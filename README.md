@@ -1,5 +1,5 @@
 # VBPR Replicability: comparison experiment
-Repository which includes all things related to replicate VBPR paper by Prof. Julian McAuley of 2016 with a modified version of ClayRS framework and original Cornac framework 
+Repository which includes all things related to replicate VBPR paper by Prof. Julian McAuley of 2016 with a modified version of ClayRS framework and the original Cornac framework 
 
 ## How to Use
 Simply perform `pip install requirements.txt` on a freshly created *virtual environment* and then run via *command line*:
