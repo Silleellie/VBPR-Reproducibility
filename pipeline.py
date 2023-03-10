@@ -1,0 +1,37 @@
+import argparse
+
+from src import ExperimentConfig
+from src.data.__main__ import main as data_main
+from src.model.__main__ import main as model_main
+from src.evaluation.__main__ import main as eval_main
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(description='Main script to reproduce the VBPR experiment')
+    parser.add_argument('-epo', '--epochs', type=int, default=[5, 10, 20, 50], nargs='+',
+                        help='Number of epochs for which the VBPR network will be trained', metavar='5')
+    parser.add_argument('-bs', '--batch_size', type=int, default=128,
+                        help='Batch size that will be used for the torch dataloaders during training',
+                        metavar='128')
+    parser.add_argument('-gd', '--gamma_dim', type=int, default=20,
+                        help='Dimension of the gamma parameter of the VBPR network', metavar='20')
+    parser.add_argument('-td', '--theta_dim', type=int, default=20,
+                        help='Dimension of the theta parameter of the VBPR network', metavar='20')
+    parser.add_argument('-lr', '--learning_rate', type=float, default=0.005,
+                        help='Learning rate for the VBPR network', metavar='0.005')
+    parser.add_argument('-seed', '--random_seed', type=int, default=42,
+                        help='random seed', metavar='42')
+
+    args = parser.parse_args()
+
+    ExperimentConfig.random_state = args.random_seed
+    ExperimentConfig.epochs = args.epochs
+    ExperimentConfig.batch_size = args.batch_size
+    ExperimentConfig.gamma_dim = args.gamma_dim
+    ExperimentConfig.theta_dim = args.theta_dim
+    ExperimentConfig.learning_rate = args.learning_rate
+
+    data_main()
+    model_main()
+    eval_main()
