@@ -9,13 +9,13 @@ import numpy as np
 from typing import Dict, Set, List, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Ratings
-    from clayrs.recsys.partitioning import Split
+    from clayrs_can_see.content_analyzer import Ratings
+    from clayrs_can_see.recsys.partitioning import Split
 
-from clayrs.evaluation.metrics.metrics import Metric
-from clayrs.evaluation.utils import get_avg_pop, pop_ratio_by_user, get_item_popularity, get_most_popular_items
-from clayrs.evaluation.exceptions import NotEnoughUsers
-from clayrs.utils.const import logger
+from clayrs_can_see.evaluation.metrics.metrics import Metric
+from clayrs_can_see.evaluation.utils import get_avg_pop, pop_ratio_by_user, get_item_popularity, get_most_popular_items
+from clayrs_can_see.evaluation.exceptions import NotEnoughUsers
+from clayrs_can_see.utils.const import logger
 
 
 class FairnessMetric(Metric):

@@ -2,14 +2,14 @@ from __future__ import annotations
 from typing import List, Set, Union, Dict, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Ratings
+    from clayrs_can_see.content_analyzer import Ratings
 
 import networkx as nx
 
-from clayrs.recsys.graphs.graph import BipartiteDiGraph, Node
-from clayrs.recsys.graphs.graph import UserNode, ItemNode
-from clayrs.utils.const import logger
-from clayrs.utils.context_managers import get_progbar
+from clayrs_can_see.recsys.graphs.graph import BipartiteDiGraph, Node
+from clayrs_can_see.recsys.graphs.graph import UserNode, ItemNode
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.context_managers import get_progbar
 
 
 class NXBipartiteGraph(BipartiteDiGraph):

@@ -5,12 +5,12 @@ from typing import Dict, List, Set, Union, TYPE_CHECKING, Optional, Iterable
 import numpy as np
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.ratings_manager.ratings import Ratings
-    from clayrs.recsys.graphs.graph import UserNode, Node, Graph, BipartiteDiGraph
-    from clayrs.recsys.methodology import Methodology
+    from clayrs_can_see.content_analyzer.ratings_manager.ratings import Ratings
+    from clayrs_can_see.recsys.graphs.graph import UserNode, Node, Graph, BipartiteDiGraph
+    from clayrs_can_see.recsys.methodology import Methodology
 
-from clayrs.recsys.graphs.graph import ItemNode
-from clayrs.recsys.algorithm import Algorithm
+from clayrs_can_see.recsys.graphs.graph import ItemNode
+from clayrs_can_see.recsys.algorithm import Algorithm
 
 
 class GraphBasedAlgorithm(Algorithm):

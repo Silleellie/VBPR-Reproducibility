@@ -5,15 +5,15 @@ from abc import ABC
 from typing import List, Dict, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.field_content_production_techniques.field_content_production_technique import \
+    from clayrs_can_see.content_analyzer.field_content_production_techniques.field_content_production_technique import \
         FieldContentProductionTechnique
-    from clayrs.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
-    from clayrs.content_analyzer.exogenous_properties_retrieval import ExogenousPropertiesRetrieval
-    from clayrs.content_analyzer.memory_interfaces.memory_interfaces import InformationInterface
-    from clayrs.content_analyzer.raw_information_source import RawInformationSource
-    from clayrs.content_analyzer.information_processor.visualpostprocessor import VisualPostProcessor
+    from clayrs_can_see.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
+    from clayrs_can_see.content_analyzer.exogenous_properties_retrieval import ExogenousPropertiesRetrieval
+    from clayrs_can_see.content_analyzer.memory_interfaces.memory_interfaces import InformationInterface
+    from clayrs_can_see.content_analyzer.raw_information_source import RawInformationSource
+    from clayrs_can_see.content_analyzer.information_processor.visualpostprocessor import VisualPostProcessor
 
-from clayrs.content_analyzer.field_content_production_techniques.field_content_production_technique import \
+from clayrs_can_see.content_analyzer.field_content_production_techniques.field_content_production_technique import \
     OriginalData
 
 
@@ -326,7 +326,7 @@ class ContentAnalyzerConfig(ABC):
         Examples:
 
             * Represent field "Plot" of the raw source with a tf-idf technique using sklearn
-            >>> import clayrs.content_analyzer as ca
+            >>> import clayrs_can_see.content_analyzer as ca
             >>> movies_ca_config.add_single_config("Plot", FieldConfig(ca.SkLearnTfIdf()))
 
         Args:
@@ -349,7 +349,7 @@ class ContentAnalyzerConfig(ABC):
 
             * Represent preprocessed field "Plot" of the raw source with a tf-idf technique using sklearn and a word
             embedding technique using Word2Vec. For the latter, no preprocessing operation will be applied
-            >>> import clayrs.content_analyzer as ca
+            >>> import clayrs_can_see.content_analyzer as ca
             >>> movies_ca_config.add_multiple_config("Plot",
             >>>                                       [FieldConfig(ca.SkLearnTfIdf(),
             >>>                                                    preprocessing=ca.NLTK(stopwords_removal=True)),
@@ -375,7 +375,7 @@ class ContentAnalyzerConfig(ABC):
         Examples:
 
             * Expand each content by using DBPedia as external source
-            >>> import clayrs.content_analyzer as ca
+            >>> import clayrs_can_see.content_analyzer as ca
             >>> movies_ca_config.add_single_exogenous(
             >>>     ca.ExogenousConfig(
             >>>         ca.DBPediaMappingTechnique('dbo:Film', 'Title', 'EN')
@@ -394,7 +394,7 @@ class ContentAnalyzerConfig(ABC):
         Examples:
 
             * Expand each content by using DBPedia as external source and local dataset as external source
-            >>> import clayrs.content_analyzer as ca
+            >>> import clayrs_can_see.content_analyzer as ca
             >>> movies_ca_config.add_single_exogenous(
             >>>     [
             >>>         ca.ExogenousConfig(
@@ -429,7 +429,7 @@ class UserAnalyzerConfig(ContentAnalyzerConfig):
 
     Examples:
 
-        >>> import clayrs.content_analyzer as ca
+        >>> import clayrs_can_see.content_analyzer as ca
         >>> raw_source = ca.JSONFile(json_path)
         >>> users_config = ca.UserAnalyzerConfig(raw_source, id='user_id', output_directory='users_codified/')
         >>> # add single field config
@@ -456,7 +456,7 @@ class ItemAnalyzerConfig(ContentAnalyzerConfig):
 
     Examples:
 
-        >>> import clayrs.content_analyzer as ca
+        >>> import clayrs_can_see.content_analyzer as ca
         >>> raw_source = ca.JSONFile(json_path)
         >>> movies_config = ca.ItemAnalyzerConfig(raw_source, id='movie_id', output_directory='movies_codified/')
         >>> # add single field config

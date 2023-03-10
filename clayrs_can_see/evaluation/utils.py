@@ -4,7 +4,7 @@ from typing import Set, Dict, List, TYPE_CHECKING
 from collections import Counter
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Ratings
+    from clayrs_can_see.content_analyzer import Ratings
 
 
 def get_item_popularity(original_ratings: Ratings) -> Dict:

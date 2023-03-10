@@ -5,14 +5,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from typing import List, Union, Mapping, Iterable, Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
-    from clayrs.content_analyzer.raw_information_source import RawInformationSource
+    from clayrs_can_see.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
+    from clayrs_can_see.content_analyzer.raw_information_source import RawInformationSource
 
-from clayrs.content_analyzer.field_content_production_techniques.field_content_production_technique \
+from clayrs_can_see.content_analyzer.field_content_production_techniques.field_content_production_technique \
     import TfIdfTechnique
-from clayrs.content_analyzer.memory_interfaces.text_interface import KeywordIndex
-from clayrs.content_analyzer.utils.check_tokenization import check_tokenized, check_not_tokenized
-from clayrs.utils.const import logger
+from clayrs_can_see.content_analyzer.memory_interfaces.text_interface import KeywordIndex
+from clayrs_can_see.content_analyzer.utils.check_tokenization import check_tokenized, check_not_tokenized
+from clayrs_can_see.utils.const import logger
 
 
 class SkLearnTfIdf(TfIdfTechnique):

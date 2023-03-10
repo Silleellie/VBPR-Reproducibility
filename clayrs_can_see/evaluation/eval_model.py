@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.ratings_manager.ratings import Prediction, Rank, Ratings
-    from clayrs.evaluation.metrics.metrics import Metric
+    from clayrs_can_see.content_analyzer.ratings_manager.ratings import Prediction, Rank, Ratings
+    from clayrs_can_see.evaluation.metrics.metrics import Metric
 
-from clayrs.evaluation.eval_pipeline_modules.metric_evaluator import MetricEvaluator
-from clayrs.utils.const import logger
+from clayrs_can_see.evaluation.eval_pipeline_modules.metric_evaluator import MetricEvaluator
+from clayrs_can_see.utils.const import logger
 
 
 class EvalModel:
@@ -27,7 +27,7 @@ class EvalModel:
 
     Examples:
 
-        >>> import clayrs.evaluation as eva
+        >>> import clayrs_can_see.evaluation as eva
         >>>
         >>> em = eva.EvalModel(
         >>>         pred_list=rank_list,
@@ -117,7 +117,7 @@ class EvalModel:
 
         Examples:
 
-            >>> import clayrs.evaluation as eva
+            >>> import clayrs_can_see.evaluation as eva
             >>> selected_users = ['u1', 'u22', 'u3'] # (1)
             >>> em = eva.EvalModel(
             >>>         pred_list,

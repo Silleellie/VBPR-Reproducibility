@@ -2,7 +2,7 @@ from typing import List
 
 from gensim.models import Word2Vec
 
-from clayrs.content_analyzer.embeddings.embedding_learner.embedding_learner import GensimWordEmbeddingLearner
+from clayrs_can_see.content_analyzer.embeddings.embedding_learner.embedding_learner import GensimWordEmbeddingLearner
 
 
 class GensimWord2Vec(GensimWordEmbeddingLearner):

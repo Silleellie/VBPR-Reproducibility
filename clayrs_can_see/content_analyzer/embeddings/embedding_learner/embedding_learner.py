@@ -6,13 +6,13 @@ import numpy as np
 from gensim.models import KeyedVectors
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
-    from clayrs.content_analyzer.raw_information_source import RawInformationSource
+    from clayrs_can_see.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
+    from clayrs_can_see.content_analyzer.raw_information_source import RawInformationSource
 
-from clayrs.content_analyzer.embeddings.embedding_source import EmbeddingSource
-from clayrs.content_analyzer.utils.check_tokenization import check_tokenized, tokenize_in_sentences, check_not_tokenized
-from clayrs.utils.const import logger
-from clayrs.utils.context_managers import get_progbar
+from clayrs_can_see.content_analyzer.embeddings.embedding_source import EmbeddingSource
+from clayrs_can_see.content_analyzer.utils.check_tokenization import check_tokenized, tokenize_in_sentences, check_not_tokenized
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.context_managers import get_progbar
 
 
 class EmbeddingLearner(EmbeddingSource):

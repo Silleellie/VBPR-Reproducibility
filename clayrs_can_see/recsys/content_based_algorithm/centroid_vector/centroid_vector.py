@@ -5,17 +5,17 @@ import numpy as np
 from scipy import sparse
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.content_representation.content import Content
-    from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+    from clayrs_can_see.content_analyzer.content_representation.content import Content
+    from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
         CombiningTechnique
-    from clayrs.recsys.content_based_algorithm.contents_loader import LoadedContentsDict
-    from clayrs.recsys.content_based_algorithm.centroid_vector.similarities import Similarity
-    from clayrs.content_analyzer import Ratings
+    from clayrs_can_see.recsys.content_based_algorithm.contents_loader import LoadedContentsDict
+    from clayrs_can_see.recsys.content_based_algorithm.centroid_vector.similarities import Similarity
+    from clayrs_can_see.content_analyzer import Ratings
 
-from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
     Centroid
-from clayrs.recsys.content_based_algorithm.content_based_algorithm import PerUserCBAlgorithm
-from clayrs.recsys.content_based_algorithm.exceptions import NoRatedItems, OnlyNegativeItems, \
+from clayrs_can_see.recsys.content_based_algorithm.content_based_algorithm import PerUserCBAlgorithm
+from clayrs_can_see.recsys.content_based_algorithm.exceptions import NoRatedItems, OnlyNegativeItems, \
     NotPredictionAlg, EmptyUserRatings
 
 
@@ -36,7 +36,7 @@ class CentroidVector(PerUserCBAlgorithm):
         * Interested in only a field representation, `CosineSimilarity` as similarity,
         `threshold` $= 3$ (Every item with rating $>= 3$ will be considered as positive)
 
-        >>> from clayrs import recsys as rs
+        >>> from clayrs_can_see import recsys as rs
         >>> alg = rs.CentroidVector({"Plot": 0}, rs.CosineSimilarity(), 3)
 
         * Interested in multiple field representations of the items, `CosineSimilarity` as similarity,

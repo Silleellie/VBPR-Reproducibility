@@ -1,5 +1,5 @@
 import os
-from clayrs.utils.custom_logger import get_custom_logger
+from clayrs_can_see.utils.custom_logger import get_custom_logger
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 root_path = os.path.join(THIS_DIR, '../../')

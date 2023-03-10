@@ -11,13 +11,13 @@ from SPARQLWrapper.SPARQLExceptions import URITooLong
 from babelpy.babelfy import BabelfyClient
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.raw_information_source import RawInformationSource
-    from clayrs.content_analyzer.content_representation.content import ExogenousPropertiesRepresentation
+    from clayrs_can_see.content_analyzer.raw_information_source import RawInformationSource
+    from clayrs_can_see.content_analyzer.content_representation.content import ExogenousPropertiesRepresentation
 
-from clayrs.content_analyzer.content_representation.content import PropertiesDict, EntitiesProp
-from clayrs.utils.const import logger
-from clayrs.utils.context_managers import get_progbar
-from clayrs.content_analyzer.utils.check_tokenization import check_not_tokenized
+from clayrs_can_see.content_analyzer.content_representation.content import PropertiesDict, EntitiesProp
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.context_managers import get_progbar
+from clayrs_can_see.content_analyzer.utils.check_tokenization import check_not_tokenized
 
 
 class ExogenousPropertiesRetrieval(ABC):

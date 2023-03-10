@@ -9,7 +9,7 @@ from sklearn.linear_model import LinearRegression, BayesianRidge, Ridge, SGDRegr
     HuberRegressor, PassiveAggressiveRegressor
 from sklearn.linear_model._stochastic_gradient import DEFAULT_EPSILON
 
-from clayrs.utils.automatic_methods import autorepr
+from clayrs_can_see.utils.automatic_methods import autorepr
 
 
 class Regressor(ABC):

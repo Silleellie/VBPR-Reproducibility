@@ -8,7 +8,7 @@ import torch.utils.data as data
 import numpy as np
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Ratings
+    from clayrs_can_see.content_analyzer import Ratings
 
 
 class TriplesDataset(data.Dataset):

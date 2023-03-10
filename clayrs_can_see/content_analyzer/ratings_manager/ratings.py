@@ -9,12 +9,12 @@ import pandas as pd
 import numpy_indexed as npi
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.ratings_manager.score_processor import ScoreProcessor
-    from clayrs.content_analyzer.raw_information_source import RawInformationSource
+    from clayrs_can_see.content_analyzer.ratings_manager.score_processor import ScoreProcessor
+    from clayrs_can_see.content_analyzer.raw_information_source import RawInformationSource
 
-from clayrs.content_analyzer.exceptions import handler_score_not_float, handler_empty_matrix, UserNone, ItemNone
-from clayrs.utils.context_managers import get_progbar
-from clayrs.utils.save_content import get_valid_filename
+from clayrs_can_see.content_analyzer.exceptions import handler_score_not_float, handler_empty_matrix, UserNone, ItemNone
+from clayrs_can_see.utils.context_managers import get_progbar
+from clayrs_can_see.utils.save_content import get_valid_filename
 
 
 class StrIntMap:
@@ -305,7 +305,7 @@ class Ratings:
         As you can see the user id column, item id column and score column are the first three column and are already in
         sequential order, so no additional parameter is required to the Ratings class:
 
-        >>> import clayrs.content_analyzer as ca
+        >>> import clayrs_can_see.content_analyzer as ca
         >>> ratings_raw_source = ca.CSVFile('ratings.csv')
         >>> # add timestamp='timestamp' to the following if
         >>> # you want to load also the timestamp

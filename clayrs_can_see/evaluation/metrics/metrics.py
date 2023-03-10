@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from clayrs.recsys.partitioning import Split
+    from clayrs_can_see.recsys.partitioning import Split
 
 
 class Metric(ABC):

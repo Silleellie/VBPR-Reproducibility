@@ -6,17 +6,17 @@ from typing import List, Union, Optional, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Content
-    from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+    from clayrs_can_see.content_analyzer import Content
+    from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
         CombiningTechnique
-    from clayrs.recsys.content_based_algorithm.classifier.classifiers import Classifier
-    from clayrs.recsys.content_based_algorithm.contents_loader import LoadedContentsDict
-    from clayrs.content_analyzer.ratings_manager.ratings import Ratings
+    from clayrs_can_see.recsys.content_based_algorithm.classifier.classifiers import Classifier
+    from clayrs_can_see.recsys.content_based_algorithm.contents_loader import LoadedContentsDict
+    from clayrs_can_see.content_analyzer.ratings_manager.ratings import Ratings
 
-from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
     Centroid
-from clayrs.recsys.content_based_algorithm.content_based_algorithm import PerUserCBAlgorithm
-from clayrs.recsys.content_based_algorithm.exceptions import NoRatedItems, OnlyPositiveItems, \
+from clayrs_can_see.recsys.content_based_algorithm.content_based_algorithm import PerUserCBAlgorithm
+from clayrs_can_see.recsys.content_based_algorithm.exceptions import NoRatedItems, OnlyPositiveItems, \
     OnlyNegativeItems, NotPredictionAlg, EmptyUserRatings
 
 
@@ -29,7 +29,7 @@ class ClassifierRecommender(PerUserCBAlgorithm):
         * Interested in only a field representation, `DecisionTree` classifier from sklearn,
         `threshold` $= 3$ (Every item with rating score $>= 3$ will be considered as *positive*)
 
-        >>> from clayrs import recsys as rs
+        >>> from clayrs_can_see import recsys as rs
         >>> alg = rs.ClassifierRecommender({"Plot": 0}, rs.SkDecisionTree(), 3)
 
         * Interested in only a field representation, `KNN` classifier with custom parameters from sklearn,

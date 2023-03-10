@@ -12,19 +12,19 @@ from sklearn.utils.validation import check_is_fitted
 import numpy as np
 import torch
 
-from clayrs.recsys.content_based_algorithm.exceptions import UserSkipAlgFit
-from clayrs.recsys.methodology import Methodology
-from clayrs.utils.const import logger
-from clayrs.utils.context_managers import get_iterator_parallel
+from clayrs_can_see.recsys.content_based_algorithm.exceptions import UserSkipAlgFit
+from clayrs_can_see.recsys.methodology import Methodology
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.context_managers import get_iterator_parallel
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+    from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
         CombiningTechnique
-    from clayrs.content_analyzer.ratings_manager.ratings import Ratings
-    from clayrs.content_analyzer.content_representation.content import Content
+    from clayrs_can_see.content_analyzer.ratings_manager.ratings import Ratings
+    from clayrs_can_see.content_analyzer.content_representation.content import Content
 
-from clayrs.recsys.algorithm import Algorithm
-from clayrs.recsys.content_based_algorithm.contents_loader import LoadedContentsDict
+from clayrs_can_see.recsys.algorithm import Algorithm
+from clayrs_can_see.recsys.content_based_algorithm.contents_loader import LoadedContentsDict
 
 
 class ContentBasedAlgorithm(Algorithm):

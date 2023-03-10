@@ -3,8 +3,8 @@ import lzma
 import os
 import pickle
 
-from clayrs.content_analyzer.content_representation.representation_container import RepresentationContainer
-from clayrs.content_analyzer.content_representation.content import Content
+from clayrs_can_see.content_analyzer.content_representation.representation_container import RepresentationContainer
+from clayrs_can_see.content_analyzer.content_representation.content import Content
 
 
 def load_content_instance(directory: str, content_id: str, only_field_representations: dict = None) -> Content:

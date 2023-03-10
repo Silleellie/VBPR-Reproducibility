@@ -13,9 +13,9 @@ from typing import List, Any, Union, Optional
 import numpy as np
 import pandas as pd
 
-from clayrs.utils.automatic_methods import autorepr
+from clayrs_can_see.utils.automatic_methods import autorepr
 
-from clayrs.content_analyzer.content_representation.content import FieldRepresentation, EmbeddingField, FeaturesBagField
+from clayrs_can_see.content_analyzer.content_representation.content import FieldRepresentation, EmbeddingField, FeaturesBagField
 
 
 class PostProcessor(ABC):
@@ -178,7 +178,7 @@ class CountVisualBagOfWords(VisualBagOfWords):
     visual techniques and setting this as postprocessor for the output of that technique as follows:
 
     ```python
-    import clayrs.content_analyzer as ca
+    import clayrs_can_see.content_analyzer as ca
     ca.FieldConfig(ca.SkImageCannyEdgeDetector(), postprocessing=[ca.CountVisualBagOfWords()])
     ```
 
@@ -238,7 +238,7 @@ class TfIdfVisualBagOfWords(VisualBagOfWords):
     visual techniques and setting this as postprocessor for the output of that technique as follows:
 
     ```python
-    import clayrs.content_analyzer as ca
+    import clayrs_can_see.content_analyzer as ca
     ca.FieldConfig(ca.SkImageCannyEdgeDetector(), postprocessing=[ca.TfIdfVisualBagOfWords()])
     ```
 
@@ -296,7 +296,7 @@ class ScipyVQ(EmbeddingInputPostProcessor):
     scipy and the retrieved vector is replaced to the original one in the final representation.
 
     ```python
-    import clayrs.content_analyzer as ca
+    import clayrs_can_see.content_analyzer as ca
     ca.FieldConfig(ca.SkImageCannyEdgeDetector(), postprocessing=[ca.ScipyVQ()])
     ```
 
@@ -435,7 +435,7 @@ class SkLearnPCA(DimensionalityReduction):
     Usage example:
 
     ```python
-    import clayrs.content_analyzer as ca
+    import clayrs_can_see.content_analyzer as ca
     ca.FieldConfig(ca.SkImageCannyEdgeDetector(), postprocessing=[ca.SkLearnPCA()])
     ```
 
@@ -466,7 +466,7 @@ class SkLearnGaussianRandomProjections(DimensionalityReduction):
     Usage example:
 
     ```python
-    import clayrs.content_analyzer as ca
+    import clayrs_can_see.content_analyzer as ca
     ca.FieldConfig(ca.SkImageCannyEdgeDetector(), postprocessing=[ca.SkLearnGaussianRandomProjections()])
     ```
 
@@ -495,7 +495,7 @@ class SkLearnFeatureAgglomeration(DimensionalityReduction):
     Usage example:
 
     ```python
-    import clayrs.content_analyzer as ca
+    import clayrs_can_see.content_analyzer as ca
     ca.FieldConfig(ca.SkImageCannyEdgeDetector(), postprocessing=[ca.SkLearnFeatureAgglomeration()])
     ```
 

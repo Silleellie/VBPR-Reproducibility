@@ -8,13 +8,13 @@ import transformers
 from transformers import AutoModel, AutoTokenizer
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.embeddings.embedding_loader.vector_strategy import VectorStrategy
-    from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique \
+    from clayrs_can_see.content_analyzer.embeddings.embedding_loader.vector_strategy import VectorStrategy
+    from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique \
         import CombiningTechnique
 
-from clayrs.content_analyzer.embeddings.embedding_loader.embedding_loader import SentenceEmbeddingLoader
-from clayrs.content_analyzer.embeddings.embedding_loader.vector_strategy import CatStrategy
-from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import Centroid
+from clayrs_can_see.content_analyzer.embeddings.embedding_loader.embedding_loader import SentenceEmbeddingLoader
+from clayrs_can_see.content_analyzer.embeddings.embedding_loader.vector_strategy import CatStrategy
+from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import Centroid
 
 
 class Transformers(SentenceEmbeddingLoader):

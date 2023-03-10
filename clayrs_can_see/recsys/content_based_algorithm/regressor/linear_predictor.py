@@ -5,17 +5,17 @@ from typing import List, Union, Optional, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Content
-    from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+    from clayrs_can_see.content_analyzer import Content
+    from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
         CombiningTechnique
-    from clayrs.recsys.content_based_algorithm.contents_loader import LoadedContentsDict
-    from clayrs.recsys.content_based_algorithm.regressor.regressors import Regressor
-    from clayrs.content_analyzer.ratings_manager.ratings import Ratings
+    from clayrs_can_see.recsys.content_based_algorithm.contents_loader import LoadedContentsDict
+    from clayrs_can_see.recsys.content_based_algorithm.regressor.regressors import Regressor
+    from clayrs_can_see.content_analyzer.ratings_manager.ratings import Ratings
 
-from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
     Centroid
-from clayrs.recsys.content_based_algorithm.exceptions import NoRatedItems, EmptyUserRatings
-from clayrs.recsys.content_based_algorithm.content_based_algorithm import PerUserCBAlgorithm
+from clayrs_can_see.recsys.content_based_algorithm.exceptions import NoRatedItems, EmptyUserRatings
+from clayrs_can_see.recsys.content_based_algorithm.content_based_algorithm import PerUserCBAlgorithm
 
 
 class LinearPredictor(PerUserCBAlgorithm):
@@ -28,7 +28,7 @@ class LinearPredictor(PerUserCBAlgorithm):
 
         * Interested in only a field representation, `LinearRegression` regressor from sklearn
 
-        >>> from clayrs import recsys as rs
+        >>> from clayrs_can_see import recsys as rs
         >>> alg = rs.LinearPredictor({"Plot": 0}, rs.SkLinearRegression())
 
         * Interested in only a field representation, `Ridge` regressor from sklearn with custom parameters

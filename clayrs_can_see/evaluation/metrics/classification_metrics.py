@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 
 if TYPE_CHECKING:
-    from clayrs.evaluation.eval_pipeline_modules.metric_evaluator import Split
+    from clayrs_can_see.evaluation.eval_pipeline_modules.metric_evaluator import Split
 
-from clayrs.evaluation.metrics.metrics import Metric, handler_different_users
+from clayrs_can_see.evaluation.metrics.metrics import Metric, handler_different_users
 
 
 class ClassificationMetric(Metric):

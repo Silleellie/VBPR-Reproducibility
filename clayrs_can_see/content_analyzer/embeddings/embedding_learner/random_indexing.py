@@ -5,8 +5,8 @@ import gensim
 from gensim.models import RpModel
 from gensim.corpora import Dictionary
 
-from clayrs.content_analyzer.embeddings.embedding_learner.embedding_learner import GensimDocumentEmbeddingLearner
-from clayrs.content_analyzer.utils.check_tokenization import check_tokenized
+from clayrs_can_see.content_analyzer.embeddings.embedding_learner.embedding_learner import GensimDocumentEmbeddingLearner
+from clayrs_can_see.content_analyzer.utils.check_tokenization import check_tokenized
 
 
 class GensimRandomIndexing(GensimDocumentEmbeddingLearner):

@@ -3,9 +3,9 @@ from os import listdir
 from abc import abstractmethod, ABC
 from typing import Set, Iterable
 
-from clayrs.content_analyzer.memory_interfaces.text_interface import SearchIndex
-from clayrs.utils import load_content_instance
-from clayrs.utils.const import logger
+from clayrs_can_see.content_analyzer.memory_interfaces.text_interface import SearchIndex
+from clayrs_can_see.utils import load_content_instance
+from clayrs_can_see.utils.const import logger
 
 
 class LoadedContentsInterface(ABC):

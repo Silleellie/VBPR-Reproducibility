@@ -4,16 +4,16 @@ import os
 import random
 from typing import Any, Set, Optional, Type, Dict, Callable, TYPE_CHECKING, Tuple, List
 
-from clayrs.recsys.content_based_algorithm.exceptions import NotPredictionAlg
+from clayrs_can_see.recsys.content_based_algorithm.exceptions import NotPredictionAlg
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+    from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
         CombiningTechnique
-    from clayrs.recsys.methodology import Methodology
+    from clayrs_can_see.recsys.methodology import Methodology
 
-from clayrs.content_analyzer.ratings_manager.ratings import Ratings
-from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import Centroid
-from clayrs.recsys.content_based_algorithm.content_based_algorithm import ContentBasedAlgorithm
+from clayrs_can_see.content_analyzer.ratings_manager.ratings import Ratings
+from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import Centroid
+from clayrs_can_see.recsys.content_based_algorithm.content_based_algorithm import ContentBasedAlgorithm
 
 import numpy as np
 
@@ -21,9 +21,9 @@ import torch
 import torch.nn.functional as fun
 import torch.utils.data as data
 
-from clayrs.recsys.visual_based_algorithm.vbpr.vbpr_network import VBPRNetwork, TriplesDataset
-from clayrs.utils.const import logger
-from clayrs.utils.context_managers import get_iterator_parallel, get_progbar
+from clayrs_can_see.recsys.visual_based_algorithm.vbpr.vbpr_network import VBPRNetwork, TriplesDataset
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.context_managers import get_iterator_parallel, get_progbar
 
 __all__ = ["VBPR"]
 

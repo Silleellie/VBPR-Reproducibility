@@ -5,8 +5,8 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 from typing import List, Set, Union, Iterable, Dict
 
-from clayrs.recsys.graphs.graph_metrics import GraphMetrics
-from clayrs.content_analyzer.ratings_manager.ratings import Ratings
+from clayrs_can_see.recsys.graphs.graph_metrics import GraphMetrics
+from clayrs_can_see.content_analyzer.ratings_manager.ratings import Ratings
 
 
 class Node(ABC):

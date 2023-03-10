@@ -1,6 +1,6 @@
 from textblob import TextBlob
 
-from clayrs.content_analyzer.ratings_manager.score_processor import SentimentAnalysis
+from clayrs_can_see.content_analyzer.ratings_manager.score_processor import SentimentAnalysis
 
 
 class TextBlobSentimentAnalysis(SentimentAnalysis):

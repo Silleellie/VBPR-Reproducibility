@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 from typing import List, Union, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from clayrs.recsys.graphs.graph import FullDiGraph
-    from clayrs.recsys.graphs.graph import UserNode, ItemNode
+    from clayrs_can_see.recsys.graphs.graph import FullDiGraph
+    from clayrs_can_see.recsys.graphs.graph import UserNode, ItemNode
 
-from clayrs.recsys.graphs.feature_selection.exceptions import FeatureSelectionException
-from clayrs.recsys.graphs.graph import PropertyNode
+from clayrs_can_see.recsys.graphs.feature_selection.exceptions import FeatureSelectionException
+from clayrs_can_see.recsys.graphs.graph import PropertyNode
 
 
 class FeatureSelectionAlgorithm(ABC):

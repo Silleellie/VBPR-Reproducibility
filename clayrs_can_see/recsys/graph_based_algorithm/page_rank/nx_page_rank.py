@@ -5,13 +5,13 @@ import networkx as nx
 import numpy as np
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.ratings_manager.ratings import Ratings
-    from clayrs.recsys.graphs import NXBipartiteGraph
-    from clayrs.recsys.methodology import Methodology
+    from clayrs_can_see.content_analyzer.ratings_manager.ratings import Ratings
+    from clayrs_can_see.recsys.graphs import NXBipartiteGraph
+    from clayrs_can_see.recsys.methodology import Methodology
 
-from clayrs.recsys.graph_based_algorithm.page_rank.page_rank import PageRank
-from clayrs.recsys.graphs.graph import UserNode, ItemNode, PropertyNode
-from clayrs.utils.context_managers import get_iterator_parallel
+from clayrs_can_see.recsys.graph_based_algorithm.page_rank.page_rank import PageRank
+from clayrs_can_see.recsys.graphs.graph import UserNode, ItemNode, PropertyNode
+from clayrs_can_see.utils.context_managers import get_iterator_parallel
 
 
 class NXPageRank(PageRank):

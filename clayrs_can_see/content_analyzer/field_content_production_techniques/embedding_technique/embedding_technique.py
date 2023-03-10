@@ -5,27 +5,27 @@ import numpy as np
 from typing import Union, List, Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.content_representation.content import FieldRepresentation
-    from clayrs.content_analyzer.embeddings.embedding_learner.embedding_learner import WordEmbeddingLearner, \
+    from clayrs_can_see.content_analyzer.content_representation.content import FieldRepresentation
+    from clayrs_can_see.content_analyzer.embeddings.embedding_learner.embedding_learner import WordEmbeddingLearner, \
         SentenceEmbeddingLearner, DocumentEmbeddingLearner
-    from clayrs.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
+    from clayrs_can_see.content_analyzer.field_content_production_techniques.embedding_technique.combining_technique import \
         CombiningTechnique
-    from clayrs.content_analyzer.embeddings.embedding_loader.embedding_loader import \
+    from clayrs_can_see.content_analyzer.embeddings.embedding_loader.embedding_loader import \
         WordEmbeddingLoader, SentenceEmbeddingLoader, DocumentEmbeddingLoader
-    from clayrs.content_analyzer.embeddings.embedding_loader.embedding_loader import EmbeddingSource
-    from clayrs.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
-    from clayrs.content_analyzer.raw_information_source import RawInformationSource
-    from clayrs.content_analyzer.information_processor.visualpostprocessor import VisualPostProcessor
+    from clayrs_can_see.content_analyzer.embeddings.embedding_loader.embedding_loader import EmbeddingSource
+    from clayrs_can_see.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
+    from clayrs_can_see.content_analyzer.raw_information_source import RawInformationSource
+    from clayrs_can_see.content_analyzer.information_processor.visualpostprocessor import VisualPostProcessor
 
-from clayrs.content_analyzer.embeddings.embedding_learner.embedding_learner import EmbeddingLearner
-from clayrs.content_analyzer.content_representation.content import EmbeddingField
-from clayrs.content_analyzer.embeddings.embedding_loader.embedding_loader import EmbeddingLoader, EmbeddingSource
-from clayrs.content_analyzer.field_content_production_techniques.field_content_production_technique import \
+from clayrs_can_see.content_analyzer.embeddings.embedding_learner.embedding_learner import EmbeddingLearner
+from clayrs_can_see.content_analyzer.content_representation.content import EmbeddingField
+from clayrs_can_see.content_analyzer.embeddings.embedding_loader.embedding_loader import EmbeddingLoader, EmbeddingSource
+from clayrs_can_see.content_analyzer.field_content_production_techniques.field_content_production_technique import \
     SingleContentTechnique
-from clayrs.content_analyzer.utils.check_tokenization import check_tokenized, tokenize_in_sentences, check_not_tokenized
-from clayrs.utils.class_utils import get_all_implemented_subclasses
-from clayrs.utils.const import logger
-from clayrs.utils.context_managers import get_progbar
+from clayrs_can_see.content_analyzer.utils.check_tokenization import check_tokenized, tokenize_in_sentences, check_not_tokenized
+from clayrs_can_see.utils.class_utils import get_all_implemented_subclasses
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.context_managers import get_progbar
 
 
 class EmbeddingTechnique(SingleContentTechnique):

@@ -11,7 +11,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
-from clayrs.utils.automatic_methods import autorepr
+from clayrs_can_see.utils.automatic_methods import autorepr
 
 
 class Classifier(ABC):

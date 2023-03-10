@@ -14,14 +14,14 @@ import os
 import matplotlib.ticker as plticker
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Ratings
-    from clayrs.recsys.partitioning import Split
+    from clayrs_can_see.content_analyzer import Ratings
+    from clayrs_can_see.recsys.partitioning import Split
 
-from clayrs.evaluation.utils import get_item_popularity, get_most_popular_items
-from clayrs.utils.save_content import get_valid_filename
-from clayrs.evaluation.metrics.fairness_metrics import GroupFairnessMetric, pop_ratio_by_user
-from clayrs.evaluation.metrics.metrics import Metric
-from clayrs.utils.const import logger
+from clayrs_can_see.evaluation.utils import get_item_popularity, get_most_popular_items
+from clayrs_can_see.utils.save_content import get_valid_filename
+from clayrs_can_see.evaluation.metrics.fairness_metrics import GroupFairnessMetric, pop_ratio_by_user
+from clayrs_can_see.evaluation.metrics.metrics import Metric
+from clayrs_can_see.utils.const import logger
 
 
 class PlotMetric(Metric):

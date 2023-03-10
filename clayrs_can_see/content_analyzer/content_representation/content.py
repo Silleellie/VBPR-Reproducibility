@@ -8,9 +8,9 @@ from numbers import Number
 from scipy import sparse
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.memory_interfaces.memory_interfaces import InformationInterface
+    from clayrs_can_see.content_analyzer.memory_interfaces.memory_interfaces import InformationInterface
 
-from clayrs.content_analyzer.content_representation.representation_container import RepresentationContainer
+from clayrs_can_see.content_analyzer.content_representation.representation_container import RepresentationContainer
 
 
 class FieldRepresentation(ABC):

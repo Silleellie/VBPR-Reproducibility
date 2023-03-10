@@ -4,12 +4,12 @@ from typing import List, Set, TYPE_CHECKING, Optional
 import numpy as np
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.ratings_manager.ratings import Ratings
-    from clayrs.recsys.graphs import NXBipartiteGraph
-    from clayrs.recsys.methodology import Methodology
+    from clayrs_can_see.content_analyzer.ratings_manager.ratings import Ratings
+    from clayrs_can_see.recsys.graphs import NXBipartiteGraph
+    from clayrs_can_see.recsys.methodology import Methodology
 
-from clayrs.recsys.content_based_algorithm.exceptions import NotPredictionAlg
-from clayrs.recsys.graph_based_algorithm.graph_based_algorithm import GraphBasedAlgorithm
+from clayrs_can_see.recsys.content_based_algorithm.exceptions import NotPredictionAlg
+from clayrs_can_see.recsys.graph_based_algorithm.graph_based_algorithm import GraphBasedAlgorithm
 
 
 class PageRank(GraphBasedAlgorithm):

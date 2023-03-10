@@ -11,7 +11,7 @@ from typing import Union, Dict
 import math
 import abc
 
-from clayrs.content_analyzer.memory_interfaces.memory_interfaces import TextInterface
+from clayrs_can_see.content_analyzer.memory_interfaces.memory_interfaces import TextInterface
 
 
 class IndexInterface(TextInterface):

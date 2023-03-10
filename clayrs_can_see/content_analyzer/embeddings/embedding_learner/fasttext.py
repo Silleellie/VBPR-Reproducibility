@@ -2,7 +2,7 @@ from typing import List
 
 from gensim.models.fasttext import FastText
 
-from clayrs.content_analyzer.embeddings.embedding_learner.embedding_learner import GensimWordEmbeddingLearner
+from clayrs_can_see.content_analyzer.embeddings.embedding_learner.embedding_learner import GensimWordEmbeddingLearner
 
 
 class GensimFastText(GensimWordEmbeddingLearner):

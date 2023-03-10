@@ -8,9 +8,9 @@ import numpy_indexed as npi
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
 if TYPE_CHECKING:
-    from clayrs.recsys.partitioning import Split
+    from clayrs_can_see.recsys.partitioning import Split
 
-from clayrs.evaluation.metrics.metrics import Metric, handler_different_users
+from clayrs_can_see.evaluation.metrics.metrics import Metric, handler_different_users
 
 
 class ErrorMetric(Metric):

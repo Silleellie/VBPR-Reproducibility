@@ -6,17 +6,17 @@ from typing import List, Union, Callable, Optional, TYPE_CHECKING
 import numpy as np
 from scipy.sparse import csr_matrix
 
-from clayrs.utils.const import logger
-from clayrs.utils.context_managers import get_progbar
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.context_managers import get_progbar
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.content_representation.content import FieldRepresentation
-    from clayrs.content_analyzer.information_processor.postprocessors.postprocessor import PostProcessor
+    from clayrs_can_see.content_analyzer.content_representation.content import FieldRepresentation
+    from clayrs_can_see.content_analyzer.information_processor.postprocessors.postprocessor import PostProcessor
 
-from clayrs.content_analyzer.content_representation.content import FeaturesBagField, SimpleField, EmbeddingField
-from clayrs.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
-from clayrs.content_analyzer.raw_information_source import RawInformationSource
-from clayrs.content_analyzer.utils.check_tokenization import check_not_tokenized
+from clayrs_can_see.content_analyzer.content_representation.content import FeaturesBagField, SimpleField, EmbeddingField
+from clayrs_can_see.content_analyzer.information_processor.information_processor_abstract import InformationProcessor
+from clayrs_can_see.content_analyzer.raw_information_source import RawInformationSource
+from clayrs_can_see.content_analyzer.utils.check_tokenization import check_not_tokenized
 
 
 class FieldContentProductionTechnique(ABC):

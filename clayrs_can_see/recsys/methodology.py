@@ -6,9 +6,9 @@ import numpy as np
 import pandas as pd
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Ratings
+    from clayrs_can_see.content_analyzer import Ratings
 
-from clayrs.utils.context_managers import get_progbar
+from clayrs_can_see.utils.context_managers import get_progbar
 
 
 class Methodology(ABC):

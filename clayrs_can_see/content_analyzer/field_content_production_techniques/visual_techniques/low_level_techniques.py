@@ -10,18 +10,18 @@ from scipy.ndimage import convolve
 from skimage.feature import hog, canny, SIFT, local_binary_pattern
 from sklearn.cluster import KMeans
 
-from clayrs.content_analyzer.content_representation.content import EmbeddingField
-from clayrs.content_analyzer.field_content_production_techniques.visual_techniques.visual_content_techniques import \
+from clayrs_can_see.content_analyzer.content_representation.content import EmbeddingField
+from clayrs_can_see.content_analyzer.field_content_production_techniques.visual_techniques.visual_content_techniques import \
     VisualContentTechnique
-from clayrs.utils.automatic_methods import autorepr
-from clayrs.utils.const import logger
-from clayrs.utils.context_managers import get_progbar
+from clayrs_can_see.utils.automatic_methods import autorepr
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.context_managers import get_progbar
 
 if TYPE_CHECKING:
-    from clayrs.content_analyzer.content_representation.content import FieldRepresentation
-    from clayrs.content_analyzer.raw_information_source import RawInformationSource
-    from clayrs.content_analyzer.information_processor.information_processor_abstract import ImageProcessor
-    from clayrs.content_analyzer.information_processor.postprocessors.postprocessor import \
+    from clayrs_can_see.content_analyzer.content_representation.content import FieldRepresentation
+    from clayrs_can_see.content_analyzer.raw_information_source import RawInformationSource
+    from clayrs_can_see.content_analyzer.information_processor.information_processor_abstract import ImageProcessor
+    from clayrs_can_see.content_analyzer.information_processor.postprocessors.postprocessor import \
         EmbeddingInputPostProcessor
 
 

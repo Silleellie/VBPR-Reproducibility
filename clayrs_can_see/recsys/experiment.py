@@ -10,21 +10,21 @@ import pyaml
 
 # fix circular import, for the future: move Ratings class to the RecSys module
 if TYPE_CHECKING:
-    from clayrs.content_analyzer import Ratings
-    from clayrs.evaluation.metrics.metrics import Metric
-    from clayrs.recsys.algorithm import Algorithm
-    from clayrs.recsys.content_based_algorithm.content_based_algorithm import ContentBasedAlgorithm
-    from clayrs.recsys.graph_based_algorithm.graph_based_algorithm import GraphBasedAlgorithm
-    from clayrs.recsys.partitioning import Partitioning
-    from clayrs.recsys.methodology import Methodology
+    from clayrs_can_see.content_analyzer import Ratings
+    from clayrs_can_see.evaluation.metrics.metrics import Metric
+    from clayrs_can_see.recsys.algorithm import Algorithm
+    from clayrs_can_see.recsys.content_based_algorithm.content_based_algorithm import ContentBasedAlgorithm
+    from clayrs_can_see.recsys.graph_based_algorithm.graph_based_algorithm import GraphBasedAlgorithm
+    from clayrs_can_see.recsys.partitioning import Partitioning
+    from clayrs_can_see.recsys.methodology import Methodology
 
-from clayrs.evaluation import EvalModel
-from clayrs.recsys import ContentBasedRS, GraphBasedRS, NXFullGraph, UserNode, ItemNode
-from clayrs.recsys.content_based_algorithm.exceptions import NotPredictionAlg
-from clayrs.utils import Report
-from clayrs.utils.const import logger
-from clayrs.utils.save_content import get_valid_dirname
-from clayrs.recsys.methodology import TestRatingsMethodology
+from clayrs_can_see.evaluation import EvalModel
+from clayrs_can_see.recsys import ContentBasedRS, GraphBasedRS, NXFullGraph, UserNode, ItemNode
+from clayrs_can_see.recsys.content_based_algorithm.exceptions import NotPredictionAlg
+from clayrs_can_see.utils import Report
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.utils.save_content import get_valid_dirname
+from clayrs_can_see.recsys.methodology import TestRatingsMethodology
 
 
 class Experiment(ABC):
@@ -251,9 +251,9 @@ class ContentBasedExperiment(Experiment):
         be evaluated on $Precision$ and $Recall$
 
         ```python
-        from clayrs.utils import ContentBasedExperiment
-        from clayrs import content_analyzer as ca
-        from clayrs import content_analyzer as rs
+        from clayrs_can_see.utils import ContentBasedExperiment
+        from clayrs_can_see import content_analyzer as ca
+        from clayrs_can_see import content_analyzer as rs
 
         original_rat = ca.Ratings(ca.CSVFile(ratings_path))
 
@@ -467,9 +467,9 @@ class GraphBasedExperiment(Experiment):
         results should be evaluated on $Precision$, $Recall$, $NDCG$
 
         ```python
-        from clayrs.utils import GraphBasedExperiment
-        from clayrs import content_analyzer as ca
-        from clayrs import content_analyzer as rs
+        from clayrs_can_see.utils import GraphBasedExperiment
+        from clayrs_can_see import content_analyzer as ca
+        from clayrs_can_see import content_analyzer as rs
 
         original_rat = ca.Ratings(ca.CSVFile(ratings_path))
 

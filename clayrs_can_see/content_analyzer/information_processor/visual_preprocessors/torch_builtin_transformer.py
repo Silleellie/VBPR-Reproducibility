@@ -4,7 +4,7 @@ import torch
 from torchvision import transforms
 from torchvision.transforms import InterpolationMode
 
-from clayrs.content_analyzer.information_processor.information_processor_abstract import ImageProcessor
+from clayrs_can_see.content_analyzer.information_processor.information_processor_abstract import ImageProcessor
 
 __all__ = [
     "TorchCompose",

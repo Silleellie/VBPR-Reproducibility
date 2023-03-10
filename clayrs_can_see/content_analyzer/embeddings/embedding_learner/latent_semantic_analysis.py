@@ -4,8 +4,8 @@ import gensim
 from gensim.corpora import Dictionary
 from gensim.models import LsiModel
 
-from clayrs.content_analyzer.embeddings.embedding_learner.embedding_learner import GensimDocumentEmbeddingLearner
-from clayrs.content_analyzer.utils.check_tokenization import check_tokenized
+from clayrs_can_see.content_analyzer.embeddings.embedding_learner.embedding_learner import GensimDocumentEmbeddingLearner
+from clayrs_can_see.content_analyzer.utils.check_tokenization import check_tokenized
 
 
 class GensimLatentSemanticAnalysis(GensimDocumentEmbeddingLearner):

@@ -1,8 +1,8 @@
 from gensim import downloader
 import numpy as np
 
-from clayrs.utils.const import logger
-from clayrs.content_analyzer.embeddings.embedding_loader.embedding_loader import WordEmbeddingLoader
+from clayrs_can_see.utils.const import logger
+from clayrs_can_see.content_analyzer.embeddings.embedding_loader.embedding_loader import WordEmbeddingLoader
 
 
 class Gensim(WordEmbeddingLoader):
