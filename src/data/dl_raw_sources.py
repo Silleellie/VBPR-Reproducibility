@@ -129,5 +129,17 @@ def main_comparison():
     dl_visual_feature()
 
 
+def main_additional():
+    dl_tradesy_feedback()
+    print("".center(80, '-'))
+    dl_extended_tradesy_images()
+    print("".center(80, '-'))
+    dl_caffe_files()
+
+
 if __name__ == "__main__":
-    main()
+
+    if ExperimentConfig.experiment == "comparison":
+        main_comparison()
+    else:
+        main_additional()

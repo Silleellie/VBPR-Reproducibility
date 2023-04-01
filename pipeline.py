@@ -22,6 +22,9 @@ if __name__ == '__main__':
                         help='Learning rate for the VBPR network', metavar='0.005')
     parser.add_argument('-seed', '--random_seed', type=int, default=42,
                         help='random seed', metavar='42')
+    parser.add_argument('-exp', '--experiment', type=str, default='comparison',
+                        help='Whether to perform the comparison experiment with Cornac, '
+                             'or the additional one with feature extraction using ClayRS', metavar='comparison')
 
     args = parser.parse_args()
 
@@ -31,6 +34,11 @@ if __name__ == '__main__':
     ExperimentConfig.gamma_dim = args.gamma_dim
     ExperimentConfig.theta_dim = args.theta_dim
     ExperimentConfig.learning_rate = args.learning_rate
+
+    if args.experiment in {"comparison", "additional"}:
+        ExperimentConfig.experiment = args.experiment
+    else:
+        raise ValueError("Only 'comparison' or 'additional' experiments are supported!")
 
     data_main()
     model_main()
