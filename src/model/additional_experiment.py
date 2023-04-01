@@ -136,7 +136,7 @@ def main():
 
     print("".center(80, "-"))
 
-    output_contents_dir = os.path.join(DATA_DIR, "additional_exp_ca_output_debug")
+    output_contents_dir = os.path.join(DATA_DIR, "additional_exp_ca_output")
 
     if not os.path.isdir(output_contents_dir):
         content_analyzer(output_contents_dir)
