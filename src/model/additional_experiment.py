@@ -38,12 +38,15 @@ def content_analyzer(output_contents_dir):
         output_directory=output_contents_dir
     )
 
+    imgs_dirs = os.path.join(INTERIM_DIR, "imgs_dirs")
+
     tradesy_config.add_multiple_config(
         'image_path',
         [
 
             ca.FieldConfig(
-                ca.PytorchImageModels('resnet50', resize_size=(256, 256), device='cuda:0', batch_size=32, feature_layer=-2),
+                ca.PytorchImageModels('resnet50', resize_size=(256, 256), device='cuda:0',
+                                      batch_size=32, feature_layer=-2, imgs_dirs=imgs_dirs),
                 preprocessing=[
                     ca.TorchCenterCrop(224),
                     ca.TorchNormalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
@@ -57,7 +60,8 @@ def content_analyzer(output_contents_dir):
                                     mean_file_path=mean_pixel,
                                     batch_size=512,
                                     resize_size=(227, 227),
-                                    swapRB=True),
+                                    swapRB=True,
+                                    imgs_dirs=imgs_dirs),
                 preprocessing=[
                     ca.TorchLambda(lambda x: x * 255)
                 ],
@@ -68,7 +72,8 @@ def content_analyzer(output_contents_dir):
                 ca.CaffeImageModels(prototxt, caffe_model,
                                     feature_layer='relu7',
                                     batch_size=512,
-                                    resize_size=(300, 300)),
+                                    resize_size=(300, 300),
+                                    imgs_dirs=imgs_dirs),
                 preprocessing=[
                     ca.TorchCenterCrop(227),
                     ca.TorchLambda(lambda x: x * 255)
