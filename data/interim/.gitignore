@@ -1,2 +1,5 @@
 filtered_positive_interactions_tradesy.csv
 tradesy_item_urls.json
+tradesy_images
+tradesy_images_paths.csv
+imgs_dirs
