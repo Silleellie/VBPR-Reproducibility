@@ -11,11 +11,11 @@ from src import INTERIM_DIR, PROCESSED_DIR, RAW_DIR
 
 
 def extract_images_from_npy(ds_path: str, item_ids_to_extract: Set[str]):
-
     print("Loading NPY matrix containing all tradesy images...")
 
     images_paths_csv = os.path.join(INTERIM_DIR, 'tradesy_images_paths.csv')
     tradesy_images_dir = os.path.join(INTERIM_DIR, 'tradesy_images')
+    item_map_fname = os.path.join(PROCESSED_DIR, "item_map.csv")
 
     if not os.path.isfile(ds_path):
         raise FileNotFoundError(f"Couldn't find images dataset in specified path {ds_path}")
@@ -33,10 +33,14 @@ def extract_images_from_npy(ds_path: str, item_ids_to_extract: Set[str]):
 
         successfully_extracted_imgs = 0
 
+        item_map = {}
         for img_info in tqdm(list(items_images.values()), desc="Extracting only relevant images for the experiment..."):
 
             item_id = img_info[b'asin'].decode()
             if item_id in item_ids_to_extract:
+
+                if item_id not in item_map:
+                    item_map[item_id] = len(item_map)
 
                 img = img_info[b'imgs']
 
@@ -51,19 +55,23 @@ def extract_images_from_npy(ds_path: str, item_ids_to_extract: Set[str]):
         with open(images_paths_csv, 'w') as f:
             f.write(csv_raw_source)
 
+        item_map_df = pd.DataFrame({
+            "item_id": list(item_map.keys()),
+            "item_idx": list(item_map.values())
+        })
+        item_map_df.to_csv(item_map_fname, index=False)
+
         print()
         print(f"{successfully_extracted_imgs}/{len(item_ids_to_extract)} images extracted and saved "
               f"into {tradesy_images_dir}!")
         print(f"CSV containing image id and relative path of each img saved "
-              f"into {tradesy_images_dir}!")
+              f"into {images_paths_csv}!")
+        print(f"Item map saved into {item_map_fname}!")
 
 
 def main():
-
-    train_interactions = pd.read_csv(os.path.join(PROCESSED_DIR, "train_set.csv"), dtype=str)
-    test_interactions = pd.read_csv(os.path.join(PROCESSED_DIR, "test_set.csv"), dtype=str)
-
-    items_id_to_extract = set(train_interactions["item_id"].append(test_interactions["item_id"], ignore_index=True))
+    interactions = pd.read_csv(os.path.join(INTERIM_DIR, "filtered_positive_interactions_tradesy.csv"), dtype=str)
+    items_id_to_extract = set(interactions["iid"])
 
     path_raw_source_npy = os.path.join(RAW_DIR, "TradesyImgPartitioned.npy")
 

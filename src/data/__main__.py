@@ -10,18 +10,11 @@ from src import ExperimentConfig
 
 def main():
 
-    if ExperimentConfig.experiment == "comparison":
-        print(" Downloading raw sources ".center(80, '#'))
-        print()
-        dl_main_comparison()
-        print()
-        print()
-    else:
-        print(" Downloading raw sources ".center(80, '#'))
-        print()
-        dl_main_additional()
-        print()
-        print()
+    print(" Downloading raw sources ".center(80, '#'))
+    print()
+    dl_main_comparison() if ExperimentConfig.experiment == "comparison" else dl_main_additional()
+    print()
+    print()
 
     print(" Filtering positive interactions ".center(80, '#'))
     print()
