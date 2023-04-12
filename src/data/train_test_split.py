@@ -65,7 +65,8 @@ def get_train_test(tradesy_feedback: Dict[str, list]):
         except ValueError:
             users_with_1_sample += 1
 
-    print(f"{users_with_1_sample} users were skipped because they had less than one interaction")
+    print(f"{users_with_1_sample} users were skipped because they had less than one interaction "
+          f"(thus they couldn't be split in train/test)")
 
     return train_feedback, test_feedback
 
@@ -98,10 +99,10 @@ def save_to_csv(train_dict, test_dict, user_map):
     print(f"Train set saved into {train_set_fname}")
 
     test_df.to_csv(test_set_fname, index=False)
-    print(f"Train set saved into {train_set_fname}")
+    print(f"Test set saved into {test_set_fname}")
 
     user_map_df.to_csv(user_map_fname, index=False)
-    print(f"User map saved into {train_set_fname}")
+    print(f"User map saved into {user_map_fname}")
 
 
 def main():

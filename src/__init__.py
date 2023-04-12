@@ -20,3 +20,4 @@ class ExperimentConfig:
     theta_dim = 20
     lr = 0.005
     random_state = 42
+    experiment = "comparison"

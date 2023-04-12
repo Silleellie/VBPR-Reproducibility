@@ -143,7 +143,39 @@ def evaluate_cornac(epoch: int):
     return sys_result, users_result
 
 
-def main():
+def evaluate_additional_experiment(epoch: int, repr_id: str):
+
+    user_map = load_user_map()
+    item_map = load_item_map()
+
+    results_additional_exp_dir = os.path.join(REPORTS_DIR, "results_additional_exp")
+    os.makedirs(results_additional_exp_dir, exist_ok=True)
+
+    train_tuples = load_train_test_instances(mode="train")
+    test_tuples = load_train_test_instances(mode="test")
+
+    train_set = ca.Ratings.from_list(train_tuples, user_map=user_map, item_map=item_map)
+    test_set = ca.Ratings.from_list(test_tuples, user_map=user_map, item_map=item_map)
+
+    with open(os.path.join(MODEL_DIR, "additional_exp_vbpr", f"additional_exp_{repr_id}_{epoch}.ml"),
+              "rb") as f:
+        rs = pickle.load(f)
+
+    start = time.time()
+    sys_result, users_result = auc_clayrs(rs, train_set, test_set)
+    end = time.time()
+
+    elapsed_m, elapsed_s = divmod(end - start, 60)
+
+    sys_result = pd.DataFrame({
+        "AUC": [sys_result],
+        "Elapsed time": [f"{int(elapsed_m)}m {int(elapsed_s)}s"]
+    })
+
+    return sys_result, users_result
+
+
+def main_comparison():
 
     print("Evaluating ClayRS:")
     print("".center(80, "-"))
@@ -159,12 +191,18 @@ def main():
         print("".center(80, "-"))
         sys_result_clayrs, users_results_clayrs = evaluate_clayrs(epoch)
 
-        print(f"AUC: {float(sys_result_clayrs['AUC'][0])}, Elapsed time: {str(sys_result_clayrs['Elapsed time'][0])}\n")
+        print(f"AUC: {float(sys_result_clayrs['AUC'][0])}, "
+              f"Elapsed time: {str(sys_result_clayrs['Elapsed time'][0])}\n")
 
-        sys_result_clayrs.to_csv(os.path.join(results_clayrs_dir,  f"sys_result_clayrs_{epoch}.csv"), index=False)
-        users_results_clayrs.to_csv(os.path.join(results_clayrs_dir,  f"users_results_clayrs_{epoch}.csv"), index=False)
-        print(f"AUC sys results saved into {os.path.join(results_clayrs_dir, f'sys_result_clayrs_{epoch}.csv')}!")
-        print(f"AUC per user results saved into {os.path.join(results_clayrs_dir, f'users_results_clayrs_{epoch}.csv')}!")
+        sys_result_clayrs.to_csv(os.path.join(results_clayrs_dir,
+                                              f"sys_result_clayrs_{epoch}.csv"), index=False)
+        users_results_clayrs.to_csv(os.path.join(results_clayrs_dir,
+                                                 f"users_results_clayrs_{epoch}.csv"), index=False)
+
+        print(f"AUC sys results saved into "
+              f"{os.path.join(results_clayrs_dir, f'sys_result_clayrs_{epoch}.csv')}!")
+        print(f"AUC per user results saved into "
+              f"{os.path.join(results_clayrs_dir, f'users_results_clayrs_{epoch}.csv')}!")
 
         # if this is the last epoch we do not print the separator
         if epoch != ExperimentConfig.epochs[-1]:
@@ -179,12 +217,59 @@ def main():
         print("".center(80, "-"))
         sys_result_cornac, users_results_cornac = evaluate_cornac(epoch)
 
-        print(f"AUC: {float(sys_result_cornac['AUC'][0])}, Elapsed time: {str(sys_result_cornac['Elapsed time'][0])}\n")
+        print(f"AUC: {float(sys_result_cornac['AUC'][0])}, "
+              f"Elapsed time: {str(sys_result_cornac['Elapsed time'][0])}\n")
 
-        sys_result_cornac.to_csv(os.path.join(results_cornac_dir, f"sys_result_cornac_{epoch}.csv"), index=False)
-        users_results_cornac.to_csv(os.path.join(results_cornac_dir, f"users_results_cornac_{epoch}.csv"), index=False)
-        print(f"AUC sys results saved into {os.path.join(results_cornac_dir, f'sys_result_cornac_{epoch}.csv')}")
-        print(f"AUC per user results saved into {os.path.join(results_cornac_dir, f'users_results_cornac_{epoch}.csv')}")
+        sys_result_cornac.to_csv(os.path.join(results_cornac_dir,
+                                              f"sys_result_cornac_{epoch}.csv"), index=False)
+        users_results_cornac.to_csv(os.path.join(results_cornac_dir,
+                                                 f"users_results_cornac_{epoch}.csv"), index=False)
+
+        print(f"AUC sys results saved into "
+              f"{os.path.join(results_cornac_dir, f'sys_result_cornac_{epoch}.csv')}")
+        print(f"AUC per user results saved into "
+              f"{os.path.join(results_cornac_dir, f'users_results_cornac_{epoch}.csv')}")
+
+        # if this is the last epoch we do not print the separator
+        if epoch != ExperimentConfig.epochs[-1]:
+            print("".center(80, '-'))
+
+
+def main_additional():
+
+    print("Evaluating ClayRS:")
+    print("".center(80, "-"))
+
+    results_additional_dir = os.path.join(REPORTS_DIR, "results_additional_exp")
+
+    os.makedirs(results_additional_dir, exist_ok=True)
+
+    repr_ids = ['resnet50', 'caffe', 'caffe_center_crop', 'vgg19']
+
+    for epoch in ExperimentConfig.epochs:
+        print(f"Considering number of epochs {epoch}")
+        print("".center(80, "-"))
+
+        for repr_id in repr_ids:
+            print(f"Considering representation with id {repr_id}")
+            sys_result_clayrs, users_results_clayrs = evaluate_additional_experiment(epoch, repr_id)
+
+            print(f"AUC: {float(sys_result_clayrs['AUC'][0])}, "
+                  f"Elapsed time: {str(sys_result_clayrs['Elapsed time'][0])}\n")
+
+            sys_result_clayrs.to_csv(os.path.join(results_additional_dir,
+                                                  f"sys_result_additional_exp_{repr_id}_{epoch}.csv"), index=False)
+            users_results_clayrs.to_csv(os.path.join(results_additional_dir,
+                                                     f"users_results_additional_exp_{repr_id}_{epoch}.csv"), index=False)
+
+            print(f"AUC sys results saved into "
+                  f"{os.path.join(results_additional_dir, f'sys_result_additional_exp_{repr_id}_{epoch}.csv')}!")
+            print(f"AUC per user results saved into "
+                  f"{os.path.join(results_additional_dir, f'users_results_clayrs_{repr_id}_{epoch}.csv')}!")
+
+            # if this is the last repr we do not print the separator
+            if repr_id != repr_ids[-1]:
+                print("".center(80, '-'))
 
         # if this is the last epoch we do not print the separator
         if epoch != ExperimentConfig.epochs[-1]:
@@ -192,4 +277,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+
+    if ExperimentConfig.experiment == "comparison":
+        main_comparison()
+    else:
+        main_additional()
+

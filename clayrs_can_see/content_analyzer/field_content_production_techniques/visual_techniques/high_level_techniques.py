@@ -1,14 +1,19 @@
 from __future__ import annotations
+import inspect
 from abc import abstractmethod
-from typing import Tuple, List, TYPE_CHECKING
+from collections import OrderedDict
+from typing import Tuple, List, TYPE_CHECKING, Callable
 
 import timm
 import torch
+import cv2
+import numpy as np
 
 from clayrs_can_see.content_analyzer.content_representation.content import EmbeddingField
 from clayrs_can_see.content_analyzer.field_content_production_techniques.visual_techniques.visual_content_techniques import \
     VisualContentTechnique
 from clayrs_can_see.utils.context_managers import get_progbar
+from clayrs_can_see.utils.automatic_methods import autorepr
 
 if TYPE_CHECKING:
     from clayrs_can_see.content_analyzer.content_representation.content import FieldRepresentation
@@ -75,26 +80,98 @@ class PytorchImageModels(HighLevelVisual):
             the size specified in the latter will be the final resize size
     """
 
-    def __init__(self, model_name: str, feature_layer: int = -1, flatten: bool = True,
+    def __init__(self, model_name: str, feature_layer: int = -1, flatten: bool = True, device: str = 'cpu',
+                 apply_on_output: Callable[[torch.Tensor], torch.Tensor] = None,
                  imgs_dirs: str = "imgs_dirs", max_timeout: int = 2, max_retries: int = 5,
                  max_workers: int = 0, batch_size: int = 64, resize_size: Tuple[int, int] = (227, 227)):
 
         super().__init__(imgs_dirs, max_timeout, max_retries, max_workers, batch_size, resize_size)
-        self.model = timm.create_model(model_name, pretrained=True, features_only=True).eval()
-        self.feature_layer = feature_layer
+        original_model = timm.create_model(model_name, pretrained=True)
+
+        feature_layer = list(original_model._modules.keys())[feature_layer]
+
+        layers = {}
+        for layer_name, layer in original_model._modules.items():
+            layers[layer_name] = layer
+            if layer_name == feature_layer:
+                break
+
+        self.model = torch.nn.Sequential(OrderedDict(layers))
+
+        def return_self(x: torch.Tensor) -> torch.Tensor:
+            return x
+
+        self.apply_on_output = return_self if apply_on_output is None else apply_on_output
+
+        self.model.to(device)
+        self.device = device
         self.flatten = flatten
+
+        self._repr_string = autorepr(self, inspect.currentframe())
 
     def produce_batch_repr(self, field_data: torch.Tensor) -> List[EmbeddingField]:
 
         if self.flatten:
-            return list(map(lambda x: EmbeddingField(x.detach().numpy().flatten()),
-                            self.model(field_data)[self.feature_layer]))
+            return list(map(lambda x: EmbeddingField(x.cpu().detach().numpy().flatten()),
+                            self.apply_on_output(self.model(field_data.to(self.device)))))
         else:
-            return list(map(lambda x: EmbeddingField(x.detach().numpy()),
-                            self.model(field_data)[self.feature_layer]))
+            return list(map(lambda x: EmbeddingField(x.cpu().detach().numpy()),
+                            self.apply_on_output(self.model(field_data.to(self.device)))))
 
     def __str__(self):
-        return "Pytorch Image Models"
+        return f"Pytorch Image Models ({self.model.pretrained_cfg['architecture']})"
 
     def __repr__(self):
-        return "Pytorch Image Models"
+        return self._repr_string
+
+
+class CaffeImageModels(HighLevelVisual):
+
+    def __init__(self, prototxt_path: str, model_path: str, feature_layer: str = None, mean_file_path: str = None,
+                 swap_rb: bool = False, flatten: bool = True, imgs_dirs: str = "imgs_dirs", use_gpu: bool = False,
+                 max_timeout: int = 2, max_retries: int = 5, max_workers: int = 0, batch_size: int = 64,
+                 resize_size: Tuple[int, int] = (227, 227)):
+
+        super().__init__(imgs_dirs, max_timeout, max_retries, max_workers, batch_size, resize_size)
+        self.model = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
+
+        if use_gpu:
+            self.model.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+            self.model.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+
+        self.feature_layer = feature_layer
+        self.mean_file_path = mean_file_path
+        self.swapRB = swap_rb
+        self.flatten = flatten
+
+        self._repr_string = autorepr(self, inspect.currentframe())
+
+    def produce_batch_repr(self, field_data: torch.Tensor) -> List[EmbeddingField]:
+
+        if self.mean_file_path is not None:
+            mean = np.load(self.mean_file_path).mean(1).mean(1)
+        else:
+            mean = None
+
+        if mean is not None:
+            imgs_blob = cv2.dnn.blobFromImages(np.moveaxis(field_data.numpy(), 1, -1), mean=mean, swapRB=self.swapRB)
+        else:
+            imgs_blob = cv2.dnn.blobFromImages(np.moveaxis(field_data.numpy(), 1, -1), swapRB=self.swapRB)
+
+        self.model.setInput(imgs_blob)
+
+        if self.feature_layer is None:
+            features_output = self.model.forward()
+        else:
+            features_output = self.model.forward(self.feature_layer)
+
+        if self.flatten:
+            return [EmbeddingField(x.flatten()) for x in features_output]
+        else:
+            return [EmbeddingField(x) for x in features_output]
+
+    def __str__(self):
+        return "Caffe Image Models"
+
+    def __repr__(self):
+        return self._repr_string
