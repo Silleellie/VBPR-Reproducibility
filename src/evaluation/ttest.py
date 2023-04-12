@@ -36,6 +36,7 @@ def main_additional():
     os.makedirs(ttest_dir, exist_ok=True)
 
     repr_ids = ['resnet50', 'caffe', 'caffe_center_crop', 'vgg19']
+    new_index = [(repr_ids[j], repr_ids[i]) for j in range(len(repr_ids)) for i in range(j, len(repr_ids)) if i != j]
 
     results_additional_exp_dir = os.path.join(REPORTS_DIR, "results_additional_exp")
 
@@ -45,10 +46,11 @@ def main_additional():
             for repr_id in repr_ids]
 
         result = eva.Ttest("user_idx").perform(results)
+        result.index = pd.Index(new_index)
 
         print(result, "\n")
 
-        result.to_csv(os.path.join(ttest_dir, f"ttest_additional_exp_{epoch}.csv"), index=False)
+        result.to_csv(os.path.join(ttest_dir, f"ttest_additional_exp_{epoch}.csv"), index=True)
         print(f"ttest results saved into {os.path.join(ttest_dir, f'ttest_{epoch}.csv')}!")
 
         # if this is the last epoch we do not print the separator
