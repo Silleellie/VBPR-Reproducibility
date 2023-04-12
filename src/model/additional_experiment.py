@@ -40,9 +40,21 @@ def content_analyzer(output_contents_dir):
 
     imgs_dirs = os.path.join(INTERIM_DIR, "imgs_dirs")
 
+    def pool(x: torch.Tensor):
+        return torch.nn.functional.max_pool2d(x, kernel_size=x.size()[2:]).squeeze()
+
     tradesy_config.add_multiple_config(
         'image_path',
         [
+            ca.FieldConfig(
+                ca.PytorchImageModels('vgg19', resize_size=(256, 256), device='cuda:0',
+                                      batch_size=32, feature_layer=-3, apply_on_output=pool),
+                preprocessing=[
+                    ca.TorchCenterCrop(224),
+                    ca.TorchNormalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+                ],
+                id='vgg19'
+            ),
 
             ca.FieldConfig(
                 ca.PytorchImageModels('resnet50', resize_size=(256, 256), device='cuda:0',
@@ -101,7 +113,10 @@ def recommender_system(contents_dir):
     train_set = ca.Ratings(ca.CSVFile(os.path.join(PROCESSED_DIR, "train_set.csv")), user_map=user_map,
                            item_map=item_map)
 
-    item_fields = [{'image_path': 'resnet50'}, {'image_path': 'caffe'}, {'image_path': 'caffe_center_crop'}]
+    item_fields = [{'image_path': 'vgg19'},
+                   {'image_path': 'resnet50'},
+                   {'image_path': 'caffe'},
+                   {'image_path': 'caffe_center_crop'}]
 
     for item_field in item_fields:
 

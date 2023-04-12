@@ -245,7 +245,7 @@ def main_additional():
 
     os.makedirs(results_additional_dir, exist_ok=True)
 
-    repr_ids = ['resnet50', 'caffe', 'caffe_center_crop']
+    repr_ids = ['resnet50', 'caffe', 'caffe_center_crop', 'vgg19']
 
     for epoch in ExperimentConfig.epochs:
         print(f"Considering number of epochs {epoch}")

@@ -35,7 +35,8 @@ def main_additional():
     ttest_dir = os.path.join(REPORTS_DIR, 'ttest_results')
     os.makedirs(ttest_dir, exist_ok=True)
 
-    repr_ids = ['resnet50', 'caffe', 'caffe_center_crop']
+    repr_ids = ['resnet50', 'caffe', 'caffe_center_crop', 'vgg19']
+
     results_additional_exp_dir = os.path.join(REPORTS_DIR, "results_additional_exp")
 
     for epoch in ExperimentConfig.epochs:
