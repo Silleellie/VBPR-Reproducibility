@@ -1,22 +1,34 @@
-# VBPR Replicability: comparison experiment
-Repository which includes all things related to replicate VBPR paper by Prof. Julian McAuley of 2016 with a modified version of ClayRS framework and the original Cornac framework 
+# VBPR Replicability: comparison and additional experiment
+Repository which includes everything needed to replicate VBPR paper by Prof. Julian McAuley of 2016 with a modified version of the ClayRS framework and the original version of the Cornac framework.
+It also contains everything to reproduce an end-to-end experiment using the modified version of ClayRS, 
+from feature extraction using the *caffe reference model* (with two different pre-processing pipelines) to *resnet50* and *vgg19*.
 
 ## How to Use
-Simply perform `pip install requirements.txt` on a freshly created *virtual environment* and then run via *command line*:
+Simply execute `pip install requirements.txt` in a freshly created *virtual environment*.
+
+To perform the 'comparison' experiment between ClayRS and Cornac, run via *command line*:
 
 ```
 python pipeline.py
 ```
 
 In this way, raw data will first be *downloaded* and *processed*, and then the actual experiment will be run using the ***default parameters***.
-* By default, the experiment is run for $5$, $10$, $20$, $50$ ***epochs***. Default parameters can be easily changed by passing them as *command line arguments*
+* By default, the experiment is run for $5$, $10$, $20$ and $50$ ***epochs***. Default parameters can be easily changed by passing them as *command line arguments*
 
-You can inspect all the parameters that can be set by simply running `python pipeline.py –h`. This is what you would obtain:
+To perform the 'additional' experiment using ClayRS, run via *command line*:
+
+```
+python pipeline.py -epo 10 20 -exp additional
+```
+
+* The experiment was performed by setting 10 and 20 epochs using the `epo` parameter, however any number of epochs can be specified
+
+You can inspect all the parameters that can be set by simply running `python pipeline.py –h`. The following is what you would obtain:
 
 ```
 $ python pipeline.py –h
 
-usage: pipeline.py [-h] [-epo 5 [5 ...]] [-bs 128] [-gd 20] [-td 20] [-lr 0.005] [-seed 42]
+usage: pipeline.py [-h] [-epo 5 [5 ...]] [-bs 128] [-gd 20] [-td 20] [-lr 0.005] [-seed 42] [-exp comparison]
 
 Main script to reproduce the VBPR experiment
 
@@ -34,30 +46,36 @@ optional arguments:
                         Learning rate for the VBPR network
   -seed 42, --random_seed 42
                         random seed
+  -exp comparison, --experiment comparison
+                        Whether to perform the comparison experiment with Cornac, or the additional one with feature extraction using ClayRS
 ```
 
 Project Organization
 ------------
-    ├── 📁 clayrs_can_see              <- Package containing a modified version of clayrs with VBPR support
+    ├── 📁 clayrs_can_see                <- Package containing a modified version of clayrs with VBPR support
     │
-    ├── 📁 data                        <- Directory containing all data generated/used by the experiment
-    │   ├── 📁 interim                      <- Intermediate data that has been transformed
-    │   ├── 📁 processed                    <- The final, canonical data sets used for training
-    │   └── 📁 raw                          <- The original, immutable data dump
+    ├── 📁 data                          <- Directory containing all data generated/used by both experiments
+    │   ├── 📁 interim                       <- Intermediate data that has been transformed
+    │   ├── 📁 processed                     <- The final, canonical data sets used for training
+    │   └── 📁 raw                           <- The original, immutable data dump
     │
-    ├── 📁 models                       <- Trained and serialized models at different epochs
-    │   ├── 📁 vbpr_clayrs                  <- Models which are output of the experiment via clayrs
-    │   └── 📁 vbpr_cornac                  <- Models which are output of the experiment via cornac
+    ├── 📁 models                        <- Trained and serialized models at different epochs for both experiments
+    │   ├── 📁 additional_exp_vbpr           <- Models which are output of the additional experiment via clayrs
+    │   ├── 📁 vbpr_clayrs                   <- Models which are output of the comparison experiment via clayrs
+    │   └── 📁 vbpr_cornac                   <- Models which are output of the comparison experiment via cornac
     │
-    ├── 📁 reports                       <- Generated metrics and reports by the experiment
-    │   ├── 📁 results_clayrs                <- AUC system wise and per user evaluating clayrs models
-    │   ├── 📁 results_cornac                <- AUC system wise and per user evaluating cornac models
-    │   ├── 📁 ttest_results                 <- Results of the ttest statistic for each epoch
-    │   └── 📄 experiment_output.txt         <- Stdout of the terminal which generated committed results
+    ├── 📁 reports                       <- Generated metrics and reports by both experiments
+    │   ├── 📁 results_additional_exp        <- AUC system wise and per user evaluating additional experiment clayrs models
+    │   ├── 📁 results_clayrs                <- AUC system wise and per user evaluating comparison experiment clayrs models
+    │   ├── 📁 results_cornac                <- AUC system wise and per user evaluating comparison experiment cornac models
+    │   ├── 📁 ttest_results                 <- Results of the ttest statistic for each epoch for both experiments
+    │   ├── 📄 additional_exp_output.txt     <- Stdout of the additional experiment terminal which generated committed results
+    │   └── 📄 comparison_exp_output.txt     <- Stdout of the comparison experiment terminal which generated committed results
     │
-    ├── 📁 src                           <- Source code for use in this project
+    ├── 📁 src                           <- Source code of the project
     │   ├── 📁 data                          <- Scripts to download and generate data
     │   │   ├── 📄 create_interaction_csv.py
+    │   │   ├── 📄 create_tradesy_images_dataset.py
     │   │   ├── 📄 dl_raw_sources.py
     │   │   ├── 📄 extract_features_from_source.py
     │   │   └── 📄 train_test_split.py
@@ -67,6 +85,7 @@ Project Organization
     │   │   └── 📄 ttest.py
     │   │
     │   ├── 📁 model                         <- Scripts to train models
+    │   │   ├── 📄 additional_experiment.py
     │   │   ├── 📄 clayrs_experiment.py
     │   │   └── 📄 cornac_experiment.py
     │   │
@@ -76,7 +95,8 @@ Project Organization
     ├── 📄 LICENSE                       <- MIT License
     ├── 📄 README.md                     <- The top-level README for developers using this project
     ├── 📄 pipeline.py                   <- Script that can be used to reproduce or customize the experiment pipeline
-    └── 📄 requirements.txt              <- The requirements file for reproducing the analysis environment (src package)
+    ├── 📄 requirements.txt              <- The requirements file for reproducing the analysis environment (src package)
+    └── 📄 requirements-clayrs.txt       <- The requirements file for the modified version of clayrs
 
 --------
 
