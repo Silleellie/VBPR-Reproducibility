@@ -99,10 +99,10 @@ def save_to_csv(train_dict, test_dict, user_map):
     print(f"Train set saved into {train_set_fname}")
 
     test_df.to_csv(test_set_fname, index=False)
-    print(f"Train set saved into {train_set_fname}")
+    print(f"Test set saved into {test_set_fname}")
 
     user_map_df.to_csv(user_map_fname, index=False)
-    print(f"User map saved into {train_set_fname}")
+    print(f"User map saved into {user_map_fname}")
 
 
 def main():

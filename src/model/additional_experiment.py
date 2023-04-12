@@ -121,6 +121,7 @@ def recommender_system(contents_dir):
     for item_field in item_fields:
 
         print("Performing VBPR training for representation: ", item_field['image_path'])
+        print()
 
         for epoch_num in ExperimentConfig.epochs:
 
@@ -150,6 +151,9 @@ def recommender_system(contents_dir):
 
             if epoch_num != ExperimentConfig.epochs[-1]:
                 print("".center(80, '-'))
+
+        if item_field != item_fields[-1]:
+            print("".center(80, "*"))
 
 
 def main():

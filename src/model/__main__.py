@@ -1,7 +1,4 @@
 from src import ExperimentConfig
-from src.model.clayrs_experiment import main as clayrs_main
-from src.model.additional_experiment import main as additional_main
-
 
 def main():
 
@@ -15,12 +12,14 @@ def main():
 
         print(" Performing ClayRS experiment ".center(80, '#'))
         print()
+        from src.model.clayrs_experiment import main as clayrs_main  # perform import here just for pretty printing
         clayrs_main()
         print()
         print()
     else:
         print(" Performing ClayRS additional experiment with feature extraction ".center(80, '#'))
         print()
+        from src.model.additional_experiment import main as additional_main  # perform import here just for pretty printing
         additional_main()
         print()
         print()
