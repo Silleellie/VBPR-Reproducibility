@@ -1,7 +1,6 @@
 import os
 import pickle
 import time
-from pathlib import Path
 
 import cornac
 import numpy as np
