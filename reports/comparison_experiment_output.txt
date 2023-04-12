@@ -1,15 +1,16 @@
+(venv) C:\Users\eliom\Desktop\VBPR-Replicability-src>python pipeline.py
 ########################### Downloading raw sources ############################
 
 Downloading...
 From: https://drive.google.com/uc?id=1xaRS4qqGeTzxaEksHzjVKjQ6l7QT9eMJ
-To: C:\Users\eliom\Desktop\VBPR-replicability\data\raw\tradesy.json.gz
+To: C:\Users\eliom\Desktop\VBPR-Replicability-src\data\raw\tradesy.json.gz
 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3.94M/3.94M [00:00<00:00, 5.51MB/s] 
 
-Tradesy raw feedback downloaded into C:\Users\eliom\Desktop\VBPR-replicability\data\raw\tradesy.json!
+Tradesy raw feedback downloaded into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\raw\tradesy.json!
 --------------------------------------------------------------------------------
 Downloading binary file containing visual features...: 100%|█████████████████████████████████████████████████████████████████████████████████████| 5.47G/5.47G [16:30<00:00, 5.93MiB/s]
 
-Visual features downloaded into C:\Users\eliom\Desktop\VBPR-replicability\data\raw\image_features_tradesy.b!
+Visual features downloaded into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\raw\image_features_tradesy.b!
 
 
 ####################### Filtering positive interactions ########################
@@ -25,7 +26,7 @@ Number of users: 19243
 Number of items: 165906
 Number of positive interactions: 394421
 
-Preprocessed dataset saved into C:\Users\eliom\Desktop\VBPR-replicability\data\interim\filtered_positive_interactions_tradesy.csv!
+Preprocessed dataset saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\interim\filtered_positive_interactions_tradesy.csv!
 
 
 ########################## Extracting visual features ##########################
@@ -34,8 +35,8 @@ Extracting only useful features from binary source...: 100%|██████�
 Feature extracted from binary source!
 Total items extracted: 165906/165906
 
-CSV containing mapping between item ids and features into C:\Users\eliom\Desktop\VBPR-replicability\data\processed\item_map.csv!
-Saved NPY feature matrix saved into C:\Users\eliom\Desktop\VBPR-replicability\data\processed\features_matrix.npy!
+CSV containing mapping between item ids and features into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\processed\item_map.csv!
+Saved NPY feature matrix saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\processed\features_matrix.npy!
 
 
 ########################### Building train/test set ############################
@@ -44,9 +45,9 @@ Splitting interactions in train/test: 100%|████████████�
 0 interactions were skipped because involved missing items
 0 users were skipped because they had less than one interaction
 
-Train set saved into C:\Users\eliom\Desktop\VBPR-replicability\data\processed\train_set.csv
-Train set saved into C:\Users\eliom\Desktop\VBPR-replicability\data\processed\train_set.csv
-User map saved into C:\Users\eliom\Desktop\VBPR-replicability\data\processed\train_set.csv
+Train set saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\processed\train_set.csv
+Test set saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\processed\test_set.csv
+User map saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\processed\user_map.csv
 
 
 ######################### Performing Cornac experiment #########################
@@ -63,7 +64,7 @@ Epoch 3/5: 100%|█████████████████████�
 Epoch 4/5: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2932/2932 [00:29<00:00, 99.92it/s, loss=18.4] 
 Epoch 5/5: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2932/2932 [00:29<00:00, 100.65it/s, loss=10.9] 
 Optimization finished!
-Cornac model for 5 epochs saved into C:\Users\eliom\Desktop\VBPR-replicability\models\vbpr_cornac\vbpr_cornac_5.ml!
+Cornac model for 5 epochs saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\models\vbpr_cornac\vbpr_cornac_5.ml!
 --------------------------------------------------------------------------------
 Considering number of epochs 10
 --------------------------------------------------------------------------------
@@ -78,7 +79,7 @@ Epoch 8/10: 100%|█████████████████████
 Epoch 9/10: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2932/2932 [00:28<00:00, 101.44it/s, loss=4.23] 
 Epoch 10/10: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2932/2932 [00:28<00:00, 101.80it/s, loss=3.81] 
 Optimization finished!
-Cornac model for 10 epochs saved into C:\Users\eliom\Desktop\VBPR-replicability\models\vbpr_cornac\vbpr_cornac_10.ml!
+Cornac model for 10 epochs saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\models\vbpr_cornac\vbpr_cornac_10.ml!
 --------------------------------------------------------------------------------
 Considering number of epochs 20
 --------------------------------------------------------------------------------
@@ -103,7 +104,7 @@ Epoch 18/20: 100%|████████████████████�
 Epoch 19/20: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2932/2932 [00:28<00:00, 101.55it/s, loss=4.15] 
 Epoch 20/20: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2932/2932 [00:28<00:00, 101.57it/s, loss=4.27] 
 Optimization finished!
-Cornac model for 20 epochs saved into C:\Users\eliom\Desktop\VBPR-replicability\models\vbpr_cornac\vbpr_cornac_20.ml!
+Cornac model for 20 epochs saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\models\vbpr_cornac\vbpr_cornac_20.ml!
 --------------------------------------------------------------------------------
 Considering number of epochs 50
 --------------------------------------------------------------------------------
@@ -158,7 +159,7 @@ Epoch 48/50: 100%|████████████████████�
 Epoch 49/50: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2932/2932 [00:28<00:00, 101.61it/s, loss=5.28] 
 Epoch 50/50: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 2932/2932 [00:28<00:00, 102.78it/s, loss=5.22] 
 Optimization finished!
-Cornac model for 50 epochs saved into C:\Users\eliom\Desktop\VBPR-replicability\models\vbpr_cornac\vbpr_cornac_50.ml!
+Cornac model for 50 epochs saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\models\vbpr_cornac\vbpr_cornac_50.ml!
 
 
 ######################### Performing ClayRS experiment #########################
@@ -168,7 +169,7 @@ INFO - *********   Processing field: item_idx   *********
  100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 165906/165906 [00:00<00:00]
 Serializing contents:  100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 165906/165906 [32:37<00:00]
 
-Output of the Content Analyzer saved into C:\Users\eliom\Desktop\VBPR-replicability\data\clayrs_output_ca!
+Output of the Content Analyzer saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\data\clayrs_output_ca!
 --------------------------------------------------------------------------------
 Considering number of epochs 5
 --------------------------------------------------------------------------------
@@ -185,7 +186,7 @@ INFO - Starting VBPR training!
 INFO - Training complete!
 INFO - Computing visual bias and theta items for faster ranking...
 INFO - Done!
-ClayRS model for 5 epochs saved into C:\Users\eliom\Desktop\VBPR-replicability\models\vbpr_clayrs\vbpr_clayrs_5.ml!
+ClayRS model for 5 epochs saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\models\vbpr_clayrs\vbpr_clayrs_5.ml!
 --------------------------------------------------------------------------------
 Considering number of epochs 10
 --------------------------------------------------------------------------------
@@ -207,7 +208,7 @@ INFO - Starting VBPR training!
 INFO - Training complete!
 INFO - Computing visual bias and theta items for faster ranking...
 INFO - Done!
-ClayRS model for 10 epochs saved into C:\Users\eliom\Desktop\VBPR-replicability\models\vbpr_clayrs\vbpr_clayrs_10.ml!
+ClayRS model for 10 epochs saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\models\vbpr_clayrs\vbpr_clayrs_10.ml!
 --------------------------------------------------------------------------------
 Considering number of epochs 20
 --------------------------------------------------------------------------------
@@ -239,7 +240,7 @@ INFO - Starting VBPR training!
 INFO - Training complete!
 INFO - Computing visual bias and theta items for faster ranking...
 INFO - Done!
-ClayRS model for 20 epochs saved into C:\Users\eliom\Desktop\VBPR-replicability\models\vbpr_clayrs\vbpr_clayrs_20.ml!
+ClayRS model for 20 epochs saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\models\vbpr_clayrs\vbpr_clayrs_20.ml!
 --------------------------------------------------------------------------------
 Considering number of epochs 50
 --------------------------------------------------------------------------------
@@ -301,7 +302,7 @@ INFO - Starting VBPR training!
 INFO - Training complete!
 INFO - Computing visual bias and theta items for faster ranking...
 INFO - Done!
-ClayRS model for 50 epochs saved into C:\Users\eliom\Desktop\VBPR-replicability\models\vbpr_clayrs\vbpr_clayrs_50.ml!
+ClayRS model for 50 epochs saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\models\vbpr_clayrs\vbpr_clayrs_50.ml!
 
 
 ##################### Computing AUC for ClayRS and Cornac ######################
@@ -313,32 +314,32 @@ Considering number of epochs 5
 AUC after evaluating 19243/19243 users ---> 0.716: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 19243/19243 [03:25<00:00, 93.50it/s]
 AUC: 0.7156017449778033, Elapsed time: 3m 25s
 
-AUC sys results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_clayrs\sys_result_clayrs_5.csv!
-AUC per user results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_clayrs\users_results_clayrs_5.csv!
+AUC sys results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_clayrs\sys_result_clayrs_5.csv!
+AUC per user results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_clayrs\users_results_clayrs_5.csv!
 --------------------------------------------------------------------------------
 Considering number of epochs 10
 --------------------------------------------------------------------------------
 AUC after evaluating 19243/19243 users ---> 0.713: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 19243/19243 [03:26<00:00, 93.34it/s]
 AUC: 0.7127759420522317, Elapsed time: 3m 26s
 
-AUC sys results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_clayrs\sys_result_clayrs_10.csv!
-AUC per user results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_clayrs\users_results_clayrs_10.csv!
+AUC sys results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_clayrs\sys_result_clayrs_10.csv!
+AUC per user results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_clayrs\users_results_clayrs_10.csv!
 --------------------------------------------------------------------------------
 Considering number of epochs 20
 --------------------------------------------------------------------------------
 AUC after evaluating 19243/19243 users ---> 0.720: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 19243/19243 [03:34<00:00, 89.78it/s]
 AUC: 0.7201013315391583, Elapsed time: 3m 34s
 
-AUC sys results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_clayrs\sys_result_clayrs_20.csv!
-AUC per user results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_clayrs\users_results_clayrs_20.csv!
+AUC sys results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_clayrs\sys_result_clayrs_20.csv!
+AUC per user results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_clayrs\users_results_clayrs_20.csv!
 --------------------------------------------------------------------------------
 Considering number of epochs 50
 --------------------------------------------------------------------------------
 AUC after evaluating 19243/19243 users ---> 0.741: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 19243/19243 [03:24<00:00, 93.98it/s]
 AUC: 0.7411114275710016, Elapsed time: 3m 24s
 
-AUC sys results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_clayrs\sys_result_clayrs_50.csv!
-AUC per user results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_clayrs\users_results_clayrs_50.csv!
+AUC sys results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_clayrs\sys_result_clayrs_50.csv!
+AUC per user results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_clayrs\users_results_clayrs_50.csv!
 
 
 Evaluating Cornac:
@@ -347,29 +348,29 @@ Considering number of epochs 5
 --------------------------------------------------------------------------------
 AUC: 0.7156017415328583, Elapsed time: 5m 38s
 
-AUC sys results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_cornac\sys_result_cornac_5.csv
-AUC per user results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_cornac\users_results_cornac_5.csv
+AUC sys results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_cornac\sys_result_cornac_5.csv
+AUC per user results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_cornac\users_results_cornac_5.csv
 --------------------------------------------------------------------------------
 Considering number of epochs 10
 --------------------------------------------------------------------------------
 AUC: 0.7127759379791193, Elapsed time: 5m 34s
 
-AUC sys results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_cornac\sys_result_cornac_10.csv
-AUC per user results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_cornac\users_results_cornac_10.csv
+AUC sys results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_cornac\sys_result_cornac_10.csv
+AUC per user results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_cornac\users_results_cornac_10.csv
 --------------------------------------------------------------------------------
 Considering number of epochs 20
 --------------------------------------------------------------------------------
 AUC: 0.720101328719106, Elapsed time: 5m 34s
 
-AUC sys results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_cornac\sys_result_cornac_20.csv
-AUC per user results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_cornac\users_results_cornac_20.csv
+AUC sys results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_cornac\sys_result_cornac_20.csv
+AUC per user results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_cornac\users_results_cornac_20.csv
 --------------------------------------------------------------------------------
 Considering number of epochs 50
 --------------------------------------------------------------------------------
 AUC: 0.7411114291336847, Elapsed time: 5m 34s
 
-AUC sys results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_cornac\sys_result_cornac_50.csv
-AUC per user results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\results_cornac\users_results_cornac_50.csv
+AUC sys results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_cornac\sys_result_cornac_50.csv
+AUC per user results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\results_cornac\users_results_cornac_50.csv
 
 
 #################### Computing ttest to compare AUC results ####################
@@ -382,7 +383,7 @@ Considering number of epochs 5
 sys_pair
 (system_1, system_2)  0.000001  0.999999
 
-ttest results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\ttest_results\ttest_5.csv!
+ttest results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\ttest_results\ttest_5.csv!
 --------------------------------------------------------------------------------
 Considering number of epochs 10
 --------------------------------------------------------------------------------
@@ -391,7 +392,7 @@ Considering number of epochs 10
 sys_pair
 (system_1, system_2)  0.000001  0.999999
 
-ttest results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\ttest_results\ttest_10.csv!
+ttest results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\ttest_results\ttest_10.csv!
 --------------------------------------------------------------------------------
 Considering number of epochs 20
 --------------------------------------------------------------------------------
@@ -400,7 +401,7 @@ Considering number of epochs 20
 sys_pair
 (system_1, system_2)  0.000001  0.999999
 
-ttest results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\ttest_results\ttest_20.csv!
+ttest results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\ttest_results\ttest_20.csv!
 --------------------------------------------------------------------------------
 Considering number of epochs 50
 --------------------------------------------------------------------------------
@@ -409,4 +410,4 @@ Considering number of epochs 50
 sys_pair
 (system_1, system_2) -5.801370e-07    1.0
 
-ttest results saved into C:\Users\eliom\Desktop\VBPR-replicability\reports\ttest_results\ttest_50.csv!
+ttest results saved into C:\Users\eliom\Desktop\VBPR-Replicability-src\reports\ttest_results\ttest_50.csv!
