@@ -72,7 +72,7 @@ def content_analyzer(output_contents_dir):
                                     mean_file_path=mean_pixel,
                                     batch_size=512,
                                     resize_size=(227, 227),
-                                    swapRB=True,
+                                    swap_rb=True,
                                     imgs_dirs=imgs_dirs),
                 preprocessing=[
                     ca.TorchLambda(lambda x: x * 255)
