@@ -2,6 +2,7 @@ from __future__ import annotations
 import inspect
 from abc import abstractmethod
 from collections import OrderedDict
+from pathlib import Path
 from typing import Tuple, List, TYPE_CHECKING, Callable
 
 import timm
@@ -96,7 +97,7 @@ class PytorchImageModels(HighLevelVisual):
             if layer_name == feature_layer:
                 break
 
-        self.model = torch.nn.Sequential(OrderedDict(layers))
+        self.model = torch.nn.Sequential(OrderedDict(layers)).eval()
 
         def return_self(x: torch.Tensor) -> torch.Tensor:
             return x
@@ -106,20 +107,23 @@ class PytorchImageModels(HighLevelVisual):
         self.model.to(device)
         self.device = device
         self.flatten = flatten
+        self.model_name = model_name
 
         self._repr_string = autorepr(self, inspect.currentframe())
 
     def produce_batch_repr(self, field_data: torch.Tensor) -> List[EmbeddingField]:
 
         if self.flatten:
-            return list(map(lambda x: EmbeddingField(x.cpu().detach().numpy().flatten()),
-                            self.apply_on_output(self.model(field_data.to(self.device)))))
+            with torch.no_grad():
+                return list(map(lambda x: EmbeddingField(x.cpu().detach().numpy().flatten()),
+                                self.apply_on_output(self.model(field_data.to(self.device)))))
         else:
-            return list(map(lambda x: EmbeddingField(x.cpu().detach().numpy()),
-                            self.apply_on_output(self.model(field_data.to(self.device)))))
+            with torch.no_grad():
+                return list(map(lambda x: EmbeddingField(x.cpu().detach().numpy()),
+                                self.apply_on_output(self.model(field_data.to(self.device)))))
 
     def __str__(self):
-        return f"Pytorch Image Models ({self.model.pretrained_cfg['architecture']})"
+        return f"Pytorch Image Models ({self.model_name})"
 
     def __repr__(self):
         return self._repr_string
@@ -134,6 +138,7 @@ class CaffeImageModels(HighLevelVisual):
 
         super().__init__(imgs_dirs, max_timeout, max_retries, max_workers, batch_size, resize_size)
         self.model = cv2.dnn.readNetFromCaffe(prototxt_path, model_path)
+        self.model_name = Path(model_path).name
 
         if use_gpu:
             self.model.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
@@ -171,7 +176,7 @@ class CaffeImageModels(HighLevelVisual):
             return [EmbeddingField(x) for x in features_output]
 
     def __str__(self):
-        return "Caffe Image Models"
+        return f"Caffe Image Models ({self.model_name})"
 
     def __repr__(self):
         return self._repr_string

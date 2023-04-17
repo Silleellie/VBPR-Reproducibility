@@ -25,7 +25,7 @@ def content_analyzer_tradesy(tradesy_item_map_path: str, features_matrix_path: s
         )
     )
 
-    content_a = ca.ContentAnalyzer(items_ca)
+    content_a = ca.ContentAnalyzer(items_ca, n_thread=ExperimentConfig.num_threads)
     content_a.fit()
 
     Report(output_dir=YAML_DIR, ca_report_filename="ca_report_comparison_exp").yaml(content_analyzer=content_a)

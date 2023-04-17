@@ -98,7 +98,7 @@ def content_analyzer(output_contents_dir):
         ]
     )
 
-    content_a = ca.ContentAnalyzer(config=tradesy_config)
+    content_a = ca.ContentAnalyzer(config=tradesy_config, n_thread=ExperimentConfig.num_threads)
     content_a.fit()
 
     Report(output_dir=YAML_DIR, ca_report_filename="ca_report_additional_exp").yaml(content_analyzer=content_a)
