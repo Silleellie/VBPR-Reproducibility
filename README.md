@@ -25,7 +25,7 @@ python pipeline.py -epo 10 20 -exp additional
 
 You can inspect all the parameters that can be set by simply running `python pipeline.py –h`. The following is what you would obtain:
 
-```
+```console
 $ python pipeline.py –h
 
 usage: pipeline.py [-h] [-epo 5 [5 ...]] [-bs 128] [-gd 20] [-td 20] [-lr 0.005] [-seed 42] [-exp comparison]
@@ -47,8 +47,35 @@ optional arguments:
   -seed 42, --random_seed 42
                         random seed
   -exp comparison, --experiment comparison
-                        Whether to perform the comparison experiment with Cornac, or the additional one with feature extraction using ClayRS
+                        Whether to perform the comparison experiment with Cornac, 
+                        or the additional one with feature extraction using ClayRS
 ```
+
+## Experiment pipeline
+
+**TO DO**
+
+### -exp comparison
+
+***Data***:
+
+* Download binary file containing features of images from ....
+* Download raw tradesy feedback from ....
+* Filtering raw interactions following original VBPR paper instruction and removing duplicate interactions
+* Build user map (following the order in which each user appears in the filtered interactions) and item map (following the order in which each item appears in the binary file)
+* Extracting into an npy matrix features from the binary file for items which appear in the filtered interactions
+* Building train and test set with leave-one-out using `-seed` parameter as random state
+
+***Experiment and evaluation***:
+
+* Fit VBPR algorithm via *ClayRS can see* and *Cornac* using command line arguments when invoking `pipeline.py` (`-epo`, `-bs`, `-gd`, etc.)
+* Compute AUC of each user and the average AUC for both *ClayRS* and *Cornac*
+* Perform ttest statistical test between *ClayRS* user results and *Cornac* user results
+
+### -exp additional
+
+**TO DO**
+
 
 Project Organization
 ------------
