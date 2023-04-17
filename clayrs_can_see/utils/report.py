@@ -102,7 +102,7 @@ class Report:
             # which has as follow-up character the '=' and a nested object after that or anything else.
             # The last part is the bounding, the match ends when ', \w+=' is found (another parameter= or the ')' (the
             # end)
-            tuples_list_args = re.findall(r"(?<=\(|\s)(\w+)=(\w+"+balanced_parenthesis_pattern+r"|.*?)(?=,\s\w+=|\))",
+            tuples_list_args = re.findall(r"(?<=\(|\s)(\w+)=(\w+"+balanced_parenthesis_pattern+r"|.*?)(?=,\s\w+=|\)$)",
                                           repr_string)
 
             dict_args_string = dict(tuples_list_args)
