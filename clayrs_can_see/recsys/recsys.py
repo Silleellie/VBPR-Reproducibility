@@ -35,7 +35,7 @@ class RecSys(ABC):
     def __init__(self, algorithm: Union[ContentBasedAlgorithm, GraphBasedAlgorithm]):
         self.__alg = algorithm
 
-        self._yaml_report: Optional[Dict] = None
+        self._yaml_report: Dict = {}
 
     @property
     def algorithm(self):
