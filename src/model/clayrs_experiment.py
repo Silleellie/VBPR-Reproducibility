@@ -24,7 +24,7 @@ def content_analyzer_tradesy(tradesy_item_map_path: str, features_matrix_path: s
         )
     )
 
-    ca.ContentAnalyzer(items_ca).fit()
+    ca.ContentAnalyzer(items_ca, n_thread=ExperimentConfig.num_threads).fit()
 
     print()
     print(f"Output of the Content Analyzer saved into {output_contents_dir}!")

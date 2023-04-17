@@ -21,3 +21,4 @@ class ExperimentConfig:
     lr = 0.005
     random_state = 42
     experiment = "comparison"
+    num_threads = 4

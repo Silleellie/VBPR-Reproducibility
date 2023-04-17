@@ -96,7 +96,7 @@ def content_analyzer(output_contents_dir):
         ]
     )
 
-    ca.ContentAnalyzer(config=tradesy_config).fit()
+    ca.ContentAnalyzer(config=tradesy_config, n_thread=ExperimentConfig.num_threads).fit()
 
     print()
     print(f"Output of the Content Analyzer saved into {output_contents_dir}!")
