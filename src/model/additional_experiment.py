@@ -48,7 +48,8 @@ def content_analyzer(output_contents_dir):
         [
             ca.FieldConfig(
                 ca.PytorchImageModels('vgg19', resize_size=(256, 256), device='cuda:0',
-                                      batch_size=32, feature_layer=-3, apply_on_output=pool),
+                                      batch_size=32, feature_layer=-3, apply_on_output=pool_and_squeeze,
+                                      imgs_dirs=imgs_dirs),
                 preprocessing=[
                     ca.TorchCenterCrop(224),
                     ca.TorchNormalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
