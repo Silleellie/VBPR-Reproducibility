@@ -10,6 +10,7 @@ INTERIM_DIR = os.path.join(ROOT_PATH, "data", "interim")
 PROCESSED_DIR = os.path.join(ROOT_PATH, "data", "processed")
 MODEL_DIR = os.path.join(ROOT_PATH, "models")
 REPORTS_DIR = os.path.join(ROOT_PATH, "reports")
+YAML_DIR = os.path.join(ROOT_PATH, "reports", "yaml_clayrs")
 
 
 # this will change if command arguments are passed to pipeline.py

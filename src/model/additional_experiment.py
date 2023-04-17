@@ -4,10 +4,11 @@ import random
 import torch
 import numpy as np
 
-from src import INTERIM_DIR, PROCESSED_DIR, ExperimentConfig, MODEL_DIR, DATA_DIR
+from src import INTERIM_DIR, PROCESSED_DIR, ExperimentConfig, MODEL_DIR, DATA_DIR, YAML_DIR
 
 import clayrs_can_see.content_analyzer as ca
 import clayrs_can_see.recsys as rs
+from clayrs_can_see.utils import Report
 from src.utils import load_user_map, load_item_map
 
 # seed everything
@@ -97,16 +98,21 @@ def content_analyzer(output_contents_dir):
         ]
     )
 
-    ca.ContentAnalyzer(config=tradesy_config).fit()
+    content_a = ca.ContentAnalyzer(config=tradesy_config)
+    content_a.fit()
+
+    Report(output_dir=YAML_DIR, ca_report_filename="ca_report_additional_exp").yaml(content_analyzer=content_a)
 
     print()
     print(f"Output of the Content Analyzer saved into {output_contents_dir}!")
+    print(f"Report of the Content Analyzer saved into {os.path.join(YAML_DIR, 'ca_report_additional_exp.yml')}!")
 
 
 def recommender_system(contents_dir):
 
     models_dir = os.path.join(MODEL_DIR, "additional_exp_vbpr")
     os.makedirs(models_dir, exist_ok=True)
+    os.makedirs(os.path.join(YAML_DIR, "rs_report_additional_exp"), exist_ok=True)
 
     user_map = load_user_map()
     item_map = load_item_map()
@@ -148,7 +154,14 @@ def recommender_system(contents_dir):
             with open(fname_cbrs, "wb") as f:
                 pickle.dump(cbrs, f, protocol=pickle.HIGHEST_PROTOCOL)
 
+            Report(output_dir=os.path.join(YAML_DIR, "rs_report_additional_exp"),
+                   rs_report_filename=f"rs_report_{item_field['image_path'][0]}_{epoch_num}").yaml(recsys=cbrs)
+
+            output_report_path = os.path.join(YAML_DIR,
+                                              'rs_report_additional_exp',
+                                              f'rs_report_{item_field["image_path"][0]}_{epoch_num}.yml')
             print(f"ClayRS model for {epoch_num} epochs saved into {fname_cbrs}!")
+            print(f"Report of the RecSys phase for {epoch_num} epochs saved into {output_report_path}!")
 
             if epoch_num != ExperimentConfig.epochs[-1]:
                 print("".center(80, '-'))
