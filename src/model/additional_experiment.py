@@ -40,7 +40,7 @@ def content_analyzer(output_contents_dir):
 
     imgs_dirs = os.path.join(INTERIM_DIR, "imgs_dirs")
 
-    def pool(x: torch.Tensor):
+    def pool_and_squeeze(x: torch.Tensor):
         return torch.nn.functional.max_pool2d(x, kernel_size=x.size()[2:]).squeeze()
 
     tradesy_config.add_multiple_config(
