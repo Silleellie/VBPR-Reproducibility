@@ -48,6 +48,8 @@ optional arguments:
                         Learning rate for the VBPR network
   -seed 42, --random_seed 42
                         random seed
+  -nt 4, --num_threads 4
+                        Number of threads that will be used in ClayRS during Content Analyzer serialization phase
   -exp comparison, --experiment comparison
                         Whether to perform the comparison experiment with Cornac, 
                         or the additional one with feature extraction using ClayRS
@@ -55,18 +57,18 @@ optional arguments:
 
 ## Experiment pipeline
 
-**TO DO**
+The following is a description of the operations carried out by the pipeline depending on the experiment type (additional or comparison)
 
 ### -exp comparison
 
 ***Data***:
 
-* Download binary file containing features of images from ....
-* Download raw tradesy feedback from ....
-* Filtering raw interactions following original VBPR paper instruction and removing duplicate interactions
+* Download raw tradesy feedback from [here](http://jmcauley.ucsd.edu/data/tradesy/tradesy.json.gz)
+* Download binary file containing features of images from [here](http://jmcauley.ucsd.edu/data/tradesy/image_features_tradesy.b)
+* Filter raw interactions following original VBPR paper instructions and remove duplicate interactions
 * Build user map (following the order in which each user appears in the filtered interactions) and item map (following the order in which each item appears in the binary file)
-* Extracting into an npy matrix features from the binary file for items which appear in the filtered interactions
-* Building train and test set with leave-one-out using `-seed` parameter as random state
+* Extract into a npy matrix features from the binary file for items which appear in the filtered interactions
+* Build train and test set with leave-one-out using `-seed` parameter as random state
 
 ***Experiment and evaluation***:
 
@@ -76,7 +78,32 @@ optional arguments:
 
 ### -exp additional
 
-**TO DO**
+***Data***:
+
+* Download raw tradesy feedback from [here](http://jmcauley.ucsd.edu/data/tradesy/tradesy.json.gz)
+* Download npy file containing tradesy images from [here](http://cseweb.ucsd.edu/~wckang/DVBPR/TradesyImgPartitioned.npy)
+* Download caffe model and all of its necessary files:
+  * *bvlc_reference_caffenet model* from [here](http://dl.caffe.berkeleyvision.org/bvlc_reference_caffenet.caffemodel)
+  * *deploy.prototxt* for bvlc_reference_caffenet from [here](https://github.com/BVLC/caffe/blob/master/models/bvlc_reference_caffenet/deploy.prototxt)
+  * *ilsvrc_2012_mean.npy* file containing mean pixel value from [here](https://github.com/facebookarchive/models/raw/master/bvlc_reference_caffenet/ilsvrc_2012_mean.npy)
+* Filter raw interactions following original VBPR paper instructions and remove duplicate interactions
+* Download binary file containing features of images from [here](http://jmcauley.ucsd.edu/data/tradesy/image_features_tradesy.b)
+* Build item map (following the order in which each item appears in the binary file)
+* Extract from the npy matrix into a folder the images of the items which appear in the filtered interactions
+* Build a .csv file associating each item to the path of its image in said directory
+* Build train and test set with leave-one-out using `-seed` parameter as random state
+
+***Experiment and evaluation***:
+
+* From the images dataset, create processed contents using the Content Analyzer. Each serialized content (corresponding to an item) 
+will have 4 different representations:
+  * **caffe**: same model as the one used in the VBPR paper (and pre-processing operations suggested for the model by the Caffe framework from [here](https://github.com/BVLC/caffe/blob/master/examples/00-classification.ipynb))
+  * **caffe_center_crop**: same configuration, but only center crop to 227x227 dimensions is applied as pre-processing operation
+  * **resnet50**: features are extracted from the *pool5* layer of the *ResNet50* architecture
+  * **vgg19**: features are extracted from the last convolution layer before the fully-connected ones  of the *vgg19* architecture and global max-pooling is applied to them
+* Fit a different VBPR algorithm for each representation via *ClayRS can see* using command line arguments when invoking `pipeline.py` (`-epo`, `-bs`, `-gd`, etc.)
+* Compute AUC of each user and the average AUC for *ClayRS* for each VBPR algorithm instance
+* Perform ttest statistical test between each configuration
 
 
 Project Organization
@@ -98,6 +125,13 @@ Project Organization
     │   ├── 📁 results_clayrs                <- AUC system wise and per user evaluating comparison experiment clayrs models
     │   ├── 📁 results_cornac                <- AUC system wise and per user evaluating comparison experiment cornac models
     │   ├── 📁 ttest_results                 <- Results of the ttest statistic for each epoch for both experiments
+    │   │
+    │   ├── 📁 yaml_clayrs                   <- Reports generated by the Report class in ClayRS to document all techniques and parameters used in the experiment
+    │   │   ├── 📁 rs_report_additional_exp      <- Reports generated for each Recommender System configuration in the additional experiment
+    │   │   ├── 📁 rs_report_comparison_exp      <- Reports generated for each Recommender System configuration in the comparison experiment
+    │   │   ├── 📄 ca_report_additional_exp.yml  <- Report generated for the Content Analyzer module in the additional experiment
+    │   │   └── 📄 ca_report_additional_exp.yml  <- Report generated for the Content Analyzer module in the comparison experiment
+    │   │
     │   ├── 📄 additional_exp_output.txt     <- Stdout of the additional experiment terminal which generated committed results
     │   └── 📄 comparison_exp_output.txt     <- Stdout of the comparison experiment terminal which generated committed results
     │
