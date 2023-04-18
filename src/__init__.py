@@ -5,6 +5,7 @@ It also contains the ExperimentConfig class where all parameters that can be set
 """
 
 import os
+from dataclasses import dataclass
 from pathlib import Path
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +20,7 @@ REPORTS_DIR = os.path.join(ROOT_PATH, "reports")
 YAML_DIR = os.path.join(ROOT_PATH, "reports", "yaml_clayrs")
 
 
-# pylint: disable=too-few-public-methods
+@dataclass
 class ExperimentConfig:
     """
     This class contains all modifiable attributes related to the experiment
