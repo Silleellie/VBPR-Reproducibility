@@ -6,6 +6,8 @@ Repository which includes everything needed to replicate VBPR paper by Prof. Jul
 It also contains everything to reproduce an end-to-end experiment using the modified version of ClayRS, 
 from feature extraction using the *caffe reference model* (with two different pre-processing pipelines) to *resnet50* and *vgg19*.
 
+Check the ['Experiment pipeline' section](#experiment-pipeline) for an overview of the operations carried out by the two different experiments
+
 ## How to Use
 
 Simply execute `pip install requirements.txt` in a freshly created *virtual environment*. The source code has been tested with ***python 3.9***.
