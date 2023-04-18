@@ -1,3 +1,9 @@
+"""
+Module used by the `comparison` experiment.
+
+Uses the NPY feature matrix built in the data preparation phase to fit the VBPR algorithm using the ClayRS framework.
+"""
+
 import os
 import pickle
 
@@ -10,6 +16,21 @@ from src.utils import load_user_map, load_item_map
 
 
 def content_analyzer_tradesy(tradesy_item_map_path: str, features_matrix_path: str, output_contents_dir: str):
+    """
+    Performs the Content Analyzer phase of the `comparison` experiment using the ClayRS framework.
+    The representation that will be generated simply imports the original feature vectors and associates them
+    to the corresponding item (thanks to the `FromNPY()` content technique).
+
+    A .yml file containing the specified technique and its parameters is saved into the `reports/yaml_clayrs`
+    directory.
+
+    Args:
+        tradesy_item_map_path: path where the item mapping is stored
+        features_matrix_path: path where the .npy feature matrix is stored
+        output_contents_dir: path to the directory where the contents will be serialized
+
+    """
+
     items_ca = ca.ItemAnalyzerConfig(
         source=ca.CSVFile(tradesy_item_map_path),
         id="item_id",
@@ -36,6 +57,21 @@ def content_analyzer_tradesy(tradesy_item_map_path: str, features_matrix_path: s
 
 
 def recsys_tradesy(train_set_path: str, items_dir: str, epoch: int):
+    """
+    Performs the Recommender System phase of the `comparison` experiment using the ClayRS framework.
+
+    A recommender is fit for the specified number of epochs and then saved in the `models/vbpr_clayrs` directory.
+
+    A .yml file containing the VBPR algorithm definition with its parameters is saved into the
+    `reports/yaml_clayrs/rs_report_comparison_exp` directory.
+
+    Args:
+        train_set_path: path to where the train .csv file is stored
+        items_dir: path to the directory where the serialized contents are stored
+        epoch: number of epochs to train the recommender for
+
+    """
+
     user_map = load_user_map()
     item_map = load_item_map()
 
@@ -43,6 +79,7 @@ def recsys_tradesy(train_set_path: str, items_dir: str, epoch: int):
 
     item_field = {'item_idx': 0}
 
+    # pylint: disable=duplicate-code
     alg = rs.VBPR(item_field, device='cuda:0',
                   epochs=epoch,
                   gamma_dim=ExperimentConfig.gamma_dim,
@@ -61,6 +98,16 @@ def recsys_tradesy(train_set_path: str, items_dir: str, epoch: int):
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    It first serializes the contents complexly represented (invoking `content_analyzer()`), and then it
+    fits different VBPR algorithms using the ClayRS library depending on the number of epochs specified by the
+    `-epo` cmd argument (invoking `recommender_system()`)
+
+    The fit recommenders will be saved into `models/vbpr_clayrs`.
+
+    """
 
     print("".center(80, '-'))
 

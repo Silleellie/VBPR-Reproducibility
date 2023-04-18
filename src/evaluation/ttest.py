@@ -1,3 +1,9 @@
+"""
+Module used both by `comparison` and `additional` experiment.
+
+Computes the ttest statistical test, using AUC user wise results, for all models evaluated.
+"""
+
 import os.path
 
 import pandas as pd
@@ -35,11 +41,22 @@ def main_comparison():
         print(f"ttest results saved into {os.path.join(ttest_dir, f'ttest_{epoch}.csv')}!")
 
         # if this is the last epoch we do not print the separator
+        # pylint: disable=duplicate-code
         if epoch != ExperimentConfig.epochs[-1]:
             print("".center(80, '-'))
 
 
 def main_additional():
+    """
+    Actual main function of the module for the `additional` experiment.
+
+    It will compute the ttest statistical test using ClayRS comparing, for each number of epochs used in the experiment,
+    all available representations user results in pairs ('resnet50' - 'caffe', 'resnet50' - 'caffe_center_crop'
+    and so on).
+
+    Results will be saved into `reports/ttest_results`.
+
+    """
 
     ttest_dir = os.path.join(REPORTS_DIR, 'ttest_results')
     os.makedirs(ttest_dir, exist_ok=True)
@@ -63,12 +80,14 @@ def main_additional():
         print(f"ttest results saved into {os.path.join(ttest_dir, f'ttest_{epoch}.csv')}!")
 
         # if this is the last epoch we do not print the separator
+        # pylint: disable=duplicate-code
         if epoch != ExperimentConfig.epochs[-1]:
             print("".center(80, '-'))
 
 
 if __name__ == "__main__":
 
+    # pylint: disable=duplicate-code
     if ExperimentConfig.experiment == "comparison":
         main_comparison()
     else:

@@ -16,20 +16,10 @@ from cornac.data.dataset import Dataset
 from cornac.data import ImageModality
 
 from src import PROCESSED_DIR, MODEL_DIR, ExperimentConfig
-from src.utils import load_user_map, load_train_test_instances, load_item_map
+from src.utils import load_user_map, load_train_test_instances, load_item_map, seed_everything
 
 # seed everything
-SEED = ExperimentConfig.random_state
-np.random.seed(SEED)
-random.seed(SEED)
-torch.manual_seed(SEED)
-torch.cuda.manual_seed_all(SEED)
-torch.use_deterministic_algorithms(True)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
-os.environ["PYTHONHASHSEED"] = str(SEED)
-os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":16:8"
-print(f"Random seed set as {SEED}")
+SEED = seed_everything()
 
 
 def build_train(feature_matrix_path: str):
@@ -89,15 +79,15 @@ def train_cornac(train_dataset: Dataset, features: np.ndarray, epoch: int):
     n_users = train_dataset.total_users
     n_items = train_dataset.total_items
 
-    Gu = torch.zeros(size=(n_users, gamma_dim)) # pylint: disable=invalid-name
-    Gi = torch.zeros(size=(n_items, gamma_dim)) # pylint: disable=invalid-name
+    Gu = torch.zeros(size=(n_users, gamma_dim))  # pylint: disable=invalid-name
+    Gi = torch.zeros(size=(n_items, gamma_dim))  # pylint: disable=invalid-name
 
-    Tu = torch.zeros(size=(n_users, theta_dim)) # pylint: disable=invalid-name
+    Tu = torch.zeros(size=(n_users, theta_dim))  # pylint: disable=invalid-name
 
-    E = torch.zeros(size=(features_dim, theta_dim)) # pylint: disable=invalid-name
-    Bp = torch.zeros(size=(features_dim, 1)) # pylint: disable=invalid-name
+    E = torch.zeros(size=(features_dim, theta_dim))  # pylint: disable=invalid-name
+    Bp = torch.zeros(size=(features_dim, 1))  # pylint: disable=invalid-name
 
-    Bi = torch.zeros(size=(n_items, 1)).squeeze() # pylint: disable=invalid-name
+    Bi = torch.zeros(size=(n_items, 1)).squeeze()  # pylint: disable=invalid-name
 
     # seed torch
     torch.manual_seed(SEED)

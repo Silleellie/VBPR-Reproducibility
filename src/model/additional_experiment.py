@@ -1,11 +1,17 @@
+"""
+Module used by the `additional` experiment.
+
+Performs both the Content Analyzer and Recommender System phase of ClayRS.
+The Content Analyzer generates the contents given several techniques to apply to the raw items and serializes them.
+The Recommender System trains the VBPR algorithm on each serialized representation.
+"""
+
 import os
 import pickle
-import random
 import torch
-import numpy as np
 
 from src import INTERIM_DIR, PROCESSED_DIR, ExperimentConfig, MODEL_DIR, DATA_DIR, YAML_DIR
-from src.utils import load_user_map, load_item_map
+from src.utils import load_user_map, load_item_map, seed_everything
 
 import clayrs_can_see.content_analyzer as ca
 import clayrs_can_see.recsys as rs
@@ -14,7 +20,30 @@ from clayrs_can_see.utils import Report
 SEED = seed_everything()
 
 
-def content_analyzer(output_contents_dir):
+def content_analyzer(output_contents_dir: str):
+    """
+    Performs the Content Analyzer phase of the `additional` experiment.
+    This phase is carried out using the ClayRS framework.
+    The representations that will be generated starting from the images for the tradesy items
+    use the following techniques:
+
+        * 'caffe': same model as the one used in the VBPR paper (and pre-processing operations suggested for
+            the model by the Caffe framework)
+        * 'caffe_center_crop': same configuration, but only center crop to 227x227 dimensions is applied as
+            pre-processing operation
+        * 'resnet50': features are extracted from the *pool5* layer of the *ResNet50* architecture
+        * 'vgg19': features are extracted from the last convolution layer before the fully-connected ones
+            of the *vgg19* architecture and global max-pooling is applied to them
+
+    Each serialized content will have 4 different field representations, each one associated to the corresponding key.
+
+    A .yml file containing all the specified techniques and their parameters is saved into the `reports/yaml_clayrs`
+    directory.
+
+    Args:
+        output_contents_dir: path to the directory where the contents will be serialized
+
+    """
 
     caffe_model_dir = os.path.join(MODEL_DIR, "reference_caffenet")
 
@@ -97,7 +126,20 @@ def content_analyzer(output_contents_dir):
     print(f"Report of the Content Analyzer saved into {os.path.join(YAML_DIR, 'ca_report_additional_exp.yml')}!")
 
 
-def recommender_system(contents_dir):
+def recommender_system(contents_dir: str):
+    """
+    Performs the Recommender System phase of the `additional` experiment.
+
+    Trains a recommender system using the VBPR algorithm via the ClayRS framework, one for each representation created
+    by the Content Analyzer. Each fit recommender is then saved in the `models/additional_exp_vbpr` directory.
+
+    A .yml file containing the VBPR algorithm definition with its parameters is saved into the
+    `reports/yaml_clayrs/rs_report_additional_exp` directory.
+
+    Args:
+        contents_dir: path to the directory where the serialized contents are stored
+
+    """
 
     models_dir = os.path.join(MODEL_DIR, "additional_exp_vbpr")
     os.makedirs(models_dir, exist_ok=True)
@@ -161,6 +203,16 @@ def recommender_system(contents_dir):
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    It first serializes the contents complexly represented (invoking `content_analyzer()`), and then it
+    fits different VBPR algorithms using the ClayRS library depending on the number of epochs specified by the
+    `-epo` cmd argument and the specified representations (invoking `recommender_system()`)
+
+    The fit recommenders will be saved into `models/additional_exp_vbpr`.
+
+    """
 
     print("".center(80, "-"))
 

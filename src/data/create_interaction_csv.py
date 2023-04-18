@@ -43,6 +43,7 @@ def import_tradesy_feedback(path: str) -> dict:
         ratings_dict: dictionary where keys are user ids and values are list of positive item ids for each user
 
     """
+
     ratings_dict = defaultdict(list)
 
     # ----------- LOAD USER POSITIVE ITEMS IN DICT -----------

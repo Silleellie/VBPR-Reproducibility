@@ -20,6 +20,7 @@ import numpy_indexed as npi
 
 from cornac.data import Dataset, ImageModality
 from cornac.eval_methods import ranking_eval
+import cornac.models.vbpr.recom_vbpr
 
 import clayrs_can_see.content_analyzer as ca
 import clayrs_can_see.recsys as rs
@@ -28,7 +29,20 @@ from src import MODEL_DIR, PROCESSED_DIR, REPORTS_DIR, ExperimentConfig
 from src.utils import load_user_map, load_item_map, load_train_test_instances
 
 
-def auc_cornac(vbpr_cornac, train_dataset, test_dataset):
+def auc_cornac(vbpr_cornac: cornac.models.vbpr.recom_vbpr.VBPR, train_dataset: List[Tuple], test_dataset: List[Tuple]):
+    """
+    Compute AUC metric on Cornac model invoking `ranking_eval` function from the framework itself
+
+    Args:
+        vbpr_cornac: fit vbpr algorithm using the Cornac framework
+        train_dataset: list containing the interaction tuples (representing the train set)
+        test_dataset: list containing the interaction tuples (representing the test set)
+
+    Returns:
+        sys_results: average AUC over all users
+        user_results: dataframe containing for each user integer key its corresponding AUC value
+
+    """
 
     sys_result, users_results = ranking_eval(vbpr_cornac, [cornac.metrics.AUC()], train_dataset, test_dataset)
 
@@ -45,6 +59,20 @@ def auc_cornac(vbpr_cornac, train_dataset, test_dataset):
 
 # pylint: disable=too-many-locals
 def auc_clayrs(vbpr_clayrs: rs.ContentBasedRS, train_set: ca.Ratings, test_set: ca.Ratings):
+    """
+    Compute AUC metric on ClayRS model using a custom defined implementation of the AUC metric via the numpy library.
+
+    Args:
+        vbpr_clayrs: fit vbpr algorithm using the ClayRS framework
+        train_set: list containing the interaction tuples (representing the train set)
+        test_set: list containing the interaction tuples (representing the test set)
+
+    Returns:
+        sys_results: average AUC over all users
+        user_results: dataframe containing for each user integer key its corresponding AUC value
+
+    """
+
     n_items = len(test_set.item_map)
     item_idxs = np.arange(0, n_items)
     query_vector = np.full(item_idxs.shape, True)
@@ -130,6 +158,20 @@ def evaluate_clayrs(epoch: int):
 
 # pylint: disable=too-many-locals
 def evaluate_cornac(epoch: int):
+    """
+    Evaluate the Cornac model fit on the specified number of epochs by first loading it into memory together with the
+    train and test set and invoke the `auc_cornac()` method to compute the AUC metric
+
+    Args:
+        epoch: integer used to retrieve the corresponding Cornac model trained on that number of epochs
+
+    Returns:
+        sys_results: dataframe containing the average AUC value over all users and the amount of time required
+            by the evaluation
+        user_results: dataframe containing for each user integer key its corresponding AUC value
+
+    """
+
     with open(os.path.join(MODEL_DIR, "vbpr_cornac", f"vbpr_cornac_{epoch}.ml"), "rb") as file:
         vbpr_cornac = pickle.load(file)
 
@@ -173,6 +215,21 @@ def evaluate_cornac(epoch: int):
 
 # pylint: disable=too-many-locals
 def evaluate_additional_experiment(epoch: int, repr_id: str):
+    """
+    Evaluate the ClayRS model fit on the specified number of epochs and on the specified representation key
+    by first loading it into memory together with the train and test set and invoke the `auc_clayrs()` method to
+    compute the AUC metric
+
+    Args:
+        epoch: integer used to retrieve the corresponding ClayRS model trained on that number of epochs
+        repr_id: string used to retrieve the corresponding ClayRS model trained on that content representation
+
+    Returns:
+        sys_results: dataframe containing the average AUC value over all users and the amount of time required
+            by the evaluation
+        user_results: dataframe containing for each user integer key its corresponding AUC value
+
+    """
 
     user_map = load_user_map()
     item_map = load_item_map()
@@ -269,11 +326,22 @@ def main_comparison():
               f"{os.path.join(results_cornac_dir, f'users_results_cornac_{epoch}.csv')}")
 
         # if this is the last epoch we do not print the separator
+        # pylint: disable=duplicate-code
         if epoch != ExperimentConfig.epochs[-1]:
             print("".center(80, '-'))
 
 
 def main_additional():
+    """
+    Actual main function of the module for the `additional` experiment.
+
+    It will compute the AUC metric system-wise and for each user considering ClayRS VBPR fit models on all
+    number of epochs specified via the `-epo` cmd argument and on all available representations, that are 'resnet50',
+    'caffe', 'caffe_center_crop' and 'vgg19' (invoking `evaluate_clayrs()`).
+
+    Results will be saved into `reports/results_additional_exp`.
+
+    """
 
     print("Evaluating ClayRS:")
     print("".center(80, "-"))
@@ -312,6 +380,7 @@ def main_additional():
                 print("".center(80, '-'))
 
         # if this is the last epoch we do not print the separator
+        # pylint: disable=duplicate-code
         if epoch != ExperimentConfig.epochs[-1]:
             print("".center(80, '-'))
 

@@ -36,6 +36,7 @@ def extract_images_from_npy(ds_path: str, item_ids_to_extract: Set[str]):
             DVBPR dataset)
 
     """
+
     print("Loading NPY matrix containing all tradesy images...")
 
     images_paths_csv = os.path.join(INTERIM_DIR, 'tradesy_images_paths.csv')
