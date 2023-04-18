@@ -1,6 +1,7 @@
 """
 Main module of the data preparation phase
 """
+
 import os.path
 
 from src.data.create_interaction_csv import main as csv_main
@@ -17,6 +18,7 @@ def main():
     """
     Main which performs the data preparation phase by calling functions w.r.t. the operations to carry out for the
     specified experiment type (comparison or additional)
+
     """
 
     print(" Downloading raw sources ".center(80, '#'))

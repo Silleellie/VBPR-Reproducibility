@@ -1,3 +1,10 @@
+"""
+Module used both by `comparison` and `additional` experiment.
+
+Possibly remove from the ratings items for which there are no visual features.
+Build both the train/test split following the instruction of the VBPR experiment and the user mapping.
+"""
+
 import csv
 import itertools
 import os
@@ -12,6 +19,17 @@ from src import INTERIM_DIR, PROCESSED_DIR, ExperimentConfig
 
 
 def filter_interactions_wo_features(path_positive_interactions: str, path_item_features_csv_map: str):
+    """
+    Remove from the ratings interactions involving items for which visual features are not available
+
+    Args:
+        path_positive_interactions: path where the tradesy filtered interactions .csv file is stored
+        path_item_features_csv_map: path where the item map .csv file is stored
+
+    Returns:
+        tradesy_feedback: tradesy feedback without interactions involving items with no visual features
+
+    """
     # ---------- delete interactions for which we don't have feature (image doesn't exist) ----------
     tradesy_feedback = defaultdict(list)
 
@@ -38,7 +56,32 @@ def filter_interactions_wo_features(path_positive_interactions: str, path_item_f
     return tradesy_feedback
 
 
-def get_user_map(valid_positive_interactions: Dict[str, list]):
+def build_user_map(valid_positive_interactions: Dict[str, list]):
+    """
+    Build mapping between user string ids and integer ids, the ordering is the same as the one in the positive
+    interactions dictionary
+
+    Args:
+        valid_positive_interactions: dictionary containing the valid positive interactions for each user
+
+            ex:
+                {
+                "0": ["1", "52"],
+                "1": ["10"],
+                ...
+                }
+
+    Returns:
+        user_map: dictionary containing the mapping
+
+            ex:
+                {
+                    "0": 0,
+                    "1": 1,
+                    ...
+                }
+
+    """
 
     user_map = {}
     for user_id in valid_positive_interactions:
@@ -48,7 +91,19 @@ def get_user_map(valid_positive_interactions: Dict[str, list]):
     return user_map
 
 
-def get_train_test(tradesy_feedback: Dict[str, list]):
+def build_train_test(tradesy_feedback: Dict[str, list]):
+    """
+    Build train and test set performing leave-one-out with fixed random state (set via -seed command line argument)
+
+    Args:
+        tradesy_feedback: dictionary with string user ids as keys and list of items involved in positive interactions
+            as values for each user
+
+    Returns:
+        train_feedback: dictionary having user ids as keys and lists of item ids as values (representing the train set)
+        test_feedback: dictionary having user ids as keys and lists of item ids as values (representing the test set)
+
+    """
 
     train_feedback = {}
     test_feedback = {}
@@ -72,6 +127,17 @@ def get_train_test(tradesy_feedback: Dict[str, list]):
 
 
 def save_to_csv(train_dict, test_dict, user_map):
+    """
+    Save train, test and user map dictionaries as .csv files (loading them into a pandas DataFrame).
+    All the resulting files will be saved into the `data/processed` directory.
+
+    Args:
+        train_dict: dictionary having user ids as keys and lists of item ids as values (representing the train set)
+        test_dict: dictionary having user ids as keys and lists of item ids as values (representing the test set)
+        user_map: dictionary having user ids as keys and user integer ids as values
+
+    """
+
     train_df = pd.DataFrame({
         "user_id": [user_id for user_id in train_dict for _ in range(len(train_dict[user_id]))],
         "item_id": list(itertools.chain.from_iterable(train_dict.values())),
@@ -106,16 +172,24 @@ def save_to_csv(train_dict, test_dict, user_map):
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    Preprocessed tradesy feedback are first filtered in case interactions involving items with no visual
+    feature available are present (invoking `filter_interactions_wo_features()`), then train set, test set and user map
+    are built and saved as .csv files (invoking `build_train_test()`, `build_user_map()`, `save_to_csv()`)
+
+    """
 
     path_positive_interactions = os.path.join(INTERIM_DIR, "filtered_positive_interactions_tradesy.csv")
     path_item_id_features_map = os.path.join(PROCESSED_DIR, "item_map.csv")
 
     valid_positive_interactions = filter_interactions_wo_features(path_positive_interactions, path_item_id_features_map)
 
-    train_feedback_dict, test_feedback_dict = get_train_test(valid_positive_interactions)
+    train_feedback_dict, test_feedback_dict = build_train_test(valid_positive_interactions)
 
     # all users in train appear in test set, so we can sefely use this
-    user_map = get_user_map(train_feedback_dict)
+    user_map = build_user_map(train_feedback_dict)
 
     save_to_csv(train_feedback_dict, test_feedback_dict, user_map)
 

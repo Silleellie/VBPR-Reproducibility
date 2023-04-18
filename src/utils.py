@@ -10,10 +10,11 @@ from src import PROCESSED_DIR
 
 def load_user_map():
     """
-    Load the user map in the data/processed folder under the 'user_map.csv' name
+    Load the user map in the `data/processed` folder under the `user_map.csv` name as a dictionary,
+    which contains the mapping between string ids of users (`user_id`) and their corresponding integers (`user_idx`)
 
     Returns:
-        - user_map: dictionary containing the user_id as keys and the user_idx as values
+        user_map: dictionary containing the `user_id` as keys and the `user_idx` as values
     """
     user_map = {}
     with open(os.path.join(PROCESSED_DIR, "user_map.csv"), "r", encoding='utf-8') as file:
@@ -28,10 +29,11 @@ def load_user_map():
 
 def load_item_map():
     """
-    Load the item map in the data/processed folder under the 'item_map.csv' name
+    Load the item map in the `data/processed` folder under the `item_map.csv` name as a dictionary,
+    which contains the mapping between string ids of users (`item_id`) and their corresponding integers (`item_idx`)
 
     Returns:
-        - item_map: dictionary containing the item_id as keys and the item_idx as values
+        item_map: dictionary containing the `item_id` as keys and the `item_idx` as values
     """
     item_map = {}
     with open(os.path.join(PROCESSED_DIR, "item_map.csv"), "r", encoding='utf-8') as file:
@@ -45,7 +47,7 @@ def load_item_map():
 
 def load_train_test_instances(mode: str = "train"):
     """
-    Load instances for either the train or test set
+    Load interaction instances for either the train or test set, depending on the `mode` parameter.
 
     The instances will be triples following this format: (user_id, item_id, 1.0) [USER, ITEM, SCORE]
 
@@ -53,7 +55,7 @@ def load_train_test_instances(mode: str = "train"):
         mode: either "train" or "test"
 
     Returns:
-        tuples_instances: list containing the tuples
+        tuples_instances: list containing the interaction tuples
     """
 
     if mode == "train":
@@ -71,3 +73,29 @@ def load_train_test_instances(mode: str = "train"):
             tuples_instances.append((str(line["user_id"]), str(line["item_id"]), 1.0))
 
     return tuples_instances
+
+
+def seed_everything():
+    """
+    Function which fixes the random state of each library used by this repository with the seed
+    specified when invoking `pipeline.py`
+
+    Returns:
+        The integer random state set via command line argument
+
+    """
+
+    # seed everything
+    seed = ExperimentConfig.random_state
+    np.random.seed(seed)
+    random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.use_deterministic_algorithms(True)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":16:8"
+    print(f"Random seed set as {seed}")
+
+    return seed

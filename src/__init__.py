@@ -1,7 +1,8 @@
 """
-Init containing all required paths in the experiment (paths to the folders where data is stored for example)
+Init containing constants for all required paths by the experiment
+(paths to the folders where data is stored for example)
 
-It also contains the ExperimentConfig class where all parameters that can be set via command line are stored
+It also contains the `ExperimentConfig` class where all parameters that can be set via command line are stored
 """
 
 import os
@@ -23,7 +24,7 @@ YAML_DIR = os.path.join(ROOT_PATH, "reports", "yaml_clayrs")
 @dataclass
 class ExperimentConfig:
     """
-    This class contains all modifiable attributes related to the experiment
+    This dataclass contains all command line arguments related to the experiment to perform
 
         - epochs: list of number of epochs, a new recommender instance will be created for each defined number
         - batch_size: batch size that will be used during recommender training

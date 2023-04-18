@@ -1,6 +1,7 @@
 """
 Main module of the evaluation phase
 """
+
 from src import ExperimentConfig
 from src.evaluation.ttest import main_additional as stat_main_additional
 from src.evaluation.ttest import main_comparison as stat_main_comparison
@@ -10,6 +11,7 @@ def main():
     """
     Main which performs the evaluation phase by calling functions w.r.t. the operations to carry out for the
     specified experiment type (comparison or additional)
+
     """
 
     if ExperimentConfig.experiment == "comparison":

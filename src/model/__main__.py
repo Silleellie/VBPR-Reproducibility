@@ -1,12 +1,15 @@
 """
 Main module of the model training phase
 """
+
 from src import ExperimentConfig
+
 
 def main():
     """
     Main which performs the model training phase by calling functions w.r.t. the operations to carry out for the
     specified experiment type (comparison or additional)
+
     """
 
     if ExperimentConfig.experiment == "comparison":

@@ -1,6 +1,11 @@
+"""
+Module used by the `comparison` experiment.
+
+Uses the NPY feature matrix built in the data preparation phase to fit the VBPR algorithm using the Cornac framework.
+"""
+
 import copy
 import os
-import random
 import pickle
 
 import cornac
@@ -29,14 +34,14 @@ print(f"Random seed set as {SEED}")
 
 def build_train(feature_matrix_path: str):
     """
-
-    Build the train set for the Cornac experiment and the matrix containing visual features related to items in this
-    train set
+    Build the train Dataset data structure required by the Cornac library using serialized train set,
+    user map and item map and NPY feature matrix.
 
     Args:
-        feature_matrix_path: path where the visual features matrix is stored
+        feature_matrix_path: path where the .npy matrix containing visual features is stored
 
     Returns:
+        train_dataset: built Cornac Dataset data structure with item visual features as image modality
 
     """
 
@@ -63,18 +68,18 @@ def build_train(feature_matrix_path: str):
 
 def train_cornac(train_dataset: Dataset, features: np.ndarray, epoch: int):
     """
-
     Train a VBPR Recommender using the Cornac framework
 
     Args:
-        train_dataset: torch dataset containing triples in the following fashion:
-            (user_idx, positive_item_idx, negative_item_idx)
+        train_dataset: cornac Dataset data structure representing train set
         features: numpy array containing visual features for each item (each row represents an item)
         epoch: number of epochs to train the model for
 
-    Returns: Trained VBPR Recommender from the cornac framework
+    Returns:
+        vbpr: Trained VBPR Recommender from the cornac framework
 
     """
+
     # Init parameters since cornac uses numpy and ClayRS uses torch for initialization,
     # torch and numpy uses different seeds
     gamma_dim = ExperimentConfig.gamma_dim
@@ -132,8 +137,13 @@ def train_cornac(train_dataset: Dataset, features: np.ndarray, epoch: int):
 
 def main():
     """
-    Cornac experiment: a Recommender System instance from the Cornac framework is created for each epoch number
-    specified in the ExperimentConfig
+    Actual main function of the module.
+
+    It first builds the train Dataset data structure required by the Cornac library (invoking `build_train()`),
+    and then fits the VBPR algorithm using the same library on the number of epochs specified by the `-epo` cmd argument
+
+    The fit algorithms will be saved into `models/vbpr_cornac`.
+
     """
 
     os.makedirs(os.path.join(MODEL_DIR, "vbpr_cornac"), exist_ok=True)

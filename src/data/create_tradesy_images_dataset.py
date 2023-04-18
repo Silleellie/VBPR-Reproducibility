@@ -1,6 +1,10 @@
 """
-Module containing the methods to create the images dataset used in the VBPR paper
+Module used by the `additional` experiment.
+
+It allows to create the tradesy images dataset used in the VBPR paper using an NPY matrix,
+extracting only those of items which appear in the filtered tradesy feedback.
 """
+
 import os
 import io
 from typing import Set
@@ -15,17 +19,21 @@ from src import INTERIM_DIR, RAW_DIR
 
 def extract_images_from_npy(ds_path: str, item_ids_to_extract: Set[str]):
     """
+    Extract the images of the tradesy dataset, used for the VBPR paper, from the tradesy dataset
+    used for the DVBPR paper.
+    The latter is stored as a NPY matrix, which contains images of more items than those relevant for the
+    VBPR experiment:
 
-    Extract the images of the tradesy dataset used for the VBPR paper from the tradesy dataset used for the DVBPR paper
+    * Thus, the NPY matrix is filtered in order to contain only the ones of interest for the experiment to be performed
 
-    The extracted images will be saved in the interim directory in the 'tradesy_images' directory
-    A .csv file will also be created in the interim directory, associating each item id with its corresponding image
-    path in the 'tradesy_images' directory
+    The extracted images will be saved as *jpgs* in the `data/interim/tradesy_images` directory.
+    A .csv file will also be created in the `data/interim` directory, associating each item id with its corresponding
+    relative image path in the `data/interim/tradesy_images` directory
 
     Args:
-        ds_path: path where the npy file containing the DVBPR dataset is
-        item_ids_to_extract: list of item ids of the VBPR tradesy dataset in order to extract only those from the
-            DVBPR dataset
+        ds_path: path where the npy file containing the DVBPR dataset is stored
+        item_ids_to_extract: list of item ids of the VBPR tradesy dataset (only those will be extracted from the
+            DVBPR dataset)
 
     """
     print("Loading NPY matrix containing all tradesy images...")
@@ -79,6 +87,14 @@ def extract_images_from_npy(ds_path: str, item_ids_to_extract: Set[str]):
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    Given the item ids of interest from the filtered positive interactions of the tradesy ratings, the images
+    are extracted from the npy file of the DVBPR paper containing them (invoking `extract_images_from_npy()`)
+
+    """
+
     interactions = pd.read_csv(os.path.join(INTERIM_DIR, "filtered_positive_interactions_tradesy.csv"), dtype=str)
     items_id_to_extract = set(interactions["iid"])
 

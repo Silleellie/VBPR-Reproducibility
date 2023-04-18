@@ -1,6 +1,10 @@
 """
-Module containing the methods to download the data sources used for either the comparison or additional experiment
+Module used both by `comparison` and `additional` experiment.
+
+Used to download the data sources (tradesy feedback, binary features file, DVBPR dataset of tradesy images,
+caffe reference model files) required by both experiments.
 """
+
 import gzip
 import os
 import shutil
@@ -15,10 +19,10 @@ from src import RAW_DIR, ExperimentConfig, MODEL_DIR
 def dl_visual_feature(chunk_size: int = 10000):
     """
     Method to download the visual features provided and used by the VBPR authors
-    The binary file will be downloaded in the raw data directory
+    The binary file will be downloaded in the `data/raw` directory
 
     Args:
-        chunk_size: number of bytes read into memory from the data stream
+        chunk_size: number of bytes to read into memory from the data stream
 
     """
 
@@ -40,6 +44,11 @@ def dl_visual_feature(chunk_size: int = 10000):
 
 
 def dl_tradesy_feedback():
+    """
+    Method to download the tradesy feedback provided and used by the VBPR authors
+    The .json file will be downloaded in the `data/raw` directory
+
+    """
 
     fname = os.path.join(RAW_DIR, "tradesy.json")
     if not os.path.isfile(fname):
@@ -58,6 +67,14 @@ def dl_tradesy_feedback():
 
 
 def dl_extended_tradesy_images(chunk_size: int = 10000):
+    """
+    Method to download the dataset provided and used by the DVBPR authors
+    The .npy file will be downloaded in the `data/raw` directory
+
+    Args:
+        chunk_size: number of bytes to read into memory from the data stream
+
+    """
 
     fname = os.path.join(RAW_DIR, "TradesyImgPartitioned.npy")
     if not os.path.isfile(fname):
@@ -78,6 +95,18 @@ def dl_extended_tradesy_images(chunk_size: int = 10000):
 
 
 def dl_caffe_files(chunk_size: int = 10000):
+    """
+    Method to download all the files that are necessary to use the caffe reference model:
+        - bvlc_reference_caffenet.caffemodel: caffe model file
+        - deploy.prototxt: prototxt used by the caffe framework associated to the reference model
+        - ilsvrc_2012_mean.npy: mean pixel from the dataset used to train the reference model
+
+    The files will be downloaded in the `models/reference_caffenet` directory
+
+    Args:
+        chunk_size: number of bytes to read into memory from the data stream
+
+    """
 
     caffe_model_dir = os.path.join(MODEL_DIR, "reference_caffenet")
     os.makedirs(caffe_model_dir, exist_ok=True)
@@ -138,12 +167,27 @@ def dl_caffe_files(chunk_size: int = 10000):
 
 
 def main_comparison():
+    """
+    Actual main function of the module for the `comparison` experiment.
+
+    It will download all raw data from sources needed (invoking `dl_tradesy_feedback()` and `dl_visual_features()`)
+
+    """
+
     dl_tradesy_feedback()
     print("".center(80, '-'))
     dl_visual_feature()
 
 
 def main_additional():
+    """
+    Actual main function of the module for the `additional` experiment.
+
+    It will download all raw data from sources needed (invoking `dl_tradesy_feedback()`, `dl_extended_tradesy_images()`
+    and `dl_caffe_files()`)
+
+    """
+
     dl_tradesy_feedback()
     print("".center(80, '-'))
     dl_extended_tradesy_images()
@@ -153,6 +197,7 @@ def main_additional():
 
 if __name__ == "__main__":
 
+    # pylint: disable=duplicate-code
     if ExperimentConfig.experiment == "comparison":
         main_comparison()
     else:

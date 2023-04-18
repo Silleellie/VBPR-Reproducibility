@@ -1,6 +1,16 @@
+"""
+Module used both by `comparison` and `additional` experiment.
+
+Computes the AUC metric considering models fit and serialized by both experiment:
+    * Cornac and ClayRS models at 5, 10, 20, 50 epochs (`comparsion` experiment)
+    * ClayRS models fit on different Content Analyzer generated representations at 10, 20 epochs
+    (`additional` experiment)
+"""
+
 import os
 import pickle
 import time
+from typing import List, Tuple
 
 import cornac
 import numpy as np
@@ -77,6 +87,20 @@ def auc_clayrs(vbpr_clayrs: rs.ContentBasedRS, train_set: ca.Ratings, test_set: 
 
 
 def evaluate_clayrs(epoch: int):
+    """
+    Evaluate the ClayRS model fit on the specified number of epochs by first loading it into memory together with the
+    train and test set and invoke the `auc_clayrs()` method to compute the AUC metric
+
+    Args:
+        epoch: integer used to retrieve the corresponding ClayRS model trained on that number of epochs
+
+    Returns:
+        sys_results: dataframe containing the average AUC value over all users and the amount of time required
+            by the evaluation
+        user_results: dataframe containing for each user integer key its corresponding AUC value
+
+    """
+
     with open(os.path.join(MODEL_DIR, "vbpr_clayrs", f"vbpr_clayrs_{epoch}.ml"), "rb") as file:
         vbpr_clayrs = pickle.load(file)
 
@@ -181,6 +205,15 @@ def evaluate_additional_experiment(epoch: int, repr_id: str):
 
 
 def main_comparison():
+    """
+    Actual main function of the module for the `comparison` experiment.
+
+    It will compute the AUC metric system-wise and for each user considering ClayRS and Cornac VBPR fit models on all
+    number of epochs specified via the `-epo` cmd argument (invoking `evaluate_clayrs()`, `evaluate_cornac()`).
+
+    Results will be saved into `reports/results_clayrs` and `reports/results_cornac`.
+
+    """
 
     print("Evaluating ClayRS:")
     print("".center(80, "-"))
@@ -285,6 +318,7 @@ def main_additional():
 
 if __name__ == "__main__":
 
+    # pylint: disable=duplicate-code
     if ExperimentConfig.experiment == "comparison":
         main_comparison()
     else:

@@ -11,18 +11,7 @@ import clayrs_can_see.content_analyzer as ca
 import clayrs_can_see.recsys as rs
 from clayrs_can_see.utils import Report
 
-# seed everything
-SEED = ExperimentConfig.random_state
-np.random.seed(SEED)
-random.seed(SEED)
-torch.manual_seed(SEED)
-torch.cuda.manual_seed_all(SEED)
-torch.use_deterministic_algorithms(True)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
-os.environ["PYTHONHASHSEED"] = str(SEED)
-os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":16:8"
-print(f"Random seed set as {SEED}")
+SEED = seed_everything()
 
 
 def content_analyzer(output_contents_dir):
@@ -41,7 +30,7 @@ def content_analyzer(output_contents_dir):
 
     imgs_dirs = os.path.join(INTERIM_DIR, "imgs_dirs")
 
-    def pool_and_squeeze(x: torch.Tensor): # pylint: disable=invalid-name
+    def pool_and_squeeze(x: torch.Tensor):  # pylint: disable=invalid-name
         return torch.nn.functional.max_pool2d(x, kernel_size=x.size()[2:]).squeeze()
 
     tradesy_config.add_multiple_config(
@@ -135,6 +124,7 @@ def recommender_system(contents_dir):
             print(f"Considering number of epochs {epoch_num}")
             print("".center(80, '-'))
 
+            # pylint: disable=duplicate-code
             alg = rs.VBPR(item_field, device='cuda:0',
                           epochs=epoch_num,
                           gamma_dim=ExperimentConfig.gamma_dim,

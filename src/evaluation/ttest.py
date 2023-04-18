@@ -7,6 +7,15 @@ from src import REPORTS_DIR, ExperimentConfig
 
 
 def main_comparison():
+    """
+    Actual main function of the module for the `comparison` experiment.
+
+    It will compute the ttest statistical test using ClayRS comparing, for each number of epochs used in the experiment,
+    between ClayRS and Cornac user results.
+
+    Results will be saved into `reports/ttest_results`.
+
+    """
 
     ttest_dir = os.path.join(REPORTS_DIR, 'ttest_results')
     os.makedirs(ttest_dir, exist_ok=True)

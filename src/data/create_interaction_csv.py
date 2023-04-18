@@ -1,6 +1,10 @@
 """
-Module to create the
+Module used both by `comparison` and `additional` experiment.
+
+It is used to convert the tradesy raw interaction dataset into a CSV following UIR (user-item-rating) format and to
+preprocess it following the original VBPR paper instructions
 """
+
 import ast
 import itertools
 import os
@@ -14,29 +18,29 @@ from src import RAW_DIR, INTERIM_DIR
 
 
 def import_tradesy_feedback(path: str) -> dict:
-
     """
-
-    Create a dictionary where keys are user ids and values are lists of item ids that are positive
-    items for that user from the .json file containing
+    Create a dictionary where keys are string user ids and values are lists of item ids that are positive
+    items for that user from the .json file containing tne interactions
 
         ex:
 
-            {"0": ["1", "52"],
-             "1": ["10"],
-             ...}
+            {
+                "0": ["1", "52"],
+                "1": ["10"],
+                ...
+            }
 
     The format of the .json file is the one provided by the VBPR authors ('tradesy.json')
 
         ex:
 
-            {'lists': {'bought': [], 'selling': [], 'want': [], 'sold': ['3', '2']}, 'uid': '1'}
+            {'lists': {'bought': [],'selling': [], 'want': [], 'sold': ['3', '2']}, 'uid': '1'}
 
     Args:
-        path: path where the .csv file is
+        path: path where the .json file is stored
 
     Returns:
-        ratings_dict: dictionary with the previously defined syntax
+        ratings_dict: dictionary where keys are user ids and values are list of positive item ids for each user
 
     """
     ratings_dict = defaultdict(list)
@@ -60,20 +64,20 @@ def import_tradesy_feedback(path: str) -> dict:
 
 def preprocess_tradesy_feedback(tradesy_feedback: dict) -> pd.DataFrame:
     """
+    Remove duplicate items in users interactions and then remove users which have less than 5 implicit ratings
 
-    Remove users from the tradesy dataset which have less than 5 implicit ratings
-
-    The resulting dictionary is also saved as a .csv file in the processed dir
+    The resulting dictionary is also saved as a .csv file in the `processed` dir
 
     Args:
         tradesy_feedback: dictionary where keys are user ids and values are lists of item ids that are positive
             items for that user
+            ex:
 
-        ex:
-
-            {"0": ["1", "52"],
-             "1": ["10"],
-             ...}
+                {
+                    "0": ["1", "52"],
+                    "1": ["10"],
+                    ...
+                }
 
     Returns:
         implicit ratings: processed implicit ratings dataframe
@@ -103,6 +107,13 @@ def preprocess_tradesy_feedback(tradesy_feedback: dict) -> pd.DataFrame:
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    Raw tradesy feedback are first converted from JSON to CSV with UIR format (invoking `import_tradesy_feedback()`) and
+    then preprocessed (invoking `preprocess_tradesy_feedback()`)
+
+    """
 
     raw_tradesy_ratings = import_tradesy_feedback(os.path.join(RAW_DIR, "tradesy.json"))
 
