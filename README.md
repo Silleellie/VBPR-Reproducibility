@@ -10,7 +10,9 @@ Check the ['Experiment pipeline' section](#experiment-pipeline) for an overview 
 
 ## How to Use
 
-Simply execute `pip install requirements.txt` in a freshly created *virtual environment*. The source code has been tested with ***python 3.9***.
+Simply execute `pip install requirements.txt` in a freshly created *virtual environment*.
+
+The source code has been tested with ***python 3.9*** and **CUDA is required** to run the experiments.
 
 To perform the 'comparison' experiment between ClayRS and Cornac, run via *command line*:
 
