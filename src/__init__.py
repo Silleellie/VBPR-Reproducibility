@@ -31,8 +31,8 @@ class ExperimentConfig:
         - lr: learning rate that will be used during recommender training
         - random_state: seed that will be set for any library whenever random operations occur
         - experiment: either "comparison" or "additional"
-        - num_threads: number of threads that will be used to serialize produced contents by the Content Analyzer module
-            in ClayRS
+        - num_threads_ca: number of threads that will be used to serialize produced contents by the Content Analyzer
+            module in ClayRS
     """
     epochs = [5, 10, 20, 50]
     batch_size = 128
@@ -41,4 +41,4 @@ class ExperimentConfig:
     lr = 0.005
     random_state = 42
     experiment = "comparison"
-    num_threads = 4
+    num_threads_ca = 4

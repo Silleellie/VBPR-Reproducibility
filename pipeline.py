@@ -22,8 +22,9 @@ if __name__ == '__main__':
                         help='Learning rate for the VBPR network', metavar='0.005')
     parser.add_argument('-seed', '--random_seed', type=int, default=42,
                         help='random seed', metavar='42')
-    parser.add_argument('-nt', '--num_threads', type=int, default=4,
-                        help='Number of threads that will be used in ClayRS during Content Analyzer serialization phase',
+    parser.add_argument('-nt_ca', '--num_threads_ca', type=int, default=4,
+                        help='Number of threads that will be used in ClayRS '
+                             'during Content Analyzer serialization phase',
                         metavar='4')
     parser.add_argument('-exp', '--experiment', type=str, default='comparison',
                         help='Whether to perform the comparison experiment with Cornac, '
@@ -37,7 +38,7 @@ if __name__ == '__main__':
     ExperimentConfig.gamma_dim = args.gamma_dim
     ExperimentConfig.theta_dim = args.theta_dim
     ExperimentConfig.learning_rate = args.learning_rate
-    ExperimentConfig.num_threads = args.num_threads
+    ExperimentConfig.num_threads_ca = args.num_threads_ca
 
     if args.experiment in {"comparison", "additional"}:
         ExperimentConfig.experiment = args.experiment
