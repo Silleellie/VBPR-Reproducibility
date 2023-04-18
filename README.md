@@ -2,7 +2,7 @@
 
 ![pylint](https://img.shields.io/badge/pylint-10.00-brightgreen?logo=python&logoColor=white)
 
-Repository which includes everything needed to replicate VBPR paper by Prof. Julian McAuley of 2016 with a modified version of the ClayRS framework and the original version of the Cornac framework.
+Repository which includes everything needed to reproduce the VBPR paper by Prof. Julian McAuley of 2016 with a modified version of the ClayRS framework and the original version of the Cornac framework.
 It also contains everything to reproduce an end-to-end experiment using the modified version of ClayRS, 
 from feature extraction using the *caffe reference model* (with two different pre-processing pipelines) to *resnet50* and *vgg19*.
 
