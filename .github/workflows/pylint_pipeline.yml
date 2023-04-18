@@ -1,4 +1,4 @@
-name: Linting src & app
+name: Linting src package
 on:
   push:
     branches:
