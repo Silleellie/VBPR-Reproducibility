@@ -4,24 +4,14 @@ import random
 import torch
 import numpy as np
 
-from src import INTERIM_DIR, PROCESSED_DIR, ExperimentConfig, MODEL_DIR, DATA_DIR
+from src import INTERIM_DIR, PROCESSED_DIR, ExperimentConfig, MODEL_DIR, DATA_DIR, YAML_DIR
+from src.utils import load_user_map, load_item_map
 
 import clayrs_can_see.content_analyzer as ca
 import clayrs_can_see.recsys as rs
-from src.utils import load_user_map, load_item_map
+from clayrs_can_see.utils import Report
 
-# seed everything
-seed = ExperimentConfig.random_state
-np.random.seed(seed)
-random.seed(seed)
-torch.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)
-torch.use_deterministic_algorithms(True)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
-os.environ["PYTHONHASHSEED"] = str(seed)
-os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":16:8"
-print(f"Random seed set as {seed}")
+SEED = seed_everything()
 
 
 def content_analyzer(output_contents_dir):
@@ -40,7 +30,7 @@ def content_analyzer(output_contents_dir):
 
     imgs_dirs = os.path.join(INTERIM_DIR, "imgs_dirs")
 
-    def pool(x: torch.Tensor):
+    def pool_and_squeeze(x: torch.Tensor):  # pylint: disable=invalid-name
         return torch.nn.functional.max_pool2d(x, kernel_size=x.size()[2:]).squeeze()
 
     tradesy_config.add_multiple_config(
@@ -48,7 +38,8 @@ def content_analyzer(output_contents_dir):
         [
             ca.FieldConfig(
                 ca.PytorchImageModels('vgg19', resize_size=(256, 256), device='cuda:0',
-                                      batch_size=32, feature_layer=-3, apply_on_output=pool),
+                                      batch_size=32, feature_layer=-3, apply_on_output=pool_and_squeeze,
+                                      imgs_dirs=imgs_dirs),
                 preprocessing=[
                     ca.TorchCenterCrop(224),
                     ca.TorchNormalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
@@ -96,16 +87,21 @@ def content_analyzer(output_contents_dir):
         ]
     )
 
-    ca.ContentAnalyzer(config=tradesy_config).fit()
+    content_a = ca.ContentAnalyzer(config=tradesy_config, n_thread=ExperimentConfig.num_threads_ca)
+    content_a.fit()
+
+    Report(output_dir=YAML_DIR, ca_report_filename="ca_report_additional_exp").yaml(content_analyzer=content_a)
 
     print()
     print(f"Output of the Content Analyzer saved into {output_contents_dir}!")
+    print(f"Report of the Content Analyzer saved into {os.path.join(YAML_DIR, 'ca_report_additional_exp.yml')}!")
 
 
 def recommender_system(contents_dir):
 
     models_dir = os.path.join(MODEL_DIR, "additional_exp_vbpr")
     os.makedirs(models_dir, exist_ok=True)
+    os.makedirs(os.path.join(YAML_DIR, "rs_report_additional_exp"), exist_ok=True)
 
     user_map = load_user_map()
     item_map = load_item_map()
@@ -128,6 +124,7 @@ def recommender_system(contents_dir):
             print(f"Considering number of epochs {epoch_num}")
             print("".center(80, '-'))
 
+            # pylint: disable=duplicate-code
             alg = rs.VBPR(item_field, device='cuda:0',
                           epochs=epoch_num,
                           gamma_dim=ExperimentConfig.gamma_dim,
@@ -144,10 +141,17 @@ def recommender_system(contents_dir):
 
             fname_cbrs = os.path.join(models_dir, f"additional_exp_{item_field['image_path'][0]}_{epoch_num}.ml")
 
-            with open(fname_cbrs, "wb") as f:
-                pickle.dump(cbrs, f, protocol=pickle.HIGHEST_PROTOCOL)
+            with open(fname_cbrs, "wb") as file:
+                pickle.dump(cbrs, file, protocol=pickle.HIGHEST_PROTOCOL)
 
+            Report(output_dir=os.path.join(YAML_DIR, "rs_report_additional_exp"),
+                   rs_report_filename=f"rs_report_{item_field['image_path'][0]}_{epoch_num}").yaml(recsys=cbrs)
+
+            output_report_path = os.path.join(YAML_DIR,
+                                              'rs_report_additional_exp',
+                                              f'rs_report_{item_field["image_path"][0]}_{epoch_num}.yml')
             print(f"ClayRS model for {epoch_num} epochs saved into {fname_cbrs}!")
+            print(f"Report of the RecSys phase for {epoch_num} epochs saved into {output_report_path}!")
 
             if epoch_num != ExperimentConfig.epochs[-1]:
                 print("".center(80, '-'))

@@ -1,3 +1,9 @@
+"""
+Module used both by `comparison` and `additional` experiment.
+
+Build both the npy matrix containing original visual features and the item mapping.
+"""
+
 import os.path
 import csv
 import struct
@@ -10,32 +16,43 @@ import pandas as pd
 from src import INTERIM_DIR, RAW_DIR, PROCESSED_DIR
 
 
-def prepare_raw_source(path_b_tradesy: str, path_processed_csv: str, chunk=10000):
+def prepare_raw_source(path_b_tradesy: str, path_processed_csv: str, chunk: int = 10000):
+    """
+    Used to extract from the binary file (provided by the VBPR authors) the visual features of the items which
+    appear in the filtered interaction tradesy feedback.
+    The visual features are stored into a NPY matrix and a mapping between string item ids and integer ones is created.
+
+    Args:
+        path_b_tradesy: path where the binary file containing visual features is stored
+        path_processed_csv: path where the .csv file containing the filtered tradesy interactions is stored
+        chunk: number of items to vstack at once into the npy matrix
+
+    """
 
     def read_image_features(path, items_set):
-        with open(path, 'rb') as f:
-            f.seek(0)
+        with open(path, 'rb') as file:
+            file.seek(0)
             while True:
-                item_id = f.read(10)
+                item_id = file.read(10)
                 item_id = item_id.strip().decode()
 
                 if item_id == '':
                     break
 
                 if item_id not in items_set:
-                    f.seek(4*4096, 1)  # skip items features from current position (4 position for a single value)
+                    file.seek(4*4096, 1)  # skip items features from current position (4 position for a single value)
                     continue
 
                 item_vector = []
                 for _ in range(4096):
-                    item_vector.append(struct.unpack('f', f.read(4))[0])  # struct unpack returns a tuple
+                    item_vector.append(struct.unpack('f', file.read(4))[0])  # struct unpack returns a tuple
 
                 yield item_id, item_vector
 
     def useful_items(path_csv):
-        with open(path_csv, "r") as f:
+        with open(path_csv, "r", encoding='utf-8') as file:
 
-            iterat = csv.DictReader(f)
+            iterat = csv.DictReader(file)
             items_set = set(line["iid"] for line in iterat)
 
         return items_set
@@ -84,6 +101,13 @@ def prepare_raw_source(path_b_tradesy: str, path_processed_csv: str, chunk=10000
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    It will create the npy matrix and the item mapping (invoking `prepare_raw_source()`)
+
+    """
+
     path_csv_interim = os.path.join(INTERIM_DIR, "filtered_positive_interactions_tradesy.csv")
     path_raw_source_b = os.path.join(RAW_DIR, "image_features_tradesy.b")
 

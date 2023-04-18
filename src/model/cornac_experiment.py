@@ -1,10 +1,15 @@
+"""
+Module used by the `comparison` experiment.
+
+Uses the NPY feature matrix built in the data preparation phase to fit the VBPR algorithm using the Cornac framework.
+"""
+
 import copy
 import os
-import random
+import pickle
 
 import cornac
 import numpy as np
-import pickle
 import torch
 
 from cornac.data.dataset import Dataset
@@ -14,20 +19,31 @@ from src import PROCESSED_DIR, MODEL_DIR, ExperimentConfig
 from src.utils import load_user_map, load_train_test_instances, load_item_map
 
 # seed everything
-seed = ExperimentConfig.random_state
-np.random.seed(seed)
-random.seed(seed)
-torch.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)
+SEED = ExperimentConfig.random_state
+np.random.seed(SEED)
+random.seed(SEED)
+torch.manual_seed(SEED)
+torch.cuda.manual_seed_all(SEED)
 torch.use_deterministic_algorithms(True)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-os.environ["PYTHONHASHSEED"] = str(seed)
+os.environ["PYTHONHASHSEED"] = str(SEED)
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":16:8"
-print(f"Random seed set as {seed}")
+print(f"Random seed set as {SEED}")
 
 
 def build_train(feature_matrix_path: str):
+    """
+    Build the train Dataset data structure required by the Cornac library using serialized train set,
+    user map and item map and NPY feature matrix.
+
+    Args:
+        feature_matrix_path: path where the .npy matrix containing visual features is stored
+
+    Returns:
+        train_dataset: built Cornac Dataset data structure with item visual features as image modality
+
+    """
 
     features = np.load(feature_matrix_path)
 
@@ -36,7 +52,7 @@ def build_train(feature_matrix_path: str):
     user_map = load_user_map()
     item_map = load_item_map()
 
-    train_dataset = Dataset.build(train_tuples, global_uid_map=user_map, global_iid_map=item_map, seed=seed)
+    train_dataset = Dataset.build(train_tuples, global_uid_map=user_map, global_iid_map=item_map, seed=SEED)
 
     # mock iterator to disable shuffle for replicability
     train_dataset.uij_iter = lambda batch_size, shuffle: Dataset.uij_iter(train_dataset, batch_size, shuffle=False)
@@ -51,6 +67,19 @@ def build_train(feature_matrix_path: str):
 
 
 def train_cornac(train_dataset: Dataset, features: np.ndarray, epoch: int):
+    """
+    Train a VBPR Recommender using the Cornac framework
+
+    Args:
+        train_dataset: cornac Dataset data structure representing train set
+        features: numpy array containing visual features for each item (each row represents an item)
+        epoch: number of epochs to train the model for
+
+    Returns:
+        vbpr: Trained VBPR Recommender from the cornac framework
+
+    """
+
     # Init parameters since cornac uses numpy and ClayRS uses torch for initialization,
     # torch and numpy uses different seeds
     gamma_dim = ExperimentConfig.gamma_dim
@@ -60,18 +89,18 @@ def train_cornac(train_dataset: Dataset, features: np.ndarray, epoch: int):
     n_users = train_dataset.total_users
     n_items = train_dataset.total_items
 
-    Gu = torch.zeros(size=(n_users, gamma_dim))
-    Gi = torch.zeros(size=(n_items, gamma_dim))
+    Gu = torch.zeros(size=(n_users, gamma_dim)) # pylint: disable=invalid-name
+    Gi = torch.zeros(size=(n_items, gamma_dim)) # pylint: disable=invalid-name
 
-    Tu = torch.zeros(size=(n_users, theta_dim))
+    Tu = torch.zeros(size=(n_users, theta_dim)) # pylint: disable=invalid-name
 
-    E = torch.zeros(size=(features_dim, theta_dim))
-    Bp = torch.zeros(size=(features_dim, 1))
+    E = torch.zeros(size=(features_dim, theta_dim)) # pylint: disable=invalid-name
+    Bp = torch.zeros(size=(features_dim, 1)) # pylint: disable=invalid-name
 
-    Bi = torch.zeros(size=(n_items, 1)).squeeze()
+    Bi = torch.zeros(size=(n_items, 1)).squeeze() # pylint: disable=invalid-name
 
     # seed torch
-    torch.manual_seed(seed)
+    torch.manual_seed(SEED)
 
     torch.nn.init.xavier_uniform_(Gu)
     torch.nn.init.xavier_uniform_(Gi)
@@ -90,7 +119,7 @@ def train_cornac(train_dataset: Dataset, features: np.ndarray, epoch: int):
         lambda_b=0.01,
         lambda_e=0.0,
         use_gpu=True,
-        seed=seed,
+        seed=SEED,
         init_params={
             "Gu": Gu.numpy(),
             "Gi": Gi.numpy(),
@@ -107,6 +136,15 @@ def train_cornac(train_dataset: Dataset, features: np.ndarray, epoch: int):
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    It first builds the train Dataset data structure required by the Cornac library (invoking `build_train()`),
+    and then fits the VBPR algorithm using the same library on the number of epochs specified by the `-epo` cmd argument
+
+    The fit algorithms will be saved into `models/vbpr_cornac`.
+
+    """
 
     os.makedirs(os.path.join(MODEL_DIR, "vbpr_cornac"), exist_ok=True)
 
@@ -122,8 +160,8 @@ def main():
 
         fname = os.path.join(MODEL_DIR, "vbpr_cornac", f"vbpr_cornac_{epoch}.ml")
 
-        with open(fname, "wb") as f:
-            pickle.dump(copy.deepcopy(vbpr), f, protocol=pickle.HIGHEST_PROTOCOL)
+        with open(fname, "wb") as file:
+            pickle.dump(copy.deepcopy(vbpr), file, protocol=pickle.HIGHEST_PROTOCOL)
 
         print(f"Cornac model for {epoch} epochs saved into {fname}!")
 

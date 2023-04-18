@@ -1,3 +1,7 @@
+"""
+Main module of the data preparation phase
+"""
+
 import os.path
 
 from src.data.create_interaction_csv import main as csv_main
@@ -11,10 +15,18 @@ from src import ExperimentConfig, PROCESSED_DIR
 
 
 def main():
+    """
+    Main which performs the data preparation phase by calling functions w.r.t. the operations to carry out for the
+    specified experiment type (comparison or additional)
+
+    """
 
     print(" Downloading raw sources ".center(80, '#'))
     print()
-    dl_main_comparison() if ExperimentConfig.experiment == "comparison" else dl_main_additional()
+    if ExperimentConfig.experiment == "comparison":
+        dl_main_comparison()
+    else:
+        dl_main_additional()
     print()
     print()
 

@@ -3,8 +3,9 @@ import pickle
 
 import clayrs_can_see.content_analyzer as ca
 import clayrs_can_see.recsys as rs
+from clayrs_can_see.utils import Report
 
-from src import PROCESSED_DIR, DATA_DIR, MODEL_DIR, ExperimentConfig
+from src import PROCESSED_DIR, DATA_DIR, MODEL_DIR, ExperimentConfig, YAML_DIR
 from src.utils import load_user_map, load_item_map
 
 
@@ -24,10 +25,14 @@ def content_analyzer_tradesy(tradesy_item_map_path: str, features_matrix_path: s
         )
     )
 
-    ca.ContentAnalyzer(items_ca).fit()
+    content_a = ca.ContentAnalyzer(items_ca, n_thread=ExperimentConfig.num_threads_ca)
+    content_a.fit()
+
+    Report(output_dir=YAML_DIR, ca_report_filename="ca_report_comparison_exp").yaml(content_analyzer=content_a)
 
     print()
     print(f"Output of the Content Analyzer saved into {output_contents_dir}!")
+    print(f"Report of the Content Analyzer phase saved into {os.path.join(YAML_DIR, 'ca_report_comparison_exp.yml')}!")
 
 
 def recsys_tradesy(train_set_path: str, items_dir: str, epoch: int):
@@ -68,6 +73,7 @@ def main():
               f"content analyzer phase has been skipped")
 
     os.makedirs(os.path.join(MODEL_DIR, "vbpr_clayrs"), exist_ok=True)
+    os.makedirs(os.path.join(YAML_DIR, "rs_report_comparison_exp"), exist_ok=True)
 
     print("".center(80, "-"))
     for epoch in ExperimentConfig.epochs:
@@ -79,10 +85,15 @@ def main():
 
         fname_cbrs = os.path.join(MODEL_DIR, "vbpr_clayrs", f"vbpr_clayrs_{epoch}.ml")
 
-        with open(fname_cbrs, "wb") as f:
-            pickle.dump(cbrs, f, protocol=pickle.HIGHEST_PROTOCOL)
+        with open(fname_cbrs, "wb") as file:
+            pickle.dump(cbrs, file, protocol=pickle.HIGHEST_PROTOCOL)
+
+        Report(output_dir=os.path.join(YAML_DIR, "rs_report_comparison_exp"),
+               rs_report_filename=f"rs_report_{epoch}").yaml(recsys=cbrs)
 
         print(f"ClayRS model for {epoch} epochs saved into {fname_cbrs}!")
+        print(f"Report of the RecSys phase for {epoch} epochs saved into "
+              f"{os.path.join(YAML_DIR, 'rs_report_comparison_exp', f'rs_report_{epoch}')}.yml!")
 
         # if this is the last epoch we do not print the separator
         if epoch != ExperimentConfig.epochs[-1]:

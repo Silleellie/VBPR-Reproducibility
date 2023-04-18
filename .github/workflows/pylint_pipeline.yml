@@ -1,0 +1,25 @@
+name: Linting src & app
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "src/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "src/**"
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: Silleellie/pylint-github-action@v1
+        with:
+          package-path: src
+          python-version: 3.9
+          requirements-path: requirements.txt
+          readme-path: README.md

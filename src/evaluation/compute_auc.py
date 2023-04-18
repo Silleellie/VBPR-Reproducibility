@@ -1,16 +1,28 @@
+"""
+Module used both by `comparison` and `additional` experiment.
+
+Computes the AUC metric considering models fit and serialized by both experiment:
+    * Cornac and ClayRS models at 5, 10, 20, 50 epochs (`comparsion` experiment)
+    * ClayRS models fit on different Content Analyzer generated representations at 10, 20 epochs
+    (`additional` experiment)
+"""
+
 import os
 import pickle
 import time
+from typing import List, Tuple
 
 import cornac
 import numpy as np
-import clayrs_can_see.content_analyzer as ca
-import clayrs_can_see.recsys as rs
 import pandas as pd
-from cornac.data import Dataset, ImageModality
-from cornac.eval_methods import ranking_eval
 from tqdm import tqdm
 import numpy_indexed as npi
+
+from cornac.data import Dataset, ImageModality
+from cornac.eval_methods import ranking_eval
+
+import clayrs_can_see.content_analyzer as ca
+import clayrs_can_see.recsys as rs
 
 from src import MODEL_DIR, PROCESSED_DIR, REPORTS_DIR, ExperimentConfig
 from src.utils import load_user_map, load_item_map, load_train_test_instances
@@ -31,6 +43,7 @@ def auc_cornac(vbpr_cornac, train_dataset, test_dataset):
     return sys_result, users_results
 
 
+# pylint: disable=too-many-locals
 def auc_clayrs(vbpr_clayrs: rs.ContentBasedRS, train_set: ca.Ratings, test_set: ca.Ratings):
     n_items = len(test_set.item_map)
     item_idxs = np.arange(0, n_items)
@@ -74,8 +87,22 @@ def auc_clayrs(vbpr_clayrs: rs.ContentBasedRS, train_set: ca.Ratings, test_set: 
 
 
 def evaluate_clayrs(epoch: int):
-    with open(os.path.join(MODEL_DIR, "vbpr_clayrs", f"vbpr_clayrs_{epoch}.ml"), "rb") as f:
-        vbpr_clayrs = pickle.load(f)
+    """
+    Evaluate the ClayRS model fit on the specified number of epochs by first loading it into memory together with the
+    train and test set and invoke the `auc_clayrs()` method to compute the AUC metric
+
+    Args:
+        epoch: integer used to retrieve the corresponding ClayRS model trained on that number of epochs
+
+    Returns:
+        sys_results: dataframe containing the average AUC value over all users and the amount of time required
+            by the evaluation
+        user_results: dataframe containing for each user integer key its corresponding AUC value
+
+    """
+
+    with open(os.path.join(MODEL_DIR, "vbpr_clayrs", f"vbpr_clayrs_{epoch}.ml"), "rb") as file:
+        vbpr_clayrs = pickle.load(file)
 
     user_map = load_user_map()
     item_map = load_item_map()
@@ -101,9 +128,10 @@ def evaluate_clayrs(epoch: int):
     return sys_result, users_result
 
 
+# pylint: disable=too-many-locals
 def evaluate_cornac(epoch: int):
-    with open(os.path.join(MODEL_DIR, "vbpr_cornac", f"vbpr_cornac_{epoch}.ml"), "rb") as f:
-        vbpr_cornac = pickle.load(f)
+    with open(os.path.join(MODEL_DIR, "vbpr_cornac", f"vbpr_cornac_{epoch}.ml"), "rb") as file:
+        vbpr_cornac = pickle.load(file)
 
     user_map = load_user_map()
     item_map = load_item_map()
@@ -143,6 +171,7 @@ def evaluate_cornac(epoch: int):
     return sys_result, users_result
 
 
+# pylint: disable=too-many-locals
 def evaluate_additional_experiment(epoch: int, repr_id: str):
 
     user_map = load_user_map()
@@ -158,11 +187,11 @@ def evaluate_additional_experiment(epoch: int, repr_id: str):
     test_set = ca.Ratings.from_list(test_tuples, user_map=user_map, item_map=item_map)
 
     with open(os.path.join(MODEL_DIR, "additional_exp_vbpr", f"additional_exp_{repr_id}_{epoch}.ml"),
-              "rb") as f:
-        rs = pickle.load(f)
+              "rb") as file:
+        rec_sys = pickle.load(file)
 
     start = time.time()
-    sys_result, users_result = auc_clayrs(rs, train_set, test_set)
+    sys_result, users_result = auc_clayrs(rec_sys, train_set, test_set)
     end = time.time()
 
     elapsed_m, elapsed_s = divmod(end - start, 60)
@@ -176,6 +205,15 @@ def evaluate_additional_experiment(epoch: int, repr_id: str):
 
 
 def main_comparison():
+    """
+    Actual main function of the module for the `comparison` experiment.
+
+    It will compute the AUC metric system-wise and for each user considering ClayRS and Cornac VBPR fit models on all
+    number of epochs specified via the `-epo` cmd argument (invoking `evaluate_clayrs()`, `evaluate_cornac()`).
+
+    Results will be saved into `reports/results_clayrs` and `reports/results_cornac`.
+
+    """
 
     print("Evaluating ClayRS:")
     print("".center(80, "-"))
@@ -258,9 +296,11 @@ def main_additional():
                   f"Elapsed time: {str(sys_result_clayrs['Elapsed time'][0])}\n")
 
             sys_result_clayrs.to_csv(os.path.join(results_additional_dir,
-                                                  f"sys_result_additional_exp_{repr_id}_{epoch}.csv"), index=False)
+                                                  f"sys_result_additional_exp_{repr_id}_{epoch}.csv"),
+                                     index=False)
             users_results_clayrs.to_csv(os.path.join(results_additional_dir,
-                                                     f"users_results_additional_exp_{repr_id}_{epoch}.csv"), index=False)
+                                                     f"users_results_additional_exp_{repr_id}_{epoch}.csv"),
+                                        index=False)
 
             print(f"AUC sys results saved into "
                   f"{os.path.join(results_additional_dir, f'sys_result_additional_exp_{repr_id}_{epoch}.csv')}!")
@@ -278,8 +318,8 @@ def main_additional():
 
 if __name__ == "__main__":
 
+    # pylint: disable=duplicate-code
     if ExperimentConfig.experiment == "comparison":
         main_comparison()
     else:
         main_additional()
-
