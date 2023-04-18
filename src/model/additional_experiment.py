@@ -5,24 +5,24 @@ import torch
 import numpy as np
 
 from src import INTERIM_DIR, PROCESSED_DIR, ExperimentConfig, MODEL_DIR, DATA_DIR, YAML_DIR
+from src.utils import load_user_map, load_item_map
 
 import clayrs_can_see.content_analyzer as ca
 import clayrs_can_see.recsys as rs
 from clayrs_can_see.utils import Report
-from src.utils import load_user_map, load_item_map
 
 # seed everything
-seed = ExperimentConfig.random_state
-np.random.seed(seed)
-random.seed(seed)
-torch.manual_seed(seed)
-torch.cuda.manual_seed_all(seed)
+SEED = ExperimentConfig.random_state
+np.random.seed(SEED)
+random.seed(SEED)
+torch.manual_seed(SEED)
+torch.cuda.manual_seed_all(SEED)
 torch.use_deterministic_algorithms(True)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
-os.environ["PYTHONHASHSEED"] = str(seed)
+os.environ["PYTHONHASHSEED"] = str(SEED)
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":16:8"
-print(f"Random seed set as {seed}")
+print(f"Random seed set as {SEED}")
 
 
 def content_analyzer(output_contents_dir):
@@ -41,7 +41,7 @@ def content_analyzer(output_contents_dir):
 
     imgs_dirs = os.path.join(INTERIM_DIR, "imgs_dirs")
 
-    def pool_and_squeeze(x: torch.Tensor):
+    def pool_and_squeeze(x: torch.Tensor): # pylint: disable=invalid-name
         return torch.nn.functional.max_pool2d(x, kernel_size=x.size()[2:]).squeeze()
 
     tradesy_config.add_multiple_config(
@@ -151,8 +151,8 @@ def recommender_system(contents_dir):
 
             fname_cbrs = os.path.join(models_dir, f"additional_exp_{item_field['image_path'][0]}_{epoch_num}.ml")
 
-            with open(fname_cbrs, "wb") as f:
-                pickle.dump(cbrs, f, protocol=pickle.HIGHEST_PROTOCOL)
+            with open(fname_cbrs, "wb") as file:
+                pickle.dump(cbrs, file, protocol=pickle.HIGHEST_PROTOCOL)
 
             Report(output_dir=os.path.join(YAML_DIR, "rs_report_additional_exp"),
                    rs_report_filename=f"rs_report_{item_field['image_path'][0]}_{epoch_num}").yaml(recsys=cbrs)

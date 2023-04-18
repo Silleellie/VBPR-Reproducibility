@@ -85,8 +85,8 @@ def main():
 
         fname_cbrs = os.path.join(MODEL_DIR, "vbpr_clayrs", f"vbpr_clayrs_{epoch}.ml")
 
-        with open(fname_cbrs, "wb") as f:
-            pickle.dump(cbrs, f, protocol=pickle.HIGHEST_PROTOCOL)
+        with open(fname_cbrs, "wb") as file:
+            pickle.dump(cbrs, file, protocol=pickle.HIGHEST_PROTOCOL)
 
         Report(output_dir=os.path.join(YAML_DIR, "rs_report_comparison_exp"),
                rs_report_filename=f"rs_report_{epoch}").yaml(recsys=cbrs)

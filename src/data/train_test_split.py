@@ -15,16 +15,16 @@ def filter_interactions_wo_features(path_positive_interactions: str, path_item_f
     # ---------- delete interactions for which we don't have feature (image doesn't exist) ----------
     tradesy_feedback = defaultdict(list)
 
-    with open(path_item_features_csv_map, "r") as f:
-        iterat = csv.DictReader(f)
+    with open(path_item_features_csv_map, "r", encoding='utf-8') as file:
+        iterat = csv.DictReader(file)
         available_items_id = set(line["item_id"] for line in iterat)
 
     count_skipped_interactions = 0
-    with open(path_positive_interactions, "r") as f:
-        n_lines = sum(1 for _ in f)
-        f.seek(0)
+    with open(path_positive_interactions, "r", encoding='utf-8') as file:
+        n_lines = sum(1 for _ in file)
+        file.seek(0)
 
-        iterat = csv.DictReader(f)
+        iterat = csv.DictReader(file)
         for line in tqdm(iterat, total=n_lines - 1, desc="Splitting interactions in train/test"):
             user_id = line["uid"]
             pos_item_id = line["iid"]
@@ -55,13 +55,13 @@ def get_train_test(tradesy_feedback: Dict[str, list]):
 
     # ---------- leave one out split ----------
     users_with_1_sample = 0
-    for u in tradesy_feedback:
-        user_pos_items = tradesy_feedback[u]
+    for user in tradesy_feedback:
+        user_pos_items = tradesy_feedback[user]
         try:
             train_items, test_items = train_test_split(user_pos_items, test_size=1,
                                                        random_state=ExperimentConfig.random_state)
-            train_feedback[u] = train_items
-            test_feedback[u] = test_items
+            train_feedback[user] = train_items
+            test_feedback[user] = test_items
         except ValueError:
             users_with_1_sample += 1
 

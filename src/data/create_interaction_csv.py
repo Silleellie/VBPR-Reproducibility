@@ -1,3 +1,6 @@
+"""
+Module to create the
+"""
 import ast
 import itertools
 import os
@@ -11,26 +14,71 @@ from src import RAW_DIR, INTERIM_DIR
 
 
 def import_tradesy_feedback(path: str) -> dict:
+
+    """
+
+    Create a dictionary where keys are user ids and values are lists of item ids that are positive
+    items for that user from the .json file containing
+
+        ex:
+
+            {"0": ["1", "52"],
+             "1": ["10"],
+             ...}
+
+    The format of the .json file is the one provided by the VBPR authors ('tradesy.json')
+
+        ex:
+
+            {'lists': {'bought': [], 'selling': [], 'want': [], 'sold': ['3', '2']}, 'uid': '1'}
+
+    Args:
+        path: path where the .csv file is
+
+    Returns:
+        ratings_dict: dictionary with the previously defined syntax
+
+    """
     ratings_dict = defaultdict(list)
 
     # ----------- LOAD USER POSITIVE ITEMS IN DICT -----------
 
-    with open(path, 'r') as f:
-        n_lines = sum(1 for _ in f)
+    with open(path, 'r', encoding='utf-8') as file:
+        n_lines = sum(1 for _ in file)
 
-        f.seek(0)
-        for line in tqdm(f, desc="Importing raw feedbacks...", total=n_lines):
+        file.seek(0)
+        for line in tqdm(file, desc="Importing raw feedbacks...", total=n_lines):
             user_profile = ast.literal_eval(line)
 
             user_id = user_profile["uid"]
             user_positive_items = user_profile["lists"]["want"] + user_profile["lists"]["bought"]
 
             ratings_dict[user_id].extend(user_positive_items)
-    
+
     return ratings_dict
 
 
 def preprocess_tradesy_feedback(tradesy_feedback: dict) -> pd.DataFrame:
+    """
+
+    Remove users from the tradesy dataset which have less than 5 implicit ratings
+
+    The resulting dictionary is also saved as a .csv file in the processed dir
+
+    Args:
+        tradesy_feedback: dictionary where keys are user ids and values are lists of item ids that are positive
+            items for that user
+
+        ex:
+
+            {"0": ["1", "52"],
+             "1": ["10"],
+             ...}
+
+    Returns:
+        implicit ratings: processed implicit ratings dataframe
+
+    """
 
     filtered_dict = {user_id: np.unique(positive_items) for user_id, positive_items in tradesy_feedback.items()
                      if len(np.unique(positive_items)) >= 5}

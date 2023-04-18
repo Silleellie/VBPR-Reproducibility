@@ -1,9 +1,12 @@
+"""
+Module containing the methods to create the images dataset used in the VBPR paper
+"""
 import os
+import io
 from typing import Set
 
 from tqdm import tqdm
 from PIL import Image
-import io
 import numpy as np
 import pandas as pd
 
@@ -11,6 +14,20 @@ from src import INTERIM_DIR, RAW_DIR
 
 
 def extract_images_from_npy(ds_path: str, item_ids_to_extract: Set[str]):
+    """
+
+    Extract the images of the tradesy dataset used for the VBPR paper from the tradesy dataset used for the DVBPR paper
+
+    The extracted images will be saved in the interim directory in the 'tradesy_images' directory
+    A .csv file will also be created in the interim directory, associating each item id with its corresponding image
+    path in the 'tradesy_images' directory
+
+    Args:
+        ds_path: path where the npy file containing the DVBPR dataset is
+        item_ids_to_extract: list of item ids of the VBPR tradesy dataset in order to extract only those from the
+            DVBPR dataset
+
+    """
     print("Loading NPY matrix containing all tradesy images...")
 
     images_paths_csv = os.path.join(INTERIM_DIR, 'tradesy_images_paths.csv')
@@ -51,8 +68,8 @@ def extract_images_from_npy(ds_path: str, item_ids_to_extract: Set[str]):
 
                 successfully_extracted_imgs += 1
 
-        with open(images_paths_csv, 'w') as f:
-            f.write(csv_raw_source)
+        with open(images_paths_csv, 'w', encoding='utf-8') as file:
+            file.write(csv_raw_source)
 
         print()
         print(f"{successfully_extracted_imgs}/{len(item_ids_to_extract)} images extracted and saved "
