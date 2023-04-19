@@ -159,7 +159,7 @@ def evaluate_clayrs(models_exp_dir: str, repr_id: str, epoch: str):
 
 
 # pylint: disable=too-many-locals
-def evaluate_cornac(epoch: int):
+def evaluate_cornac(models_exp_dir: str, epoch: int):
     """
     Evaluate the Cornac model fit on the specified number of epochs by first loading it into memory together with the
     train and test set and invoke the `auc_cornac()` method to compute the AUC metric
@@ -174,7 +174,7 @@ def evaluate_cornac(epoch: int):
 
     """
 
-    with open(os.path.join(MODEL_DIR, "vbpr_cornac", f"vbpr_cornac_{epoch}.ml"), "rb") as file:
+    with open(os.path.join(models_exp_dir, f"vbpr_cornac_{epoch}.ml"), "rb") as file:
         vbpr_cornac = pickle.load(file)
 
     user_map = load_user_map()
@@ -255,8 +255,7 @@ def common_eval_clayrs(models_exp_dir: str, field_representation_list: list, res
             print("".center(80, "*"))
 
 
-
-def main_comparison():
+def main_exp1():
     """
     Actual main function of the module for the `comparison` experiment.
 
@@ -270,33 +269,18 @@ def main_comparison():
     print("Evaluating ClayRS:")
     print("".center(80, "-"))
 
+    models_clayrs_dir = os.path.join(MODEL_DIR, "exp1", "vbpr_clayrs")
+    models_cornac_dir = os.path.join(MODEL_DIR, "exp1", "vbpr_cornac")
+
     results_clayrs_dir = os.path.join(REPORTS_DIR, "results_clayrs")
     results_cornac_dir = os.path.join(REPORTS_DIR, "results_cornac")
 
     os.makedirs(results_clayrs_dir, exist_ok=True)
     os.makedirs(results_cornac_dir, exist_ok=True)
 
-    for epoch in ExperimentConfig.epochs:
-        print(f"Considering number of epochs {epoch}")
-        print("".center(80, "-"))
-        sys_result_clayrs, users_results_clayrs = evaluate_clayrs(epoch)
-
-        print(f"AUC: {float(sys_result_clayrs['AUC'][0])}, "
-              f"Elapsed time: {str(sys_result_clayrs['Elapsed time'][0])}\n")
-
-        sys_result_clayrs.to_csv(os.path.join(results_clayrs_dir,
-                                              f"sys_result_clayrs_{epoch}.csv"), index=False)
-        users_results_clayrs.to_csv(os.path.join(results_clayrs_dir,
-                                                 f"users_results_clayrs_{epoch}.csv"), index=False)
-
-        print(f"AUC sys results saved into "
-              f"{os.path.join(results_clayrs_dir, f'sys_result_clayrs_{epoch}.csv')}!")
-        print(f"AUC per user results saved into "
-              f"{os.path.join(results_clayrs_dir, f'users_results_clayrs_{epoch}.csv')}!")
-
-        # if this is the last epoch we do not print the separator
-        if epoch != ExperimentConfig.epochs[-1]:
-            print("".center(80, '-'))
+    common_eval_clayrs(models_exp_dir=models_clayrs_dir,
+                       field_representation_list=["imported_features"],
+                       results_output_dir=results_clayrs_dir)
 
     print()
     print()
@@ -305,7 +289,7 @@ def main_comparison():
     for epoch in ExperimentConfig.epochs:
         print(f"Considering number of epochs {epoch}")
         print("".center(80, "-"))
-        sys_result_cornac, users_results_cornac = evaluate_cornac(epoch)
+        sys_result_cornac, users_results_cornac = evaluate_cornac(models_cornac_dir, epoch)
 
         print(f"AUC: {float(sys_result_cornac['AUC'][0])}, "
               f"Elapsed time: {str(sys_result_cornac['Elapsed time'][0])}\n")
@@ -326,64 +310,46 @@ def main_comparison():
             print("".center(80, '-'))
 
 
-def main_additional():
-    """
-    Actual main function of the module for the `additional` experiment.
-
-    It will compute the AUC metric system-wise and for each user considering ClayRS VBPR fit models on all
-    number of epochs specified via the `-epo` cmd argument and on all available representations, that are 'resnet50',
-    'caffe', 'caffe_center_crop' and 'vgg19' (invoking `evaluate_clayrs()`).
-
-    Results will be saved into `reports/results_additional_exp`.
-
-    """
+def main_exp2():
 
     print("Evaluating ClayRS:")
     print("".center(80, "-"))
 
-    results_additional_dir = os.path.join(REPORTS_DIR, "results_additional_exp")
+    models_clayrs_dir = os.path.join(MODEL_DIR, "exp2")
 
-    os.makedirs(results_additional_dir, exist_ok=True)
+    results_clayrs_dir = os.path.join(REPORTS_DIR, "exp2")
+    os.makedirs(results_clayrs_dir, exist_ok=True)
 
-    repr_ids = ['resnet50', 'caffe', 'caffe_center_crop', 'vgg19']
+    field_representation_list = ["caffe", "caffe_center_crop"]
 
-    for epoch in ExperimentConfig.epochs:
-        print(f"Considering number of epochs {epoch}")
-        print("".center(80, "-"))
+    common_eval_clayrs(models_exp_dir=models_clayrs_dir,
+                       field_representation_list=field_representation_list,
+                       results_output_dir=results_clayrs_dir)
 
-        for repr_id in repr_ids:
-            print(f"Considering representation with id {repr_id}")
-            sys_result_clayrs, users_results_clayrs = evaluate_additional_experiment(epoch, repr_id)
 
-            print(f"AUC: {float(sys_result_clayrs['AUC'][0])}, "
-                  f"Elapsed time: {str(sys_result_clayrs['Elapsed time'][0])}\n")
+def main_exp3():
 
-            sys_result_clayrs.to_csv(os.path.join(results_additional_dir,
-                                                  f"sys_result_additional_exp_{repr_id}_{epoch}.csv"),
-                                     index=False)
-            users_results_clayrs.to_csv(os.path.join(results_additional_dir,
-                                                     f"users_results_additional_exp_{repr_id}_{epoch}.csv"),
-                                        index=False)
+    print("Evaluating ClayRS:")
+    print("".center(80, "-"))
 
-            print(f"AUC sys results saved into "
-                  f"{os.path.join(results_additional_dir, f'sys_result_additional_exp_{repr_id}_{epoch}.csv')}!")
-            print(f"AUC per user results saved into "
-                  f"{os.path.join(results_additional_dir, f'users_results_clayrs_{repr_id}_{epoch}.csv')}!")
+    models_clayrs_dir = os.path.join(MODEL_DIR, "exp3")
 
-            # if this is the last repr we do not print the separator
-            if repr_id != repr_ids[-1]:
-                print("".center(80, '-'))
+    results_clayrs_dir = os.path.join(REPORTS_DIR, "exp3")
+    os.makedirs(results_clayrs_dir, exist_ok=True)
 
-        # if this is the last epoch we do not print the separator
-        # pylint: disable=duplicate-code
-        if epoch != ExperimentConfig.epochs[-1]:
-            print("".center(80, '-'))
+    field_representation_list = ["vgg19", "resnet50"]
+
+    common_eval_clayrs(models_exp_dir=models_clayrs_dir,
+                       field_representation_list=field_representation_list,
+                       results_output_dir=results_clayrs_dir)
 
 
 if __name__ == "__main__":
 
     # pylint: disable=duplicate-code
-    if ExperimentConfig.experiment == "comparison":
-        main_comparison()
+    if ExperimentConfig.experiment == "exp1":
+        main_exp1()
+    elif ExperimentConfig.experiment == "exp2":
+        main_exp2()
     else:
-        main_additional()
+        main_exp3()
