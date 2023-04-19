@@ -135,8 +135,8 @@ def main():
     The fit algorithms will be saved into `models/vbpr_cornac`.
 
     """
-
-    os.makedirs(os.path.join(MODEL_DIR, "vbpr_cornac"), exist_ok=True)
+    models_dir = os.path.join(MODEL_DIR, "exp1", "vbpr_cornac")
+    os.makedirs(models_dir, exist_ok=True)
 
     feature_matrix_path = os.path.join(PROCESSED_DIR, "features_matrix.npy")
 
@@ -148,7 +148,7 @@ def main():
         print("".center(80, '-'))
         vbpr = train_cornac(train_set, features, epoch)
 
-        fname = os.path.join(MODEL_DIR, "vbpr_cornac", f"vbpr_cornac_{epoch}.ml")
+        fname = os.path.join(models_dir, f"vbpr_cornac_{epoch}.ml")
 
         with open(fname, "wb") as file:
             pickle.dump(copy.deepcopy(vbpr), file, protocol=pickle.HIGHEST_PROTOCOL)
