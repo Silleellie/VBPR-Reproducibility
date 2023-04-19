@@ -114,13 +114,16 @@ def auc_clayrs(vbpr_clayrs: rs.ContentBasedRS, train_set: ca.Ratings, test_set: 
     return sys_result, per_user_result
 
 
-def evaluate_clayrs(epoch: int):
+# pylint: disable=too-many-locals
+def evaluate_clayrs(models_exp_dir: str, repr_id: str, epoch: str):
     """
-    Evaluate the ClayRS model fit on the specified number of epochs by first loading it into memory together with the
-    train and test set and invoke the `auc_clayrs()` method to compute the AUC metric
+    Evaluate the ClayRS model fit on the specified number of epochs and on the specified representation key
+    by first loading it into memory together with the train and test set and invoke the `auc_clayrs()` method to
+    compute the AUC metric
 
     Args:
         epoch: integer used to retrieve the corresponding ClayRS model trained on that number of epochs
+        repr_id: string used to retrieve the corresponding ClayRS model trained on that content representation
 
     Returns:
         sys_results: dataframe containing the average AUC value over all users and the amount of time required
@@ -129,8 +132,8 @@ def evaluate_clayrs(epoch: int):
 
     """
 
-    with open(os.path.join(MODEL_DIR, "vbpr_clayrs", f"vbpr_clayrs_{epoch}.ml"), "rb") as file:
-        vbpr_clayrs = pickle.load(file)
+    with open(os.path.join(models_exp_dir, f"vbpr_clayrs_{repr_id}_{epoch}.ml"), "rb") as file:
+        rec_sys = pickle.load(file)
 
     user_map = load_user_map()
     item_map = load_item_map()
@@ -139,11 +142,10 @@ def evaluate_clayrs(epoch: int):
     test_tuples = load_train_test_instances(mode="test")
 
     train_set = ca.Ratings.from_list(train_tuples, user_map=user_map, item_map=item_map)
-
     test_set = ca.Ratings.from_list(test_tuples, user_map=user_map, item_map=item_map)
 
     start = time.time()
-    sys_result, users_result = auc_clayrs(vbpr_clayrs, train_set, test_set)
+    sys_result, users_result = auc_clayrs(rec_sys, train_set, test_set)
     end = time.time()
 
     elapsed_m, elapsed_s = divmod(end - start, 60)
@@ -213,52 +215,45 @@ def evaluate_cornac(epoch: int):
     return sys_result, users_result
 
 
-# pylint: disable=too-many-locals
-def evaluate_additional_experiment(epoch: int, repr_id: str):
-    """
-    Evaluate the ClayRS model fit on the specified number of epochs and on the specified representation key
-    by first loading it into memory together with the train and test set and invoke the `auc_clayrs()` method to
-    compute the AUC metric
+def common_eval_clayrs(models_exp_dir: str, field_representation_list: list, results_output_dir: str):
 
-    Args:
-        epoch: integer used to retrieve the corresponding ClayRS model trained on that number of epochs
-        repr_id: string used to retrieve the corresponding ClayRS model trained on that content representation
+    print("".center(80, "*"))
+    for repr_id in field_representation_list:
 
-    Returns:
-        sys_results: dataframe containing the average AUC value over all users and the amount of time required
-            by the evaluation
-        user_results: dataframe containing for each user integer key its corresponding AUC value
+        print("Considering representation: ", repr_id)
+        print("".center(80, "*"))
 
-    """
+        for epoch_num in ExperimentConfig.epochs:
 
-    user_map = load_user_map()
-    item_map = load_item_map()
+            print(f"Considering number of epochs {epoch_num}")
+            print("".center(80, '-'))
 
-    results_additional_exp_dir = os.path.join(REPORTS_DIR, "results_additional_exp")
-    os.makedirs(results_additional_exp_dir, exist_ok=True)
+            sys_result_clayrs, users_results_clayrs = evaluate_clayrs(models_exp_dir, repr_id, epoch_num)
 
-    train_tuples = load_train_test_instances(mode="train")
-    test_tuples = load_train_test_instances(mode="test")
+            print(f"AUC: {float(sys_result_clayrs['AUC'][0])}, "
+                  f"Elapsed time: {str(sys_result_clayrs['Elapsed time'][0])}\n")
 
-    train_set = ca.Ratings.from_list(train_tuples, user_map=user_map, item_map=item_map)
-    test_set = ca.Ratings.from_list(test_tuples, user_map=user_map, item_map=item_map)
+            sys_result_output_path = os.path.join(results_output_dir,
+                                                  f"sys_result_clayrs_{repr_id}_{epoch_num}.csv")
+            users_results_output_path = os.path.join(results_output_dir,
+                                                     f"users_results_clayrs_{repr_id}_{epoch_num}.csv")
 
-    with open(os.path.join(MODEL_DIR, "additional_exp_vbpr", f"additional_exp_{repr_id}_{epoch}.ml"),
-              "rb") as file:
-        rec_sys = pickle.load(file)
+            sys_result_clayrs.to_csv(sys_result_output_path,
+                                     index=False)
+            users_results_clayrs.to_csv(users_results_output_path,
+                                        index=False)
 
-    start = time.time()
-    sys_result, users_result = auc_clayrs(rec_sys, train_set, test_set)
-    end = time.time()
+            print(f"AUC sys results saved into {sys_result_output_path}!")
+            print(f"AUC per user results saved into {users_results_output_path}!")
 
-    elapsed_m, elapsed_s = divmod(end - start, 60)
+            # if this is the last epoch we do not print the epoch separator ("-")
+            if epoch_num != ExperimentConfig.epochs[-1]:
+                print("".center(80, '-'))
 
-    sys_result = pd.DataFrame({
-        "AUC": [sys_result],
-        "Elapsed time": [f"{int(elapsed_m)}m {int(elapsed_s)}s"]
-    })
+        # if this is the last representation to use we do not print the representation separator ("*")
+        if repr_id != field_representation_list[-1]:
+            print("".center(80, "*"))
 
-    return sys_result, users_result
 
 
 def main_comparison():
