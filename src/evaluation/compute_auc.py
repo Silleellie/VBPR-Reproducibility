@@ -1,10 +1,13 @@
 """
-Module used both by `comparison` and `additional` experiment.
+Module used by `exp1`, `exp2` and `exp3` experiments.
 
 Computes the AUC metric considering models fit and serialized by both experiment:
     * Cornac and ClayRS models at 5, 10, 20, 50 epochs (`comparsion` experiment)
-    * ClayRS models fit on different Content Analyzer generated representations at 10, 20 epochs
-    (`additional` experiment)
+    * ClayRS models fit on two different Content Analyzer generated representations,
+        using the caffe reference model for both but with different pre-processing operations, at 10, 20 epochs
+    * ClayRS models fit on two different Content Analyzer generated representations,
+        using the vgg19 and resnet50 pre-trained neural networks with their required pre-processing operations,
+        at 10, 20 epochs
 """
 
 import os
@@ -216,6 +219,23 @@ def evaluate_cornac(models_exp_dir: str, epoch: int):
 
 
 def common_eval_clayrs(models_exp_dir: str, field_representation_list: list, results_output_dir: str):
+    """
+    Encapsulates the common operations carried out to compute the AUC metric on models trained using the
+    ClayRS framework.
+    The AUC results will be stored in dataframes and saved locally using the following formats:
+
+        * "sys_result_clayrs_{repr_id}_{epoch_num}.csv"
+        * "users_results_clayrs_{repr_id}_{epoch_num}.csv"
+
+    Each result will be uniquely identified by the Content Analyzer representation that was used to train the model and
+    the number of training epochs
+
+    Args:
+        models_exp_dir: path to the directory where the trained models are stored
+        field_representation_list: list containing the id of each representation to take into account during evaluation
+        results_output_dir: path to the directory where the results of the evaluation will be stored
+
+    """
 
     print("".center(80, "*"))
     for repr_id in field_representation_list:
@@ -257,7 +277,7 @@ def common_eval_clayrs(models_exp_dir: str, field_representation_list: list, res
 
 def main_exp1():
     """
-    Actual main function of the module for the `comparison` experiment.
+    Actual main function of the module for the `exp1` experiment.
 
     It will compute the AUC metric system-wise and for each user considering ClayRS and Cornac VBPR fit models on all
     number of epochs specified via the `-epo` cmd argument (invoking `evaluate_clayrs()`, `evaluate_cornac()`).
@@ -311,6 +331,16 @@ def main_exp1():
 
 
 def main_exp2():
+    """
+    Actual main function of the module for the `exp2` experiment.
+
+    It will compute the AUC metric system-wise and for each user considering ClayRS VBPR fit models on all
+    number of epochs specified via the `-epo` cmd argument and on the representations identified by the following ids:
+    'caffe' and 'caffe_center_crop' (invoking `evaluate_clayrs()`).
+
+    Results will be saved into `reports/exp2`.
+
+    """
 
     print("Evaluating ClayRS:")
     print("".center(80, "-"))
@@ -328,6 +358,16 @@ def main_exp2():
 
 
 def main_exp3():
+    """
+    Actual main function of the module for the `exp3` experiment.
+
+    It will compute the AUC metric system-wise and for each user considering ClayRS VBPR fit models on all
+    number of epochs specified via the `-epo` cmd argument and on the representations identified by the following ids:
+    'vgg19' and 'resnet50' (invoking `evaluate_clayrs()`).
+
+    Results will be saved into `reports/exp3`.
+
+    """
 
     print("Evaluating ClayRS:")
     print("".center(80, "-"))
