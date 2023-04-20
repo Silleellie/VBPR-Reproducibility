@@ -1,13 +1,14 @@
 """
 Module used by `exp1`, `exp2` and `exp3` experiments.
 
-Computes the AUC metric considering models fit and serialized by both experiment:
-    * Cornac and ClayRS models at 5, 10, 20, 50 epochs (`comparsion` experiment)
+Computes the AUC metric considering models fit and serialized by the three experiments:
+    * Cornac and ClayRS models at 5, 10, 20, 50 epochs (`exp1` experiment)
     * ClayRS models fit on two different Content Analyzer generated representations,
         using the caffe reference model for both but with different pre-processing operations, at 10, 20 epochs
+        (`exp2` experiment)
     * ClayRS models fit on two different Content Analyzer generated representations,
         using the vgg19 and resnet50 pre-trained neural networks with their required pre-processing operations,
-        at 10, 20 epochs
+        at 10, 20 epochs (`exp3` experiment)
 """
 
 import os
@@ -43,7 +44,7 @@ def auc_cornac(vbpr_cornac: cornac.models.vbpr.recom_vbpr.VBPR, train_dataset: L
 
     Returns:
         sys_results: average AUC over all users
-        user_results: dataframe containing for each user integer key its corresponding AUC value
+        user_results: DataFrame containing for each user integer id its corresponding AUC value
 
     """
 
@@ -72,7 +73,7 @@ def auc_clayrs(vbpr_clayrs: rs.ContentBasedRS, train_set: ca.Ratings, test_set: 
 
     Returns:
         sys_results: average AUC over all users
-        user_results: dataframe containing for each user integer key its corresponding AUC value
+        user_results: DataFrame containing for each user integer id its corresponding AUC value
 
     """
 
@@ -118,20 +119,21 @@ def auc_clayrs(vbpr_clayrs: rs.ContentBasedRS, train_set: ca.Ratings, test_set: 
 
 
 # pylint: disable=too-many-locals
-def evaluate_clayrs(models_exp_dir: str, repr_id: str, epoch: str):
+def evaluate_clayrs(models_exp_dir: str, repr_id: str, epoch: int):
     """
     Evaluate the ClayRS model fit on the specified number of epochs and on the specified representation key
     by first loading it into memory together with the train and test set and invoke the `auc_clayrs()` method to
     compute the AUC metric
 
     Args:
-        epoch: integer used to retrieve the corresponding ClayRS model trained on that number of epochs
+        models_exp_dir: path to the directory where the trained ClayRS models to evaluate are stored
         repr_id: string used to retrieve the corresponding ClayRS model trained on that content representation
+        epoch: integer used to retrieve the corresponding ClayRS model trained on that number of epochs
 
     Returns:
-        sys_results: dataframe containing the average AUC value over all users and the amount of time required
+        sys_results: DataFrame containing the average AUC value over all users and the amount of time required
             by the evaluation
-        user_results: dataframe containing for each user integer key its corresponding AUC value
+        user_results: DataFrame containing for each user integer id its corresponding AUC value
 
     """
 
@@ -168,12 +170,13 @@ def evaluate_cornac(models_exp_dir: str, epoch: int):
     train and test set and invoke the `auc_cornac()` method to compute the AUC metric
 
     Args:
+        models_exp_dir: path to the directory where the trained Cornac models to evaluate are stored
         epoch: integer used to retrieve the corresponding Cornac model trained on that number of epochs
 
     Returns:
-        sys_results: dataframe containing the average AUC value over all users and the amount of time required
+        sys_results: DataFrame containing the average AUC value over all users and the amount of time required
             by the evaluation
-        user_results: dataframe containing for each user integer key its corresponding AUC value
+        user_results: DataFrame containing for each user integer id its corresponding AUC value
 
     """
 
@@ -227,11 +230,11 @@ def common_eval_clayrs(models_exp_dir: str, field_representation_list: list, res
         * "sys_result_clayrs_{repr_id}_{epoch_num}.csv"
         * "users_results_clayrs_{repr_id}_{epoch_num}.csv"
 
-    Each result will be uniquely identified by the Content Analyzer representation that was used to train the model and
+    Each result will be uniquely identified by the content representation that was used to train the model and
     the number of training epochs
 
     Args:
-        models_exp_dir: path to the directory where the trained models are stored
+        models_exp_dir: path to the directory where the trained ClayRS models to evaluate are stored
         field_representation_list: list containing the id of each representation to take into account during evaluation
         results_output_dir: path to the directory where the results of the evaluation will be stored
 
@@ -282,7 +285,7 @@ def main_exp1():
     It will compute the AUC metric system-wise and for each user considering ClayRS and Cornac VBPR fit models on all
     number of epochs specified via the `-epo` cmd argument (invoking `evaluate_clayrs()`, `evaluate_cornac()`).
 
-    Results will be saved into `reports/results_clayrs` and `reports/results_cornac`.
+    Results will be saved into `reports/exp1/results_clayrs` and `reports/exp1/results_cornac`.
 
     """
 

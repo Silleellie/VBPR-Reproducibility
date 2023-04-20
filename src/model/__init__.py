@@ -1,3 +1,7 @@
+"""
+Init containing the common operations done by the ClayRS recommender system in all the experiments
+"""
+
 import os
 import pickle
 
@@ -15,18 +19,25 @@ def clayrs_recsys(contents_dir: str,
                   exp_string: str,
                   models_dir: str):
     """
-    Performs the Recommender System phase of the `additional` experiment.
-
-    Trains a recommender system using the VBPR algorithm via the ClayRS framework, one for each representation created
-    by the Content Analyzer. Each fit recommender is then saved in the `models/additional_exp_vbpr` directory.
+    Encapsulates the common operations carried out to train a recommender system VBPR model using the ClayRS framework
+    for all epochs set via `-epo` cmd argument and for all the representations in the `field_representation_list` for
+    the specific `item_field`.
 
     A .yml file containing the VBPR algorithm definition with its parameters is saved into the
-    `reports/yaml_clayrs/rs_report_additional_exp` directory.
+    `reports/yaml_clayrs/{exp_string}_rs_report` directory
+
+    * i.e. reports/yaml_clayrs/exp1_rs_report, reports/yaml_clayrs/exp2_rs_report, reports/yaml_clayrs/exp3_rs_report
 
     Args:
         contents_dir: path to the directory where the serialized contents are stored
+        item_field: string representing the content field to take into account to train the recommender
+        field_representation_list: list of the representations identifiers (strings or integers) of the specified
+            item_field to take into account, one recommender will be trained for each
+        exp_string: string representing the corresponding experiment type (`exp1`, `exp2`, `exp3`)
+        models_dir: path to the directory where the trained models will be stored
 
     """
+
     os.makedirs(os.path.join(YAML_DIR, f"{exp_string}_rs_report"), exist_ok=True)
 
     user_map = load_user_map()

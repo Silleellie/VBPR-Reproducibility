@@ -11,25 +11,30 @@ from clayrs_can_see import evaluation as eva
 
 from src import REPORTS_DIR, ExperimentConfig
 
-def perform_ttest(sys1_results, sys2_results, epoch: str, results_output_dir: str):
+
+def perform_ttest(sys1_user_results: pd.DataFrame,
+                  sys2_user_results: pd.DataFrame,
+                  epoch: int,
+                  results_output_dir: str):
     """
     Encapsulates the common operations carried out to perform the ttest statistical test on models trained using the
     ClayRS framework.
-    The results of the evaluation procedure will be stored in dataframes and saved locally using the following formats:
+    The results of the evaluation procedure will be stored in dataframes and saved locally using the following format:
 
         * "ttest_{epoch}.csv"
 
     Each result will be uniquely identified by the number of training epochs
 
     Args:
-        sys1_results: dataframe containing the user-wise results for the first system
-        sys2_results: dataframe containing the user-wise results for the second system
-        epoch: number of training epoch used for the models associated to the results
+        sys1_user_results: DataFrame containing the user-wise results for the first system
+        sys2_user_results: DataFrame containing the user-wise results for the second system
+        epoch: integer which represents the number of training epochs that were used to train the models that produced
+            the results
         results_output_dir: path to the directory where the results of the evaluation will be stored
 
     """
 
-    result = eva.Ttest("user_idx").perform([sys1_results, sys2_results])
+    result = eva.Ttest("user_idx").perform([sys1_user_results, sys2_user_results])
 
     print(result, "\n")
 
@@ -44,7 +49,7 @@ def main_exp1():
     It will compute the ttest statistical test using ClayRS comparing, for each number of epochs used in the experiment,
     between ClayRS and Cornac user results.
 
-    Results will be saved into `reports/ttest_results`.
+    Results will be saved into `reports/ttest_results/exp1`.
 
     """
 
@@ -63,8 +68,8 @@ def main_exp1():
         result_cornac = pd.read_csv(os.path.join(REPORTS_DIR, "exp1", "results_cornac",
                                                  f"users_results_cornac_{epoch}.csv"))
 
-        perform_ttest(sys1_results=result_clayrs,
-                      sys2_results=result_cornac,
+        perform_ttest(sys1_user_results=result_clayrs,
+                      sys2_user_results=result_cornac,
                       epoch=epoch,
                       results_output_dir=exp1_ttest_dir)
 
@@ -80,7 +85,7 @@ def main_exp2():
     It will compute the ttest statistical test using ClayRS comparing, for each number of epochs used in the experiment,
     between ClayRS models trained on representations identified by ids `caffe` and `caffe_center_crop`.
 
-    Results will be saved into `reports/ttest_results`.
+    Results will be saved into `reports/ttest_results/exp2`.
 
     """
 
@@ -99,8 +104,8 @@ def main_exp2():
         result_caffe_crop = pd.read_csv(os.path.join(REPORTS_DIR, "exp2",
                                                      f"users_results_clayrs_caffe_center_crop_{epoch}.csv"))
 
-        perform_ttest(sys1_results=result_caffe,
-                      sys2_results=result_caffe_crop,
+        perform_ttest(sys1_user_results=result_caffe,
+                      sys2_user_results=result_caffe_crop,
                       epoch=epoch,
                       results_output_dir=exp2_ttest_dir)
 
@@ -116,7 +121,7 @@ def main_exp3():
     It will compute the ttest statistical test using ClayRS comparing, for each number of epochs used in the experiment,
     between ClayRS models trained on representations identified by ids `vgg19` and `resnet50`.
 
-    Results will be saved into `reports/ttest_results`.
+    Results will be saved into `reports/ttest_results/exp3`.
 
     """
 
@@ -135,8 +140,8 @@ def main_exp3():
         result_caffe_crop = pd.read_csv(os.path.join(REPORTS_DIR, "exp3",
                                                      f"users_results_clayrs_resnet50_{epoch}.csv"))
 
-        perform_ttest(sys1_results=result_caffe,
-                      sys2_results=result_caffe_crop,
+        perform_ttest(sys1_user_results=result_caffe,
+                      sys2_user_results=result_caffe_crop,
                       epoch=epoch,
                       results_output_dir=exp3_ttest_dir)
 

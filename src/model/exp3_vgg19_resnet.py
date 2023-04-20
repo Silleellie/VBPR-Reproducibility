@@ -1,3 +1,11 @@
+"""
+Module used by the `exp3` experiment.
+
+Performs both the Content Analyzer and Recommender System phase of ClayRS.
+The Content Analyzer generates the contents, using the vgg19 and resnet50 pre-trained models, and serializes them.
+The Recommender System trains the VBPR algorithm on the previously produced representations.
+"""
+
 import os
 import torch
 
@@ -14,20 +22,16 @@ SEED = seed_everything()
 
 def content_analyzer(output_contents_dir: str):
     """
-    Performs the Content Analyzer phase of the `additional` experiment.
+    Performs the Content Analyzer phase of the `exp2` experiment.
     This phase is carried out using the ClayRS framework.
     The representations that will be generated starting from the images for the tradesy items
     use the following techniques:
 
-        * 'caffe': same model as the one used in the VBPR paper (and pre-processing operations suggested for
-            the model by the Caffe framework)
-        * 'caffe_center_crop': same configuration, but only center crop to 227x227 dimensions is applied as
-            pre-processing operation
-        * 'resnet50': features are extracted from the *pool5* layer of the *ResNet50* architecture
         * 'vgg19': features are extracted from the last convolution layer before the fully-connected ones
             of the *vgg19* architecture and global max-pooling is applied to them
+        * 'resnet50': features are extracted from the *pool5* layer of the *ResNet50* architecture
 
-    Each serialized content will have 4 different field representations, each one associated to the corresponding key.
+    Each serialized content will have two different representations, each one associated to the corresponding field.
 
     A .yml file containing all the specified techniques and their parameters is saved into the `reports/yaml_clayrs`
     directory.
@@ -37,6 +41,7 @@ def content_analyzer(output_contents_dir: str):
 
     """
 
+    # pylint: disable=duplicate-code
     tradesy_config = ca.ItemAnalyzerConfig(
         source=ca.CSVFile(os.path.join(INTERIM_DIR, 'tradesy_images_paths.csv')),
         id='itemID',
@@ -45,7 +50,8 @@ def content_analyzer(output_contents_dir: str):
 
     imgs_dirs = os.path.join(INTERIM_DIR, "imgs_dirs")
 
-    def pool_and_squeeze(x: torch.Tensor):  # pylint: disable=invalid-name
+    # pylint: disable=invalid-name
+    def pool_and_squeeze(x: torch.Tensor):
         return torch.nn.functional.max_pool2d(x, kernel_size=x.size()[2:]).squeeze()
 
     tradesy_config.add_multiple_config(
@@ -85,11 +91,22 @@ def content_analyzer(output_contents_dir: str):
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    It first serializes the contents complexly represented (invoking `content_analyzer()`), and then it
+    fits different VBPR algorithms, for 'vgg19' and 'resnet50' representations, using the ClayRS framework
+    depending on the number of epochs specified in the `-epo` cmd argument (invoking `clayrs_recsys()`)
+
+    The fit recommenders will be saved into the `models/exp3` directory.
+
+    """
 
     print("".center(80, "-"))
 
     output_contents_dir = os.path.join(DATA_DIR, "exp3_ca_output")
 
+    # pylint: disable=duplicate-code
     if not os.path.isdir(output_contents_dir):
         content_analyzer(output_contents_dir)
     else:

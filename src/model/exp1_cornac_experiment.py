@@ -1,5 +1,5 @@
 """
-Module used by the `comparison` experiment.
+Module used by the `exp1` experiment.
 
 Uses the NPY feature matrix built in the data preparation phase to fit the VBPR algorithm using the Cornac framework.
 """
@@ -130,9 +130,9 @@ def main():
     Actual main function of the module.
 
     It first builds the train Dataset data structure required by the Cornac library (invoking `build_train()`),
-    and then fits the VBPR algorithm using the same library on the number of epochs specified by the `-epo` cmd argument
+    and then fits the VBPR algorithm using the same library on the number of epochs specified in the `-epo` cmd argument
 
-    The fit algorithms will be saved into `models/vbpr_cornac`.
+    The fit algorithms will be saved into the `models/exp1/vbpr_cornac` directory.
 
     """
     models_dir = os.path.join(MODEL_DIR, "exp1", "vbpr_cornac")

@@ -1,3 +1,12 @@
+"""
+Module used by the `exp2` experiment.
+
+Performs both the Content Analyzer and Recommender System phase of ClayRS.
+The Content Analyzer generates the contents, using the caffe reference model with two different pre-processing
+configurations, and serializes them.
+The Recommender System trains the VBPR algorithm on the previously produced representations.
+"""
+
 import os
 
 from src import INTERIM_DIR, ExperimentConfig, MODEL_DIR, DATA_DIR, YAML_DIR
@@ -13,7 +22,7 @@ SEED = seed_everything()
 
 def content_analyzer(output_contents_dir: str):
     """
-    Performs the Content Analyzer phase of the `additional` experiment.
+    Performs the Content Analyzer phase of the `exp2` experiment.
     This phase is carried out using the ClayRS framework.
     The representations that will be generated starting from the images for the tradesy items
     use the following techniques:
@@ -22,11 +31,8 @@ def content_analyzer(output_contents_dir: str):
             the model by the Caffe framework)
         * 'caffe_center_crop': same configuration, but only center crop to 227x227 dimensions is applied as
             pre-processing operation
-        * 'resnet50': features are extracted from the *pool5* layer of the *ResNet50* architecture
-        * 'vgg19': features are extracted from the last convolution layer before the fully-connected ones
-            of the *vgg19* architecture and global max-pooling is applied to them
 
-    Each serialized content will have 4 different field representations, each one associated to the corresponding key.
+    Each serialized content will have two different representations, each one associated to the corresponding field.
 
     A .yml file containing all the specified techniques and their parameters is saved into the `reports/yaml_clayrs`
     directory.
@@ -42,6 +48,7 @@ def content_analyzer(output_contents_dir: str):
     caffe_model = os.path.join(caffe_model_dir, "bvlc_reference_caffenet.caffemodel")
     mean_pixel = os.path.join(caffe_model_dir, "ilsvrc_2012_mean.npy")
 
+    # pylint: disable=duplicate-code
     tradesy_config = ca.ItemAnalyzerConfig(
         source=ca.CSVFile(os.path.join(INTERIM_DIR, 'tradesy_images_paths.csv')),
         id='itemID',
@@ -94,11 +101,22 @@ def content_analyzer(output_contents_dir: str):
 
 
 def main():
+    """
+    Actual main function of the module.
+
+    It first serializes the contents complexly represented (invoking `content_analyzer()`), and then it
+    fits different VBPR algorithms, for 'caffe' and 'caffe_center_crop' representations, using the ClayRS framework
+    depending on the number of epochs specified in the `-epo` cmd argument (invoking `clayrs_recsys()`)
+
+    The fit recommenders will be saved into the `models/exp2` directory.
+
+    """
 
     print("".center(80, "-"))
 
     output_contents_dir = os.path.join(DATA_DIR, "exp2_ca_output")
 
+    # pylint: disable=duplicate-code
     if not os.path.isdir(output_contents_dir):
         content_analyzer(output_contents_dir)
     else:

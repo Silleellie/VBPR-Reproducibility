@@ -170,7 +170,7 @@ def main_exp1():
     """
     Actual main function of the module for the `exp1` experiment.
 
-    It will download all raw data from sources needed (invoking `dl_tradesy_feedback()` and `dl_visual_features()`)
+    It will download all raw data from sources needed (invoking `dl_tradesy_feedback()` and `dl_visual_feature()`)
 
     """
 

@@ -8,7 +8,7 @@ from src import ExperimentConfig
 def main():
     """
     Main which performs the model training phase by calling functions w.r.t. the operations to carry out for the
-    specified experiment type (comparison or additional)
+    specified experiment (exp1, exp2 or exp3)
 
     """
 

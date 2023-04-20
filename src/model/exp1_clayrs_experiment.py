@@ -1,5 +1,5 @@
 """
-Module used by the `comparison` experiment.
+Module used by the `exp1` experiment.
 
 Uses the NPY feature matrix built in the data preparation phase to fit the VBPR algorithm using the ClayRS framework.
 """
@@ -15,7 +15,7 @@ from src.model import clayrs_recsys
 
 def content_analyzer_tradesy(output_contents_dir: str):
     """
-    Performs the Content Analyzer phase of the `comparison` experiment using the ClayRS framework.
+    Performs the Content Analyzer phase of the `exp1` experiment using the ClayRS framework.
     The representation that will be generated simply imports the original feature vectors and associates them
     to the corresponding item (thanks to the `FromNPY()` content technique).
 
@@ -61,10 +61,10 @@ def main():
     Actual main function of the module.
 
     It first serializes the contents complexly represented (invoking `content_analyzer()`), and then it
-    fits different VBPR algorithms using the ClayRS library depending on the number of epochs specified by the
-    `-epo` cmd argument (invoking `recommender_system()`)
+    fits different VBPR algorithms using the ClayRS library depending on the number of epochs specified in the
+    `-epo` cmd argument (invoking `clayrs_recsys()`)
 
-    The fit recommenders will be saved into `models/vbpr_clayrs`.
+    The fit recommenders will be saved into the `models/exp1/vbpr_clayrs` directory.
 
     """
 

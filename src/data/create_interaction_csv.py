@@ -1,5 +1,5 @@
 """
-Module used both by `comparison` and `additional` experiment.
+Module used by `exp1`, `exp2` and `exp3` experiments.
 
 It is used to convert the tradesy raw interaction dataset into a CSV following UIR (user-item-rating) format and to
 preprocess it following the original VBPR paper instructions

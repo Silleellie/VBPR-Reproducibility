@@ -1,8 +1,8 @@
 """
-Module used both by `comparison` and `additional` experiment.
+Module used by `exp1`, `exp2` and `exp3` experiments.
 
 Possibly remove from the ratings items for which there are no visual features.
-Build both the train/test split following the instruction of the VBPR experiment and the user mapping.
+Build both the train and test split following the instruction of the VBPR experiment and the user mapping.
 """
 
 import csv
@@ -175,7 +175,7 @@ def main():
     """
     Actual main function of the module.
 
-    Preprocessed tradesy feedback are first filtered in case interactions involving items with no visual
+    Pre-processed tradesy feedback are first filtered in case interactions involving items with no visual
     feature available are present (invoking `filter_interactions_wo_features()`), then train set, test set and user map
     are built and saved as .csv files (invoking `build_train_test()`, `build_user_map()`, `save_to_csv()`)
 

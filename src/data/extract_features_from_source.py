@@ -1,5 +1,5 @@
 """
-Module used both by `comparison` and `additional` experiment.
+Module used by `exp1`, `exp2` and `exp3` experiments.
 
 Build both the npy matrix containing original visual features and the item mapping.
 """
