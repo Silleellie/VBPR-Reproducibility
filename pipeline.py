@@ -23,13 +23,13 @@ if __name__ == '__main__':
     parser.add_argument('-seed', '--random_seed', type=int, default=42,
                         help='random seed', metavar='42')
     parser.add_argument('-nt_ca', '--num_threads_ca', type=int, default=4,
-                        help='Number of threads that will be used in ClayRS '
+                        help='Number of threads that will be used in ClayRS can see '
                              'during Content Analyzer serialization phase',
                         metavar='4')
     parser.add_argument('-exp', '--experiment', type=str, default='exp1',
-                        help='exp1 to perform the comparison experiment with Cornac, '
+                        help='exp1 to perform the comparison experiment between ClayRS can see and Cornac, '
                              'exp2 to perform end to end experiment using caffe via ClayRS can see, '
-                             'exp3 to perform end to end experiment using vgg19 and resnet 50 via Clayrs can see',
+                             'exp3 to perform end to end experiment using vgg19 and resnet50 via Clayrs can see',
                         metavar='exp1')
 
     args = parser.parse_args()
