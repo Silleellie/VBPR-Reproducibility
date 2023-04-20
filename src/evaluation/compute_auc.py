@@ -287,13 +287,12 @@ def main_exp1():
     """
 
     print("Evaluating ClayRS:")
-    print("".center(80, "-"))
 
     models_clayrs_dir = os.path.join(MODEL_DIR, "exp1", "vbpr_clayrs")
     models_cornac_dir = os.path.join(MODEL_DIR, "exp1", "vbpr_cornac")
 
-    results_clayrs_dir = os.path.join(REPORTS_DIR, "results_clayrs")
-    results_cornac_dir = os.path.join(REPORTS_DIR, "results_cornac")
+    results_clayrs_dir = os.path.join(REPORTS_DIR, "exp1", "results_clayrs")
+    results_cornac_dir = os.path.join(REPORTS_DIR, "exp1", "results_cornac")
 
     os.makedirs(results_clayrs_dir, exist_ok=True)
     os.makedirs(results_cornac_dir, exist_ok=True)
@@ -343,7 +342,6 @@ def main_exp2():
     """
 
     print("Evaluating ClayRS:")
-    print("".center(80, "-"))
 
     models_clayrs_dir = os.path.join(MODEL_DIR, "exp2")
 
@@ -370,7 +368,6 @@ def main_exp3():
     """
 
     print("Evaluating ClayRS:")
-    print("".center(80, "-"))
 
     models_clayrs_dir = os.path.join(MODEL_DIR, "exp3")
 
