@@ -32,7 +32,7 @@ def main():
         print()
 
     elif ExperimentConfig.experiment == "exp2":
-        print(" Performing ClayRS additional experiment with feature extraction ".center(80, '#'))
+        print(" Performing ClayRS experiment with caffe and caffe center crop feature extraction ".center(80, '#'))
         print()
         # perform import here just for pretty printing
         # pylint: disable=import-outside-toplevel
@@ -42,7 +42,7 @@ def main():
         print()
 
     else:
-        print(" Performing ClayRS additional experiment with feature extraction ".center(80, '#'))
+        print(" Performing ClayRS experiment with vgg19 and resnet50 feature extraction ".center(80, '#'))
         print()
         # perform import here just for pretty printing
         # pylint: disable=import-outside-toplevel
