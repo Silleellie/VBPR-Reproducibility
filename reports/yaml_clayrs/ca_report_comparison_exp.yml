@@ -1,9 +1,0 @@
-source_file: item_map.csv
-id_each_content:
-- item_id
-exogenous_representations: null
-field_representations:
-  item_idx/0:
-    FromNPY:
-      npy_file_path: C:\Users\eliom\Desktop\VBPR-Replicability-src\data\processed\features_matrix.npy
-    preprocessing: null
