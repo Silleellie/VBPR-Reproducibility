@@ -1,4 +1,4 @@
-# VBPR Replicability: comparison and additional experiment
+# VBPR Replicability: comparison and end-to-end experiments with ClayRS can see 
 
 ![pylint](https://img.shields.io/badge/pylint-10.00-brightgreen?logo=python&logoColor=white)
 
