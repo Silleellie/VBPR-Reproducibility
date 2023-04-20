@@ -58,9 +58,9 @@ def main_exp1():
     for epoch in ExperimentConfig.epochs:
         print(f"Considering number of epochs {epoch}")
         print("".center(80, "-"))
-        result_clayrs = pd.read_csv(os.path.join(REPORTS_DIR, "exp1", "vbpr_clayrs",
+        result_clayrs = pd.read_csv(os.path.join(REPORTS_DIR, "exp1", "results_clayrs",
                                                  f"users_results_clayrs_imported_features_{epoch}.csv"))
-        result_cornac = pd.read_csv(os.path.join(REPORTS_DIR, "exp1", "vbpr_cornac",
+        result_cornac = pd.read_csv(os.path.join(REPORTS_DIR, "exp1", "results_cornac",
                                                  f"users_results_cornac_{epoch}.csv"))
 
         perform_ttest(sys1_results=result_clayrs,
