@@ -2,11 +2,182 @@
 
 ![pylint](https://img.shields.io/badge/pylint-10.00-brightgreen?logo=python&logoColor=white)
 
-Repository which includes everything needed to reproduce the VBPR paper by Prof. Julian McAuley of 2016 with a modified version of the ClayRS framework and the original version of the Cornac framework.
-It also contains everything to reproduce two end-to-end experiments using the modified version of ClayRS, 
-from feature extraction using the *caffe reference model* (with two different pre-processing pipelines) to *resnet50* and *vgg19*.
+Repository which includes everything related to the paper ***Reproducibility Analysis of Recommender Systems relying on 
+Visual Features: traps, pitfalls, and countermeasures***
+
+The following are the experiments that could be reproduced using this repository:
+
+* Experiment 1: comparing VBPR results
+  * *Comparing the implementation of the VBPR algorithm between the modified version of ClayRS and Cornac*
+* Experiment 2: Testing ClayRS Can See functionalities to include images as side information
+  * *Performing an end-to-end experiment using the modified version of ClayRS with the pre-trained caffe reference 
+  model on different pre-processing configurations*
+* Experiment 3: Testing state-of-the-art models for extracting features from images
+  * *Performing an end-to-end experiment using the modified version of ClayRS with the pre-trained vgg19 and resnet50 
+  models*
 
 Check the ['Experiment pipeline' section](#experiment-pipeline) for an overview of the operations carried out by the three different experiments
+
+All the experiments provided in this repository are compliant with the proposed checklist:
+
+<table align="center">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Stage</th>
+      <th>Check</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td rowspan="5" valign="center">Dataset Collection</td>
+      <td>✅ Link to a downloadable version of the dataset collection</td>
+      <td>
+        <a href="https://drive.google.com/uc?id=1xaRS4qqGeTzxaEksHzjVKjQ6l7QT9eMJ">Tradesy raw feedback</a>,<br>
+        <a href="http://jmcauley.ucsd.edu/data/tradesy/image_features_tradesy.b">Image features binary file</a>,<br>
+        <a href="http://cseweb.ucsd.edu/~wckang/DVBPR/TradesyImgPartitioned.npy">Tradesy Images from DVBPR dataset</a>
+      </td>
+    </tr>
+    <tr>
+      <td>✅ Any pre-filtering process performed on data</td>
+      <td>
+        $\forall$ experiment, duplicate interactions are removed and users with less than five interactions are not considered.<br>
+        For <i>Experiment 2</i> and <i>Experiment 3</i>, images from the <i>Tradesy Images DVBPR</i> dataset were removed in order to
+        re-create the VBPR dataset (since original dataset is not accessible)
+      </td>
+    </tr>
+    <tr>
+      <td>✅ Relevant dataset statistics</td>
+      <td>$\forall$ experiment, lines <b>18-27</b> of <a href="reports/exp1_terminal_output.txt">terminal output</a></td>
+    </tr>
+    <tr>
+      <td>✅ Preprocessing operations performed on side information</td>
+      <td>
+        <i>Experiment 1</i>: no preprocessing performed, visual features provided by original authors were used,<br>
+        <i>Experiment 2</i>: lines <b>23-24</b>, <b>42-47</b> of <a href="reports/yaml_clayrs/exp2_ca_report.yml">yaml report</a>, lines <b>71-73</b>, <b>83-86</b> of <a href="src/model/exp2_caffe.py">script</a>,<br>
+        <i>Experiment 3</i>: lines <b>21-34</b>, <b>50-63</b> of <a href="reports/yaml_clayrs/exp3_ca_report.yml">yaml report</a>, lines <b>64-67</b>, <b>74-77</b> of <a href="src/model/exp3_vgg19_resnet.py">script</a>
+      </td>
+    </tr>
+    <tr>
+      <td>✅ Pre-trained models adopted to represent side information</td>
+      <td>
+        <a href="https://github.com/BVLC/caffe/tree/master/models/bvlc_reference_caffenet">bvlc_reference_caffenet</a>,<br>
+        <a href="https://pytorch.org/hub/nvidia_deeplearningexamples_resnet50/">resnet50</a>,<br>
+        <a href="https://pytorch.org/hub/pytorch_vision_vgg/">vgg19</a>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="2" valign="center">Data Splitting</td>
+      <td>✅ Protocol used for data partitioning and random seed to reproduce random splits</td>
+      <td> <i>Leave-one-out</i> with random seed set at <b>42</b>, <a href="">script</a></td>
+    </tr>
+    <tr>
+      <td>⬜ Link to a downloadable version of the training/test/validation sets</td>
+      <td> <i>Train</i> and <i>test sets</i> are not provided, but can be easily reproduced by running the <a href="src/data/__main__.py"> main data pipeline </a>,
+          by setting the random state to <b>42</b>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="4" valign="center">Recommendation</td>
+      <td>✅ Name and version of the framework containing the recommendation algorithm</td>
+      <td>
+        Clayrs can See (modified version of <a href="https://github.com/swapUniba/ClayRS/releases/tag/v0.4.0"><i>Clayrs v0.4</i></a>),<br>
+        <a href="https://github.com/PreferredAI/cornac/releases/tag/v1.14.2"><i>Cornac v1.14.2</i></a>
+      </td>
+    </tr>
+    <tr>
+      <td>✅ Source code of the recommendation algorithm and setting of parameters</td>
+      <td>
+        Source code of the recommendation algorithm:<br>
+        <a href="clayrs_can_see/recsys/visual_based_algorithm/vbpr">Clayrs can See VBPR</a>,<br>
+        <a href="https://github.com/PreferredAI/cornac/tree/5caf11cffb862c304e4dcc3e0e90c8bdcdc08093/cornac/models/vbpr">Cornac VBPR</a><br>
+        <br>
+        Parameters settings:<br>
+        ClayRS can See: lines <b>61-70</b> of <a href="src/model/__init__.py">script</a>,<br>
+        Cornac: lines <b>102-121</b> of <a href="src/model/exp1_cornac_experiment.py">script</a>
+      </td>
+    </tr>
+    <tr>
+      <td>⬜ Method to select the best hyperparameters</td>
+      <td> No <i>hyperparameter tuning</i> was carried out </td>
+    </tr>
+    <tr>
+      <td>✅ Any random seed necessary to reproduce random processes</td>
+      <td> All random processes were set to random seed <b>42</b> </td>
+    </tr>
+    <tr>
+      <td rowspan="2" valign="center">Candidate Item Filtering</td>
+      <td>✅ Set of target items to generate a ranking</td>
+      <td>
+        All items of the system were taken into account
+      </td>
+    </tr>
+    <tr>
+      <td>✅ Strategy (TestRatings, TestItems, TrainingItems, AllItems, One-Plus-Random)</td>
+      <td>
+        <i>AllItems</i>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="5" valign="center">Evaluation</td>
+      <td>✅ Name and version of the framework used to compute metrics</td>
+      <td>
+        Cornac framework for evaluating cornac models, <a href="src/evaluation/compute_auc.py">custom AUC implementation</a> to
+        evaluate ClayRS model, lines of script: <b>64-118</b>
+      </td>
+    </tr>
+    <tr>
+      <td>✅ List of metrics adopted and cutoff for recommendation lists</td>
+      <td>
+        The only metric used was <b>AUC</b>, and all ranked items were taken into account to compute it
+      </td>
+    </tr>
+    <tr>
+      <td>⬜ Normalization strategy adopted</td>
+      <td>
+        No normalization strategy was applied for the metric chosen (<i>AUC</i>)
+      </td>
+    </tr>
+    <tr>
+      <td>✅ Averaging strategy adopted (e.g. micro or macro-average)</td>
+      <td>
+        System results were generated by performing macro-average over the user results,
+        line 115 of <a href="src/evaluation/compute_auc.py">script</a>
+      </td>
+    </tr>
+    <tr>
+      <td>✅ List of results in a standard format (per fold and overall)</td>
+      <td>
+        <a href="reports/exp1"><i>Experiment 1</i> AUC results</a>,<br>
+        <a href="reports/exp2"><i>Experiment 2</i> AUC results</a>,<br>
+        <a href="reports/exp3"><i>Experiment 3</i> AUC results</a>
+      </td>
+    </tr>
+    <tr>
+      <td rowspan="3" valign="center">Statistical testing</td>
+      <td>✅ Data on which the test is performed</td>
+      <td>
+        <i>Experiment 1</i>: <a href="reports/exp1">AUC results between ClayRS and Cornac for each epoch</a>,<br>
+        <i>Experiment 2</i>: <a href="reports/exp2">AUC results between caffe and caffe_center_crop trained recommender for each epoch,</a><br>
+        <i>Experiment 3</i>: <a href="reports/exp3">AUC results between vgg19 and resnet50 trained recommender for each epoch</a>
+      </td>
+    </tr>
+    <tr>
+      <td>✅ Type of test and p-value</td>
+      <td>
+        <b>ttest statistical test</b> was used:<br>
+        <a href="reports/ttest_results/exp1"><i>Experiment 1</i> p-value results</a>,<br>
+        <a href="reports/ttest_results/exp2"><i>Experiment 2</i> p-value results</a>,<br>
+        <a href="reports/ttest_results/exp3"><i>Experiment 3</i> p-value results</a>
+      </td>
+    </tr>
+    <tr>
+      <td>⬜ Corrections for multiple comparisons</td>
+      <td>No correction was applied</td>
+    </tr>
+  </tbody>
+</table>
+
 
 ## How to Use
 
