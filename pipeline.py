@@ -23,12 +23,14 @@ if __name__ == '__main__':
     parser.add_argument('-seed', '--random_seed', type=int, default=42,
                         help='random seed', metavar='42')
     parser.add_argument('-nt_ca', '--num_threads_ca', type=int, default=4,
-                        help='Number of threads that will be used in ClayRS '
+                        help='Number of threads that will be used in ClayRS can see '
                              'during Content Analyzer serialization phase',
                         metavar='4')
-    parser.add_argument('-exp', '--experiment', type=str, default='comparison',
-                        help='Whether to perform the comparison experiment with Cornac, '
-                             'or the additional one with feature extraction using ClayRS', metavar='comparison')
+    parser.add_argument('-exp', '--experiment', type=str, default='exp1',
+                        help='exp1 to perform the comparison experiment between ClayRS can see and Cornac, '
+                             'exp2 to perform end to end experiment using caffe via ClayRS can see, '
+                             'exp3 to perform end to end experiment using vgg19 and resnet50 via Clayrs can see',
+                        metavar='exp1')
 
     args = parser.parse_args()
 
@@ -40,10 +42,10 @@ if __name__ == '__main__':
     ExperimentConfig.learning_rate = args.learning_rate
     ExperimentConfig.num_threads_ca = args.num_threads_ca
 
-    if args.experiment in {"comparison", "additional"}:
+    if args.experiment in {"exp1", "exp2", "exp3"}:
         ExperimentConfig.experiment = args.experiment
     else:
-        raise ValueError("Only 'comparison' or 'additional' experiments are supported!")
+        raise ValueError("Only 'exp1', 'exp2' or 'exp3' type of experiments are supported!")
 
     data_main()
     model_main()

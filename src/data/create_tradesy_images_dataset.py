@@ -1,5 +1,5 @@
 """
-Module used by the `additional` experiment.
+Module used by `exp2` and `exp3` experiments.
 
 It allows to create the tradesy images dataset used in the VBPR paper using an NPY matrix,
 extracting only those of items which appear in the filtered tradesy feedback.

@@ -1,0 +1,47 @@
+source_file: tradesy_images_paths.csv
+id_each_content:
+- itemID
+exogenous_representations: null
+field_representations:
+  image_path/0:
+    CaffeImageModels:
+      prototxt_path: C:\Users\eliom\Desktop\VBPR-Replicability-src\models\reference_caffenet\deploy.prototxt
+      model_path: C:\Users\eliom\Desktop\VBPR-Replicability-src\models\reference_caffenet\bvlc_reference_caffenet.caffemodel
+      feature_layer: relu7
+      mean_file_path: C:\Users\eliom\Desktop\VBPR-Replicability-src\models\reference_caffenet\ilsvrc_2012_mean.npy
+      swap_rb: true
+      flatten: true
+      imgs_dirs: C:\Users\eliom\Desktop\VBPR-Replicability-src\data\interim\imgs_dirs
+      use_gpu: false
+      max_timeout: 2
+      max_retries: 5
+      max_workers: 0
+      batch_size: 512
+      resize_size:
+      - 227
+      - 227
+    preprocessing:
+      Lambda: {}
+  image_path/1:
+    CaffeImageModels:
+      prototxt_path: C:\Users\eliom\Desktop\VBPR-Replicability-src\models\reference_caffenet\deploy.prototxt
+      model_path: C:\Users\eliom\Desktop\VBPR-Replicability-src\models\reference_caffenet\bvlc_reference_caffenet.caffemodel
+      feature_layer: relu7
+      mean_file_path: null
+      swap_rb: false
+      flatten: true
+      imgs_dirs: C:\Users\eliom\Desktop\VBPR-Replicability-src\data\interim\imgs_dirs
+      use_gpu: false
+      max_timeout: 2
+      max_retries: 5
+      max_workers: 0
+      batch_size: 512
+      resize_size:
+      - 300
+      - 300
+    preprocessing:
+      CenterCrop:
+        size:
+        - 227
+        - 227
+      Lambda: {}

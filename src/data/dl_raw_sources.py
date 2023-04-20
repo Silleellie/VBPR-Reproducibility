@@ -1,8 +1,8 @@
 """
-Module used both by `comparison` and `additional` experiment.
+Module used by `exp1`, `exp2` and `exp3` experiments.
 
 Used to download the data sources (tradesy feedback, binary features file, DVBPR dataset of tradesy images,
-caffe reference model files) required by both experiments.
+caffe reference model files) required by the experiments.
 """
 
 import gzip
@@ -166,11 +166,11 @@ def dl_caffe_files(chunk_size: int = 10000):
         print(f"Prototxt for Caffe reference model was already downloaded into {prototxt_fname}, skipped")
 
 
-def main_comparison():
+def main_exp1():
     """
-    Actual main function of the module for the `comparison` experiment.
+    Actual main function of the module for the `exp1` experiment.
 
-    It will download all raw data from sources needed (invoking `dl_tradesy_feedback()` and `dl_visual_features()`)
+    It will download all raw data from sources needed (invoking `dl_tradesy_feedback()` and `dl_visual_feature()`)
 
     """
 
@@ -179,9 +179,9 @@ def main_comparison():
     dl_visual_feature()
 
 
-def main_additional():
+def main_exp2():
     """
-    Actual main function of the module for the `additional` experiment.
+    Actual main function of the module for the `exp2` experiment.
 
     It will download all raw data from sources needed (invoking `dl_tradesy_feedback()`, `dl_extended_tradesy_images()`
     and `dl_caffe_files()`)
@@ -195,10 +195,26 @@ def main_additional():
     dl_caffe_files()
 
 
+def main_exp3():
+    """
+    Actual main function of the module for the `exp3` experiment.
+
+    It will download all raw data from sources needed (invoking `dl_tradesy_feedback()` and
+    `dl_extended_tradesy_images()`)
+
+    """
+
+    dl_tradesy_feedback()
+    print("".center(80, '-'))
+    dl_extended_tradesy_images()
+
+
 if __name__ == "__main__":
 
     # pylint: disable=duplicate-code
-    if ExperimentConfig.experiment == "comparison":
-        main_comparison()
+    if ExperimentConfig.experiment == "exp1":
+        main_exp1()
+    elif ExperimentConfig.experiment == "exp2":
+        main_exp2()
     else:
-        main_additional()
+        main_exp3()

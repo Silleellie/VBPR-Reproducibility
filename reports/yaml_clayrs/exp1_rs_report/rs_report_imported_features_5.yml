@@ -1,0 +1,26 @@
+recsys:
+  ContentBasedRS:
+    algorithm:
+      VBPR:
+        item_field:
+          item_idx:
+          - imported_features
+        gamma_dim: 20
+        theta_dim: 20
+        batch_size: 128
+        epochs: 5
+        threshold: 0
+        additional_opt_parameters:
+          batch_size: 128
+        lambda_w: 0.01
+        lambda_b_pos: 0.01
+        lambda_b_neg: 0.001
+        lambda_e: 0
+        train_loss: <built-in function log_sigmoid>
+        optimizer_class: <class 'torch.optim.adam.Adam'>
+        device: cuda:0
+        embedding_combiner:
+          Centroid: {}
+        normalize: true
+        seed: 42
+        additional_dl_parameters: {}

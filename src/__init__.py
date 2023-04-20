@@ -42,5 +42,5 @@ class ExperimentConfig:
     theta_dim = 20
     lr = 0.005
     random_state = 42
-    experiment = "comparison"
+    experiment = "exp1"
     num_threads_ca = 4
