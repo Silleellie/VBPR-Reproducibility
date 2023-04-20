@@ -68,11 +68,11 @@ def clayrs_recsys(contents_dir: str,
                 pickle.dump(cbrs, file, protocol=pickle.HIGHEST_PROTOCOL)
 
             Report(output_dir=os.path.join(YAML_DIR, f"{exp_string}_rs_report"),
-                   rs_report_filename=f"rs_report_{item_field}_{epoch_num}").yaml(recsys=cbrs)
+                   rs_report_filename=f"rs_report_{representation_id}_{epoch_num}").yaml(recsys=cbrs)
 
             output_report_path = os.path.join(YAML_DIR,
                                               f"{exp_string}_rs_report",
-                                              f'rs_report_{item_field}_{epoch_num}.yml')
+                                              f'rs_report_{representation_id}_{epoch_num}.yml')
 
             print(f"ClayRS model for {epoch_num} epochs saved into {fname_cbrs}!")
             print(f"Report of the RecSys phase for {epoch_num} epochs saved into {output_report_path}!")
