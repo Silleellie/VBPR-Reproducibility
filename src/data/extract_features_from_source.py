@@ -97,7 +97,7 @@ def prepare_raw_source(path_b_tradesy: str, path_processed_csv: str, chunk: int 
     print(f"CSV containing mapping between item ids and features into {csv_filename}!")
 
     np.save(features_filename, feature_matrix)
-    print(f"Saved NPY feature matrix saved into {features_filename}!")
+    print(f"NPY feature matrix saved into {features_filename}!")
 
 
 def main():
