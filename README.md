@@ -41,9 +41,9 @@ All the experiments provided in this repository are compliant with the proposed 
     <tr>
       <td>✅ Any pre-filtering process performed on data</td>
       <td>
-        $\forall$ experiment, duplicate interactions are removed and users with less than five interactions are not considered.<br>
+        $\forall$ experiment, duplicate interactions are removed and users with less than five interactions are not considered, <a href="src/data/create_interaction_csv.py">script</a>.<br>
         For <i>Experiment 2</i> and <i>Experiment 3</i>, images from the <i>Tradesy Images DVBPR</i> dataset were removed in order to
-        re-create the VBPR dataset (since original dataset is not accessible)
+        re-create the VBPR dataset (since original dataset is not accessible), <a href="src/data/create_tradesy_images_dataset.py">script</a>
       </td>
     </tr>
     <tr>
