@@ -183,7 +183,8 @@ All the experiments provided in this repository are compliant with the proposed 
 
 Simply execute `pip install requirements.txt` in a freshly created *virtual environment*.
 
-The source code has been tested with ***python 3.9*** and **CUDA is required** to run the experiments.
+The source code has been tested and results have been produced with ***python 3.9*** and ***CUDA V11.6***.
+Please note that *CUDA* must be installed to run the experiments.
 
 To perform the `exp1` experiment, which is the comparison of the VBPR implementation between ClayRS and Cornac, 
 run via *command line*:
