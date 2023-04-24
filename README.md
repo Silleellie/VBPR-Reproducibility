@@ -69,7 +69,7 @@ All the experiments provided in this repository are compliant with the proposed 
     <tr>
       <td rowspan="2" valign="center">Data Splitting</td>
       <td>✅ Protocol used for data partitioning and random seed to reproduce random splits</td>
-      <td> <i>Leave-one-out</i> with random seed set at <b>42</b>, <a href="">script</a></td>
+      <td> <i>Leave-one-out</i> with random seed set at <b>42</b>, <a href="src/data/train_test_split.py">script</a></td>
     </tr>
     <tr>
       <td>⬜ Link to a downloadable version of the training/test/validation sets</td>
@@ -122,8 +122,8 @@ All the experiments provided in this repository are compliant with the proposed 
       <td rowspan="5" valign="center">Evaluation</td>
       <td>✅ Name and version of the framework used to compute metrics</td>
       <td>
-        Cornac framework for evaluating cornac models, <a href="src/evaluation/compute_auc.py">custom AUC implementation</a> to
-        evaluate ClayRS model, lines of script: <b>64-118</b>
+        Cornac framework for evaluating cornac models,<br>
+        <a href="src/evaluation/compute_auc.py">Custom AUC implementation</a> to evaluate ClayRS model, lines of script: <b>64-118</b>
       </td>
     </tr>
     <tr>
@@ -148,27 +148,27 @@ All the experiments provided in this repository are compliant with the proposed 
     <tr>
       <td>✅ List of results in a standard format (per fold and overall)</td>
       <td>
-        <a href="reports/exp1"><i>Experiment 1</i> AUC results</a>,<br>
-        <a href="reports/exp2"><i>Experiment 2</i> AUC results</a>,<br>
-        <a href="reports/exp3"><i>Experiment 3</i> AUC results</a>
+        <i>Experiment 1</i> AUC results path: <code>reports/exp1</code>,<br>
+        <i>Experiment 2</i> AUC results path: <code>reports/exp2</code>,<br>
+        <i>Experiment 3</i> AUC results path: <code>reports/exp3</code>
       </td>
     </tr>
     <tr>
       <td rowspan="3" valign="center">Statistical testing</td>
       <td>✅ Data on which the test is performed</td>
       <td>
-        <i>Experiment 1</i>: <a href="reports/exp1">AUC results between ClayRS and Cornac for each epoch</a>,<br>
-        <i>Experiment 2</i>: <a href="reports/exp2">AUC results between caffe and caffe_center_crop trained recommender for each epoch,</a><br>
-        <i>Experiment 3</i>: <a href="reports/exp3">AUC results between vgg19 and resnet50 trained recommender for each epoch</a>
+        <i>Experiment 1</i>: AUC results between ClayRS and Cornac for each epoch located at <code>reports/exp1</code>,<br>
+        <i>Experiment 2</i>: AUC results between caffe and caffe_center_crop trained recommender for each epoch located at <code>reports/exp2</code>,</a><br>
+        <i>Experiment 3</i>: AUC results between vgg19 and resnet50 trained recommender for each epoch located at <code>reports/exp3</code></a>
       </td>
     </tr>
     <tr>
       <td>✅ Type of test and p-value</td>
       <td>
         <b>ttest statistical test</b> was used:<br>
-        <a href="reports/ttest_results/exp1"><i>Experiment 1</i> p-value results</a>,<br>
-        <a href="reports/ttest_results/exp2"><i>Experiment 2</i> p-value results</a>,<br>
-        <a href="reports/ttest_results/exp3"><i>Experiment 3</i> p-value results</a>
+        <i>Experiment 1</i> p-value results path: <code>reports/ttest_results/exp1</code>,<br>
+        <i>Experiment 2</i> p-value results path: <code>reports/ttest_results/exp2</code>,<br>
+        <i>Experiment 3</i> p-value results path: <code>reports/ttest_results/exp3</code>
       </td>
     </tr>
     <tr>
@@ -190,7 +190,7 @@ To perform the `exp1` experiment, which is the comparison of the VBPR implementa
 run via *command line*:
 
 ```
-python pipeline.py
+python pipeline.py -epo 5 10 20 50 -exp exp1
 ```
 
 In this way, raw data will first be *downloaded* and *processed*, and then the actual experiment will be run using the ***default parameters***.
