@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: Silleellie/pylint-github-action@v1
+      - uses: XXXX-10
         with:
           package-path: src
           python-version: 3.9
