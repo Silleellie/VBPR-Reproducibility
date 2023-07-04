@@ -13,8 +13,8 @@ from src import INTERIM_DIR, ExperimentConfig, MODEL_DIR, DATA_DIR, YAML_DIR
 from src.model import clayrs_recsys
 from src.utils import seed_everything
 
-import clayrs_can_see.content_analyzer as ca
-from clayrs_can_see.utils import Report
+import clayrs.content_analyzer as ca
+from clayrs.utils import Report
 
 # seed everything
 SEED = seed_everything()

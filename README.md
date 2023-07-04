@@ -89,7 +89,7 @@ All the experiments provided in this repository are compliant with the proposed 
       <td>✅ Source code of the recommendation algorithm and setting of parameters</td>
       <td>
         Source code of the recommendation algorithm:<br>
-        <a href="clayrs_can_see/recsys/visual_based_algorithm/vbpr">Clayrs can See VBPR</a>,<br>
+        <a href="https://github.com/swapUniba/ClayRS/blob/v0.5.1/clayrs/recsys/visual_based_algorithm/vbpr/vbpr_algorithm.py">Clayrs can See VBPR</a>,<br>
         <a href="https://github.com/PreferredAI/cornac/tree/5caf11cffb862c304e4dcc3e0e90c8bdcdc08093/cornac/models/vbpr">Cornac VBPR</a><br>
         <br>
         Parameters settings:<br>
@@ -323,8 +323,6 @@ will have two different representations:
 
 Project Organization
 ------------
-    ├── 📁 clayrs_can_see                <- Package containing a modified version of clayrs with VBPR support
-    │
     ├── 📁 data                          <- Directory containing all data generated/used by both experiments
     │   ├── 📁 interim                       <- Intermediate data that has been transformed
     │   ├── 📁 processed                     <- The final, canonical data sets used for training
@@ -388,8 +386,7 @@ Project Organization
     ├── 📄 LICENSE                       <- MIT License
     ├── 📄 pipeline.py                   <- Script that can be used to reproduce or customize the experiment pipeline
     ├── 📄 README.md                     <- The top-level README for developers using this project
-    ├── 📄 requirements.txt              <- The requirements file for reproducing the analysis environment (src package)
-    └── 📄 requirements-clayrs.txt       <- The requirements file for the modified version of clayrs
+    └── 📄 requirements.txt              <- The requirements file for reproducing the analysis environment (src package)
 
 --------
 

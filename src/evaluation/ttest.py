@@ -7,7 +7,7 @@ Computes the ttest statistical test, using AUC user wise results, for all models
 import os.path
 
 import pandas as pd
-from clayrs_can_see import evaluation as eva
+from clayrs import evaluation as eva
 
 from src import REPORTS_DIR, ExperimentConfig
 

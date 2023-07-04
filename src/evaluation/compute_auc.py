@@ -26,8 +26,8 @@ from cornac.data import Dataset, ImageModality
 from cornac.eval_methods import ranking_eval
 import cornac.models.vbpr.recom_vbpr
 
-import clayrs_can_see.content_analyzer as ca
-import clayrs_can_see.recsys as rs
+import clayrs.content_analyzer as ca
+import clayrs.recsys as rs
 
 from src import MODEL_DIR, PROCESSED_DIR, REPORTS_DIR, ExperimentConfig
 from src.utils import load_user_map, load_item_map, load_train_test_instances

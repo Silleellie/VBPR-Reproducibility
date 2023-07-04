@@ -8,9 +8,9 @@ import pickle
 from src import PROCESSED_DIR, ExperimentConfig, YAML_DIR
 from src.utils import load_user_map, load_item_map
 
-import clayrs_can_see.content_analyzer as ca
-import clayrs_can_see.recsys as rs
-from clayrs_can_see.utils import Report
+import clayrs.content_analyzer as ca
+import clayrs.recsys as rs
+from clayrs.utils import Report
 
 
 def clayrs_recsys(contents_dir: str,
