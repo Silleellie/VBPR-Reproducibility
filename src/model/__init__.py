@@ -5,12 +5,12 @@ Init containing the common operations done by the ClayRS recommender system in a
 import os
 import pickle
 
-from src import PROCESSED_DIR, ExperimentConfig, YAML_DIR
-from src.utils import load_user_map, load_item_map
-
 import clayrs.content_analyzer as ca
 import clayrs.recsys as rs
 from clayrs.utils import Report
+
+from src import PROCESSED_DIR, ExperimentConfig, YAML_DIR
+from src.utils import load_user_map, load_item_map
 
 
 def clayrs_recsys(contents_dir: str,
