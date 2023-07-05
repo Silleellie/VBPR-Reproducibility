@@ -1,13 +1,13 @@
--r requirements-clayrs.txt
+wheel
 pandas>1.2.0
 numpy-indexed~=0.3.5
 tqdm>4.62.0
+# package location
+-f https://download.pytorch.org/whl/torch_stable.html
 torch==1.13.1+cu116
-cornac~=1.14.2
+torchvision==0.14.1+cu116
 scikit-learn>1.0.0
 gdown~=4.6.0
 requests~=2.28.2
-numpy>1.21.0
-
-# package location
---find-links https://download.pytorch.org/whl/torch_stable.html
+clayrs==0.5.1
+cornac~=1.14.2

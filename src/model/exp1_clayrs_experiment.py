@@ -6,8 +6,8 @@ Uses the NPY feature matrix built in the data preparation phase to fit the VBPR 
 
 import os
 
-import clayrs_can_see.content_analyzer as ca
-from clayrs_can_see.utils import Report
+import clayrs.content_analyzer as ca
+from clayrs.utils import Report
 
 from src import PROCESSED_DIR, DATA_DIR, MODEL_DIR, ExperimentConfig, YAML_DIR
 from src.model import clayrs_recsys
