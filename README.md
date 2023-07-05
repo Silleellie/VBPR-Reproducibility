@@ -33,7 +33,7 @@ All the experiments provided in this repository are compliant with the proposed 
       <td rowspan="5" valign="center">Dataset Collection</td>
       <td>✅ Link to a downloadable version of the dataset collection</td>
       <td>
-        <a href="https://drive.google.com/uc?id=1xaRS4qqGeTzxaEksHzjVKjQ6l7QT9eMJ">Tradesy raw feedback</a>,<br>
+        <a href="https://datarepo.eng.ucsd.edu/mcauley_group/data/tradesy/tradesy.json.gz">Tradesy raw feedback</a>,<br>
         <a href="http://jmcauley.ucsd.edu/data/tradesy/image_features_tradesy.b">Image features binary file</a>,<br>
         <a href="http://cseweb.ucsd.edu/~wckang/DVBPR/TradesyImgPartitioned.npy">Tradesy Images from DVBPR dataset</a>
       </td>

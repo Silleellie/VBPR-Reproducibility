@@ -52,7 +52,7 @@ def dl_tradesy_feedback():
 
     fname = os.path.join(RAW_DIR, "tradesy.json")
     if not os.path.isfile(fname):
-        gdown.download("https://drive.google.com/uc?id=1xaRS4qqGeTzxaEksHzjVKjQ6l7QT9eMJ",
+        gdown.download("https://datarepo.eng.ucsd.edu/mcauley_group/data/tradesy/tradesy.json.gz",
                        output=os.path.join(RAW_DIR, "tradesy.json.gz"))
 
         with gzip.open(os.path.join(RAW_DIR, "tradesy.json.gz"), 'rb') as f_in:
