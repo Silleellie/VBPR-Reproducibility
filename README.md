@@ -62,7 +62,7 @@ All the experiments provided in this repository are compliant with the proposed 
       <td>✅ Pre-trained models adopted to represent side information</td>
       <td>
         <a href="https://github.com/BVLC/caffe/tree/master/models/bvlc_reference_caffenet">bvlc_reference_caffenet</a>,<br>
-        <a href="https://pytorch.org/hub/nvidia_deeplearningexamples_resnet50/">resnet50</a>,<br>
+        <a href="https://pytorch.org/hub/pytorch_vision_resnet/">resnet50</a>,<br>
         <a href="https://pytorch.org/hub/pytorch_vision_vgg/">vgg19</a>
       </td>
     </tr>
