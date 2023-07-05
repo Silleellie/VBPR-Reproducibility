@@ -1,6 +1,6 @@
 # VBPR Replicability: comparison and end-to-end experiments with ClayRS can see 
 
-![pylint](https://img.shields.io/badge/pylint-10.00-brightgreen?logo=python&logoColor=white)
+![pylint](https://img.shields.io/badge/pylint-9.92-yellow?logo=python&logoColor=white)
 
 Repository which includes everything related to the paper ***Reproducibility Analysis of Recommender Systems relying on 
 Visual Features: traps, pitfalls, and countermeasures***
