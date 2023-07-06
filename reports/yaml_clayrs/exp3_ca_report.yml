@@ -9,7 +9,7 @@ field_representations:
       feature_layer: features
       flatten: true
       device: cuda:0
-      apply_on_output: <function content_analyzer.<locals>.pool_and_squeeze at 0x000001245B4F5C10>
+      apply_on_output: <function content_analyzer.<locals>.pool_and_squeeze at 0x000002699F7D7430>
       imgs_dirs: C:\Users\eliom\Desktop\VBPR-Replicability-src\data\interim\imgs_dirs
       max_timeout: 2
       max_retries: 5
