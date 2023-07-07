@@ -5,5 +5,5 @@ exogenous_representations: null
 field_representations:
   item_idx/0:
     FromNPY:
-      npy_file_path: C:\Users\eliom\Desktop\VBPR-Replicability-src\data\processed\features_matrix.npy
+      npy_file_path: C:\Users\anton\Desktop\GitHub projects\VBPR-experiment-with-src\data\processed\features_matrix.npy
     preprocessing: null
