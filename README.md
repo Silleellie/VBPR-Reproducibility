@@ -69,7 +69,7 @@ All the experiments provided in this repository are compliant with the proposed 
     <tr>
       <td rowspan="2" valign="center">Data Splitting</td>
       <td>✅ Protocol used for data partitioning and random seed to reproduce random splits</td>
-      <td> <i>Leave-one-out</i> with random seed set at <b>42</b>, <a href="src/data/train_test_split.py">script</a></td>
+      <td> <i>Holdout</i> $\forall$ user with test set size of one instance with random seed set at <b>42</b>, <a href="src/data/train_test_split.py">script</a></td>
     </tr>
     <tr>
       <td>⬜ Link to a downloadable version of the training/test/validation sets</td>
